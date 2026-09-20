@@ -56,6 +56,7 @@ public struct SQLiteDeckRepository: DeckRepository, DeckBuilding {
             // card is Forbidden in one format and unrestricted in another.
             let rows = try Row.fetchAll(db, sql: """
                 SELECT card.id, card.name_en, card.limit_name, card.frame_type,
+                       card.type AS card_type, card.level, card.attribute, card.race,
                        ban_status.status AS ban
                 FROM card
                 LEFT JOIN ban_status
@@ -83,7 +84,12 @@ public struct SQLiteDeckRepository: DeckRepository, DeckBuilding {
                     limitName: row["limit_name"] ?? name,
                     frame: CardFrame(rawValue: row["frame_type"] ?? "") ?? .effect,
                     formats: formatsByCard[id] ?? [],
-                    banStatus: BanStatus(storedValue: row["ban"]))
+                    banStatus: BanStatus(storedValue: row["ban"]),
+                    type: row["card_type"] ?? "",
+                    level: row["level"],
+                    attribute: (row["attribute"] as String?)
+                        .flatMap(CardAttribute.init(rawValue:)),
+                    race: row["race"] ?? "")
             })
         }
     }

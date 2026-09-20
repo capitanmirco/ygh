@@ -4,6 +4,7 @@ import YGOCore
 import YGODesignSystem
 import UniformTypeIdentifiers
 import YGOFeatureBrowser
+import YGOFeatureAnalytics
 import YGOFeatureCollection
 import YGOFeatureDeckBuilder
 
@@ -43,6 +44,7 @@ struct RootView: View {
         case catalog = "Catalogo"
         case decks = "Mazzi"
         case collection = "Collezione"
+        case analytics = "Statistiche"
         var id: String { rawValue }
 
         var symbol: String {
@@ -50,6 +52,7 @@ struct RootView: View {
             case .catalog: "square.grid.2x2"
             case .decks: "rectangle.stack"
             case .collection: "tray.full"
+            case .analytics: "chart.bar"
             }
         }
     }
@@ -189,8 +192,25 @@ private struct Detail: View {
                 banStatusProvider: environment.repository))
         case .collection:
             CollectionView(model: CollectionViewModel(reader: environment.collection))
+        case .analytics:
+            analyticsDetail
         case .decks:
             deckDetail
+        }
+    }
+
+    /// Analytics needs a deck. Without one there is nothing to be statistical
+    /// about, and saying so beats an empty chart.
+    @ViewBuilder
+    private var analyticsDetail: some View {
+        if let selectedDeck {
+            AnalyticsLoader(environment: environment, deckID: selectedDeck)
+                .id(selectedDeck)
+        } else {
+            ContentUnavailableView(
+                "Nessun mazzo scelto",
+                systemImage: "chart.bar",
+                description: Text("Scegli un mazzo dalla sezione Mazzi per vederne le statistiche."))
         }
     }
 
@@ -284,5 +304,31 @@ struct LaunchFailureView: View {
         }
         .padding(Theme.Spacing.section)
         .frame(maxWidth: 520)
+    }
+}
+
+/// Loads a deck and its card snapshot, then hands both to the analytics view.
+private struct AnalyticsLoader: View {
+    let environment: CatalogEnvironment
+    let deckID: Int64
+
+    @State private var model = AnalyticsViewModel()
+    @State private var loaded = false
+
+    var body: some View {
+        Group {
+            if loaded {
+                AnalyticsView(model: model)
+            } else {
+                ProgressView()
+            }
+        }
+        .task {
+            guard let deck = try? await environment.deckRepository.deck(with: deckID),
+                  let index = try? await environment.deckRepository.cardIndex(for: deck)
+            else { return }
+            model.load(deck: deck, index: index)
+            loaded = true
+        }
     }
 }

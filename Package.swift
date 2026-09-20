@@ -18,8 +18,10 @@ let package = Package(
         .library(name: "YGOFeatureBrowser", targets: ["YGOFeatureBrowser"]),
         .library(name: "YGOFeatureDeckBuilder", targets: ["YGOFeatureDeckBuilder"]),
         .library(name: "YGOFeatureCollection", targets: ["YGOFeatureCollection"]),
+        .library(name: "YGOFeatureAnalytics", targets: ["YGOFeatureAnalytics"]),
         .library(name: "YGOValidation", targets: ["YGOValidation"]),
         .library(name: "YGODeckIO", targets: ["YGODeckIO"]),
+        .library(name: "YGOAnalytics", targets: ["YGOAnalytics"]),
         .library(name: "YGOComposition", targets: ["YGOComposition"]),
         .executable(name: "YGODeckManager", targets: ["YGODeckManagerApp"]),
     ],
@@ -71,6 +73,21 @@ let package = Package(
             path: "Packages/Features/YGOFeatureBrowser/Sources/YGOFeatureBrowser",
             swiftSettings: strictConcurrency),
 
+        // The maths. Depends on YGOCore alone: no database, no network, no
+        // view, so every probability is checkable against a figure worked out
+        // by hand.
+        .target(
+            name: "YGOAnalytics",
+            dependencies: ["YGOCore"],
+            path: "Packages/YGOAnalytics/Sources/YGOAnalytics",
+            swiftSettings: strictConcurrency),
+
+        .testTarget(
+            name: "YGOAnalyticsTests",
+            dependencies: ["YGOAnalytics", "YGOCore", "YGOFeatureAnalytics"],
+            path: "Tests/YGOAnalyticsTests",
+            swiftSettings: strictConcurrency),
+
         // The interchange formats. Depends on YGOCore alone, so a deck file
         // can be read and written with no database in sight.
         .target(
@@ -111,6 +128,12 @@ let package = Package(
             path: "Packages/Features/YGOFeatureCollection/Sources/YGOFeatureCollection",
             swiftSettings: strictConcurrency),
 
+        .target(
+            name: "YGOFeatureAnalytics",
+            dependencies: ["YGOCore", "YGOAnalytics", "YGODesignSystem"],
+            path: "Packages/Features/YGOFeatureAnalytics/Sources/YGOFeatureAnalytics",
+            swiftSettings: strictConcurrency),
+
         // The composition root: the only target allowed to know every
         // concrete implementation at once.
         .target(
@@ -124,7 +147,8 @@ let package = Package(
         .executableTarget(
             name: "YGODeckManagerApp",
             dependencies: ["YGOComposition", "YGOCore", "YGODesignSystem",
-                           "YGOFeatureBrowser", "YGOFeatureDeckBuilder", "YGOFeatureCollection"],
+                           "YGOFeatureBrowser", "YGOFeatureDeckBuilder", "YGOFeatureCollection",
+                           "YGOFeatureAnalytics"],
             path: "App",
             swiftSettings: strictConcurrency),
 

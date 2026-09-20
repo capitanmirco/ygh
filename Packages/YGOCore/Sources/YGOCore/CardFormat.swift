@@ -18,6 +18,24 @@ public enum CardFormat: String, Hashable, Sendable, Codable, CaseIterable {
     ///
     /// When it does not, restrictions come from the user and must be presented
     /// as such rather than as an authoritative list.
+    /// Whether the player going first draws on their first turn.
+    ///
+    /// Not published by the catalog: this comes from the formats' own rule
+    /// documents. The 2008 rules had the first player draw, and the modern
+    /// rules removed it to offset the advantage of building a board first.
+    /// Edison looks modern but is a 2010 event played under the 2008 rules,
+    /// so it draws.
+    ///
+    /// The difference is one card, and one card is 5.7 percentage points on
+    /// three copies in forty. Getting it wrong would make every figure in the
+    /// analytics quietly wrong for a retro deck.
+    public var firstPlayerDraws: Bool {
+        switch self {
+        case .goat, .ocgGoat, .edison: true
+        case .tcg, .ocg, .masterDuel, .duelLinks, .speedDuel, .commonCharity: false
+        }
+    }
+
     public var hasUpstreamBanList: Bool {
         switch self {
         case .tcg, .ocg, .goat: true

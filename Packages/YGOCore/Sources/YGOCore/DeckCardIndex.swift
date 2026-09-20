@@ -16,13 +16,24 @@ public struct DeckCardIndex: Hashable, Sendable {
         public let formats: Set<CardFormat>
         public let banStatus: BanStatus
 
+        /// The catalog's own wording, such as "Effect Monster" or "Normal Spell".
+        public let type: String
+        /// Absent for spells, traps and link monsters, which have no level.
+        public let level: Int?
+        public let attribute: CardAttribute?
+        public let race: String
+
         public init(
             card: CardIdentifier,
             name: String,
             limitName: String,
             frame: CardFrame,
             formats: Set<CardFormat>,
-            banStatus: BanStatus
+            banStatus: BanStatus,
+            type: String = "",
+            level: Int? = nil,
+            attribute: CardAttribute? = nil,
+            race: String = ""
         ) {
             self.card = card
             self.name = name
@@ -30,6 +41,10 @@ public struct DeckCardIndex: Hashable, Sendable {
             self.frame = frame
             self.formats = formats
             self.banStatus = banStatus
+            self.type = type
+            self.level = level
+            self.attribute = attribute
+            self.race = race
         }
     }
 
