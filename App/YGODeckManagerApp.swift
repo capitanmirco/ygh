@@ -7,6 +7,8 @@ import YGOFeatureBrowser
 import YGOFeatureAnalytics
 import YGOFeatureCollection
 import YGOFeatureDeckBuilder
+import YGOFeaturePricing
+import YGOPricing
 
 /// The application entry point. It builds the object graph once and hands each
 /// feature the protocols it needs; no policy lives here.
@@ -45,6 +47,7 @@ struct RootView: View {
         case decks = "Mazzi"
         case collection = "Collezione"
         case analytics = "Statistiche"
+        case value = "Valore"
         var id: String { rawValue }
 
         var symbol: String {
@@ -53,6 +56,7 @@ struct RootView: View {
             case .decks: "rectangle.stack"
             case .collection: "tray.full"
             case .analytics: "chart.bar"
+            case .value: "eurosign.circle"
             }
         }
     }
@@ -194,6 +198,8 @@ private struct Detail: View {
             CollectionView(model: CollectionViewModel(reader: environment.collection))
         case .analytics:
             analyticsDetail
+        case .value:
+            PricingLoader(environment: environment)
         case .decks:
             deckDetail
         }
@@ -329,6 +335,53 @@ private struct AnalyticsLoader: View {
             else { return }
             model.load(deck: deck, index: index)
             loaded = true
+        }
+    }
+}
+
+/// Loads the collection and hands it to the valuation view.
+private struct PricingLoader: View {
+    let environment: CatalogEnvironment
+
+    @State private var model: PricingViewModel?
+
+    var body: some View {
+        Group {
+            if let model {
+                PricingView(model: model)
+            } else {
+                ProgressView()
+            }
+        }
+        .task {
+            let model = PricingViewModel(lookup: environment.prices)
+            let entries = (try? await environment.collection.entries()) ?? []
+
+            // Rarity and location come from the printing and the binder, which
+            // is why the valuation can be broken down by either.
+            var items: [ValuationItem] = []
+            var names: [CardIdentifier: String] = [:]
+            let locations = (try? await environment.collection.locations()) ?? []
+            let locationNames = Dictionary(
+                uniqueKeysWithValues: locations.map { ($0.id, $0.name) })
+
+            for entry in entries {
+                items.append(ValuationItem(
+                    card: entry.card,
+                    quantity: entry.quantity,
+                    rarity: nil,
+                    location: entry.locationID.flatMap { locationNames[$0] }))
+                if names[entry.card] == nil {
+                    names[entry.card] = (try? await environment.repository
+                        .card(with: entry.card))??.englishName ?? "Carta \(entry.card.rawValue)"
+                }
+            }
+
+            let totals = try? await environment.collection.totals()
+            await model.load(
+                items: items, names: names,
+                recordedSpend: totals.map { Money(amount: $0.recordedSpend, currency: .eur) })
+            self.model = model
         }
     }
 }
