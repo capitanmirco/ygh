@@ -1,0 +1,177 @@
+[
+ {
+  "id": 1475311,
+  "reason": "ban_ocg=Limited",
+  "name": "Allure of Darkness"
+ },
+ {
+  "id": 3544583,
+  "reason": "accented-italian",
+  "name": "Allvain the Essence of Vanity"
+ },
+ {
+  "id": 4731783,
+  "reason": "frameType=link",
+  "name": "A Bao A Qu, the Lightless Shadow"
+ },
+ {
+  "id": 11714098,
+  "reason": "frameType=normal",
+  "name": "30,000-Year White Turtle"
+ },
+ {
+  "id": 12644061,
+  "reason": "accented-italian",
+  "name": "Advanced Dark"
+ },
+ {
+  "id": 13026402,
+  "reason": "accented-italian",
+  "name": "A-Team: Trap Disposal Unit"
+ },
+ {
+  "id": 13332685,
+  "reason": "frameType=ritual",
+  "name": "Ame no Habakiri no Mitsurugi"
+ },
+ {
+  "id": 14558127,
+  "reason": "ban_ocg=Semi-Limited",
+  "name": "Ash Blossom & Joyous Spring"
+ },
+ {
+  "id": 15308295,
+  "reason": "frameType=effect_pendulum",
+  "name": "Abyss Actor - Comic Relief"
+ },
+ {
+  "id": 18318842,
+  "reason": "ban_goat=Semi-Limited",
+  "name": "Abyss Soldier"
+ },
+ {
+  "id": 21044178,
+  "reason": "ban_tcg=Forbidden",
+  "name": "Abyss Dweller"
+ },
+ {
+  "id": 23771716,
+  "reason": "format=Speed Duel",
+  "name": "7 Colored Fish"
+ },
+ {
+  "id": 23995348,
+  "reason": "multi-artwork",
+  "name": "Blue-Eyes Ultimate Dragon"
+ },
+ {
+  "id": 30983281,
+  "reason": "frameType=synchro",
+  "name": "Accel Synchro Stardust Dragon"
+ },
+ {
+  "id": 33760966,
+  "reason": "ban_tcg=Semi-Limited",
+  "name": "Dracotail Arthalion"
+ },
+ {
+  "id": 34541863,
+  "reason": "format=Edison",
+  "name": "\"A\" Cell Breeding Device"
+ },
+ {
+  "id": 44052075,
+  "reason": "frameType=token",
+  "name": "Ancient Gear Token"
+ },
+ {
+  "id": 44553392,
+  "reason": "untranslated",
+  "name": "A Shattered, Colorless Realm"
+ },
+ {
+  "id": 46593546,
+  "reason": "frameType=xyz_pendulum",
+  "name": "D/D/D Deviser King Deus Machinex"
+ },
+ {
+  "id": 48469380,
+  "reason": "frameType=ritual_pendulum",
+  "name": "Archfiend Emperor"
+ },
+ {
+  "id": 50687050,
+  "reason": "frameType=fusion_pendulum",
+  "name": "Arktos XII - Chronochasm Vaylantz"
+ },
+ {
+  "id": 65172015,
+  "reason": "frameType=fusion",
+  "name": "A-to-Z-Dragon Buster Cannon"
+ },
+ {
+  "id": 68170903,
+  "reason": "frameType=trap",
+  "name": "A Feint Plan"
+ },
+ {
+  "id": 69243953,
+  "reason": "ban_goat=Forbidden",
+  "name": "Butterfly Dagger - Elma"
+ },
+ {
+  "id": 70026064,
+  "reason": "frameType=normal_pendulum",
+  "name": "Bujin Hiruko"
+ },
+ {
+  "id": 72989439,
+  "reason": "ban_goat=Limited",
+  "name": "Black Luster Soldier - Envoy of the Beginning"
+ },
+ {
+  "id": 75926389,
+  "reason": "untranslated",
+  "name": "A-to-Z Energy Load"
+ },
+ {
+  "id": 80181649,
+  "reason": "ban_tcg=Limited",
+  "name": "\"A Case for K9\""
+ },
+ {
+  "id": 86988864,
+  "reason": "frameType=effect",
+  "name": "3-Hump Lacooda"
+ },
+ {
+  "id": 89631139,
+  "reason": "multi-artwork",
+  "name": "Blue-Eyes White Dragon"
+ },
+ {
+  "id": 90036274,
+  "reason": "frameType=synchro_pendulum",
+  "name": "Clear Wing Fast Dragon"
+ },
+ {
+  "id": 91152256,
+  "reason": "multi-artwork",
+  "name": "Celtic Guardian"
+ },
+ {
+  "id": 98319530,
+  "reason": "untranslated",
+  "name": "\"Infernoble Arms - Almace\""
+ },
+ {
+  "id": 98787535,
+  "reason": "accented-italian",
+  "name": "Aleirtt, the Ogdoadic Dark"
+ },
+ {
+  "id": 300302022,
+  "reason": "frameType=skill",
+  "name": "Ancient Fusion"
+ }
+]
