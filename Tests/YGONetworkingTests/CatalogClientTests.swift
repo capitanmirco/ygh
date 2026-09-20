@@ -67,7 +67,11 @@ struct CatalogClientTests {
 
         let cards = try await client.fetchDataset(language: .english)
 
-        #expect(cards.count == 35)
+        // Derived from the fixture rather than pinned, so extending it for a
+        // later feature does not turn this into a false failure.
+        let expected = try YGOProDeckCatalogClient.decodeDataset(Fixture.data("catalog-en.json")).count
+        #expect(cards.count == expected)
+        #expect(cards.count > 30)
         #expect(cards.allSatisfy { !$0.cardImages.isEmpty })
         // The fixture was built to carry a card with three artworks, which is
         // what makes alias resolution testable downstream.

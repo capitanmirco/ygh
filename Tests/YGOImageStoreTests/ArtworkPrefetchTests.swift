@@ -144,8 +144,9 @@ struct ArtworkPrefetchTests {
 
         // While the first retrieval is held open, the catalog still answers.
         let repository = SQLiteCardRepository(database: rig.database)
+        let expectedCards = try ArtworkFixture.cards().count
         let count = try await repository.cardCount()
-        #expect(count == 35)
+        #expect(count == expectedCards)
 
         let firstCard = try #require(try ArtworkFixture.cards().first)
         let card = try await repository.card(with: CardIdentifier(firstCard.id))

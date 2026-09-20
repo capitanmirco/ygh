@@ -32,9 +32,9 @@ struct CatalogSeedTests {
         let first = try await CatalogSynchronizer(
             client: client, store: store, now: { SyncFixture.observedAt }).synchronize()
 
-        #expect(first == .seeded(cardCount: 35))
+        #expect(first == .seeded(cardCount: SyncFixture.englishCardCount))
         let storedCards = try await store.cardCount()
-        #expect(storedCards == 35)
+        #expect(storedCards == SyncFixture.englishCardCount)
         let downloadsAfterSeed = await client.datasetRequestCount
         #expect(downloadsAfterSeed > 0)
 

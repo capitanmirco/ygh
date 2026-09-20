@@ -96,8 +96,11 @@ struct CatalogDecodingTests {
         let english = try YGOProDeckCatalogClient.decodeDataset(Fixture.data("catalog-en.json"))
         let italian = try YGOProDeckCatalogClient.decodeDataset(Fixture.data("catalog-it.json"))
 
-        #expect(english.count == 35)
-        #expect(italian.count == 22)
+        #expect(english.count > 30)
+        #expect(italian.count > 20)
+        // The localised dataset covers fewer cards than the English one; that
+        // gap is what the fallback rule exists for.
+        #expect(italian.count < english.count)
         // The localised response is what carries the English name alongside the
         // translation; without it a translated row cannot be matched back.
         #expect(italian.allSatisfy { $0.nameEn != nil })

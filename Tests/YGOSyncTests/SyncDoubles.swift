@@ -18,6 +18,10 @@ enum SyncFixture {
 
     static let observedAt = Date(timeIntervalSince1970: 1_758_000_000)
 
+    /// Read from the fixture rather than pinned, so extending the fixture for a
+    /// later feature does not turn these assertions into false failures.
+    static var englishCardCount: Int { (try? cards("catalog-en.json").count) ?? 0 }
+
     static func migratedDatabase() throws -> DatabaseQueue {
         var configuration = GRDB.Configuration()
         configuration.foreignKeysEnabled = true

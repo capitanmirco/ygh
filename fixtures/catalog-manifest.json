@@ -1,5 +1,10 @@
 [
  {
+  "id": 295517,
+  "reason": "treated-as -> Umi",
+  "name": "A Legendary Ocean"
+ },
+ {
   "id": 1475311,
   "reason": "ban_ocg=Limited",
   "name": "Allure of Darkness"
@@ -55,6 +60,11 @@
   "name": "Abyss Dweller"
  },
  {
+  "id": 22702055,
+  "reason": "limit-name target",
+  "name": "Umi"
+ },
+ {
   "id": 23771716,
   "reason": "format=Speed Duel",
   "name": "7 Colored Fish"
@@ -63,6 +73,16 @@
   "id": 23995348,
   "reason": "multi-artwork",
   "name": "Blue-Eyes Ultimate Dragon"
+ },
+ {
+  "id": 24094653,
+  "reason": "limit-name target",
+  "name": "Polymerization"
+ },
+ {
+  "id": 27927359,
+  "reason": "treated-as -> Harpie Lady",
+  "name": "Harpie Lady 2"
  },
  {
   "id": 30983281,
@@ -105,6 +125,11 @@
   "name": "Arktos XII - Chronochasm Vaylantz"
  },
  {
+  "id": 54415063,
+  "reason": "treated-as -> Harpie Lady",
+  "name": "Harpie Lady 3"
+ },
+ {
   "id": 65172015,
   "reason": "frameType=fusion",
   "name": "A-to-Z-Dragon Buster Cannon"
@@ -130,14 +155,29 @@
   "name": "Black Luster Soldier - Envoy of the Beginning"
  },
  {
+  "id": 74335036,
+  "reason": "treated-as -> Polymerization",
+  "name": "Fusion Substitute"
+ },
+ {
   "id": 75926389,
   "reason": "untranslated",
   "name": "A-to-Z Energy Load"
  },
  {
+  "id": 76812113,
+  "reason": "limit-name target",
+  "name": "Harpie Lady"
+ },
+ {
   "id": 80181649,
   "reason": "ban_tcg=Limited",
   "name": "\"A Case for K9\""
+ },
+ {
+  "id": 80316585,
+  "reason": "treated-as -> Harpie Lady",
+  "name": "Cyber Harpie Lady"
  },
  {
   "id": 86988864,
@@ -158,6 +198,11 @@
   "id": 91152256,
   "reason": "multi-artwork",
   "name": "Celtic Guardian"
+ },
+ {
+  "id": 91932350,
+  "reason": "treated-as -> Harpie Lady",
+  "name": "Harpie Lady 1"
  },
  {
   "id": 98319530,

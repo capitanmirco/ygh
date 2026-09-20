@@ -7,7 +7,11 @@ import GRDB
 /// still need to run.
 public enum CatalogSchema {
     /// Every migration identifier this build knows about, in order.
-    public static let migrationIdentifiers = ["v001_initial_catalog"]
+    public static let migrationIdentifiers = [
+        "v001_initial_catalog",
+        "v002_card_limit_names",
+        "v003_decks",
+    ]
 
     public static var migrator: DatabaseMigrator {
         var migrator = DatabaseMigrator()
@@ -22,7 +26,105 @@ public enum CatalogSchema {
             try createFilterIndexes(db)
         }
 
+        migrator.registerMigration("v002_card_limit_names") { db in
+            try addCardLimitNames(db)
+        }
+
+        migrator.registerMigration("v003_decks") { db in
+            try createDeckTables(db)
+        }
+
         return migrator
+    }
+
+    // MARK: - Decks
+
+    /// Decks live beside the catalog so that a slot holds a real foreign key to
+    /// a card, and so the two can be queried together when reporting why a deck
+    /// is illegal.
+    private static func createDeckTables(_ db: Database) throws {
+        try db.create(table: "folder") { t in
+            t.autoIncrementedPrimaryKey("id")
+            t.column("name", .text).notNull()
+            // A deleted folder releases what it holds rather than taking it
+            // with it; the database is the right place for that guarantee.
+            t.column("parent_id", .integer).references("folder", onDelete: .setNull)
+        }
+
+        try db.create(table: "deck") { t in
+            t.autoIncrementedPrimaryKey("id")
+            t.column("name", .text).notNull()
+            t.column("format_code", .text).notNull()
+            t.column("folder_id", .integer).references("folder", onDelete: .setNull)
+            t.column("notes", .text)
+            t.column("created_at", .text).notNull()
+            t.column("updated_at", .text).notNull()
+        }
+
+        // Keyed by artwork, not by card: a deck may hold two copies of one card
+        // under two printings, and an export has to return the printing the
+        // user actually holds.
+        try db.create(table: "deck_slot") { t in
+            t.column("deck_id", .integer).notNull()
+                .references("deck", onDelete: .cascade)
+            t.column("section", .text).notNull()
+                .check { ["main", "extra", "side"].contains($0) }
+            t.column("artwork_id", .integer).notNull()
+                .references("card_artwork", column: "artwork_id")
+            t.column("card_id", .integer).notNull().references("card")
+            t.column("quantity", .integer).notNull().check { $0 > 0 }
+            t.primaryKey(["deck_id", "section", "artwork_id"])
+        }
+
+        // A version is a historical record that must still read correctly after
+        // deck_slot gains a column, so it is stored as its own document.
+        try db.create(table: "deck_version") { t in
+            t.autoIncrementedPrimaryKey("id")
+            t.column("deck_id", .integer).notNull()
+                .references("deck", onDelete: .cascade)
+            t.column("label", .text)
+            t.column("created_at", .text).notNull()
+            t.column("snapshot", .text).notNull()
+        }
+
+        try db.create(table: "tag") { t in
+            t.autoIncrementedPrimaryKey("id")
+            t.column("name", .text).notNull().unique()
+        }
+
+        try db.create(table: "deck_tag") { t in
+            t.column("deck_id", .integer).notNull()
+                .references("deck", onDelete: .cascade)
+            t.column("tag_id", .integer).notNull()
+                .references("tag", onDelete: .cascade)
+            t.primaryKey(["deck_id", "tag_id"])
+        }
+
+        try db.create(index: "deck_slot_card_idx", on: "deck_slot", columns: ["card_id"])
+        try db.create(index: "deck_folder_idx", on: "deck", columns: ["folder_id"])
+        try db.create(index: "deck_version_deck_idx", on: "deck_version", columns: ["deck_id"])
+        try db.create(index: "deck_name_idx", on: "deck", columns: ["name"])
+    }
+
+    // MARK: - Limit names
+
+    /// The name a card's copies are counted against.
+    ///
+    /// Most cards count against their own name, but a few count against
+    /// another card's: `Harpie Lady 1`, `2` and `3` share one limit, and
+    /// `Fusion Substitute` counts as `Polymerization`. Grouping on one stored
+    /// column keeps that out of the rules entirely.
+    ///
+    /// Existing rows are backfilled with the card's own name, which is correct
+    /// for all but a handful. The next catalog write replaces every card and
+    /// corrects those, so the window in which a shared limit reads as its own
+    /// is one synchronisation long.
+    private static func addCardLimitNames(_ db: Database) throws {
+        try db.alter(table: "card") { t in
+            t.add(column: "limit_name", .text)
+        }
+        try db.execute(sql: "UPDATE card SET limit_name = name_en WHERE limit_name IS NULL")
+        try db.create(index: "card_limit_name_idx", on: "card", columns: ["limit_name"])
     }
 
     // MARK: - Cards

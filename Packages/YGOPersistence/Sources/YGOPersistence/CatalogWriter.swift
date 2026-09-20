@@ -48,7 +48,7 @@ public struct CatalogWriter: Sendable {
             card.humanReadableCardType, card.race, card.attribute, card.level,
             card.atk, card.def, card.linkValue,
             card.linkMarkers?.joined(separator: ","), card.pendulumScale,
-            card.archetype, (card.misc?.hasEffect ?? 0) != 0,
+            card.archetype, Self.limitName(for: card), (card.misc?.hasEffect ?? 0) != 0,
             card.misc?.tcgDate, card.misc?.ocgDate, card.misc?.konamiId,
             card.misc?.mdRarity,
         ])
@@ -156,6 +156,16 @@ public struct CatalogWriter: Sendable {
         return translated
     }
 
+    /// The name this card's copies count against.
+    ///
+    /// Upstream marks 142 cards with a `treated_as` name, but only 13 of them
+    /// name a card other than themselves; for the rest the value repeats the
+    /// card's own name and changes nothing. Taking it whenever it is present
+    /// is therefore both correct and free of a special case.
+    static func limitName(for card: CatalogCardPayload) -> String {
+        card.misc?.treatedAs ?? card.name
+    }
+
     /// Upstream spells the statuses in title case; the catalog stores them in
     /// the form `BanStatus` round-trips.
     static func banStatus(fromUpstream text: String?) -> BanStatus? {
@@ -187,8 +197,8 @@ public struct CatalogWriter: Sendable {
                 INSERT INTO card (id, name_en, desc_en, type, frame_type,
                                   human_readable_type, race, attribute, level, atk, def,
                                   link_value, link_markers, pendulum_scale, archetype,
-                                  has_effect, tcg_date, ocg_date, konami_id, md_rarity)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                                  limit_name, has_effect, tcg_date, ocg_date, konami_id, md_rarity)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 ON CONFLICT(id) DO UPDATE SET
                     name_en = excluded.name_en, desc_en = excluded.desc_en,
                     -- Cleared here and refilled by the Italian merge inside the
@@ -201,6 +211,7 @@ public struct CatalogWriter: Sendable {
                     level = excluded.level, atk = excluded.atk, def = excluded.def,
                     link_value = excluded.link_value, link_markers = excluded.link_markers,
                     pendulum_scale = excluded.pendulum_scale, archetype = excluded.archetype,
+                    limit_name = excluded.limit_name,
                     has_effect = excluded.has_effect, tcg_date = excluded.tcg_date,
                     ocg_date = excluded.ocg_date, konami_id = excluded.konami_id,
                     md_rarity = excluded.md_rarity

@@ -22,7 +22,7 @@ struct CatalogUpdateTests {
 
         let outcome = try await CatalogSynchronizer(
             client: client, store: store, now: { SyncFixture.observedAt }).synchronize()
-        #expect(outcome == .seeded(cardCount: 35))
+        #expect(outcome == .seeded(cardCount: SyncFixture.englishCardCount))
 
         return (database, store, client)
     }
@@ -56,8 +56,9 @@ struct CatalogUpdateTests {
         await client.replaceEnglish(with: cards)
         await client.advanceVersion(to: "148.00")
 
+        let expectedTotal = cards.count
         let outcome = try await synchronizer(client, store).synchronize()
-        #expect(outcome == .updated(cardCount: 35))
+        #expect(outcome == .updated(cardCount: expectedTotal))
 
         try await database.read { db in
             let changed = try Row.fetchOne(db, sql:
@@ -70,7 +71,7 @@ struct CatalogUpdateTests {
             #expect(kept?["name_en"] == untouched.name)
 
             let total = try Int.fetchOne(db, sql: "SELECT count(*) FROM card")
-            #expect(total == 35)
+            #expect(total == expectedTotal)
         }
     }
 
@@ -125,7 +126,7 @@ struct CatalogUpdateTests {
 
         // The catalog is still fully usable.
         let storedCards = try await store.cardCount()
-        #expect(storedCards == 35)
+        #expect(storedCards == SyncFixture.englishCardCount)
         let storedVersion = try await store.storedVersion()
         #expect(storedVersion?.databaseVersion == "147.04")
 
@@ -147,7 +148,7 @@ struct CatalogUpdateTests {
         let callsAfterRefresh = await client.calls
 
         #expect(onStartup == .alreadyCurrent)
-        #expect(onRefresh == .updated(cardCount: 35))
+        #expect(onRefresh == .updated(cardCount: SyncFixture.englishCardCount))
 
         // Both began with a version request; only the one that found a
         // difference went on to the dataset.

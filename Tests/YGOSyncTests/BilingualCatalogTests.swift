@@ -32,8 +32,8 @@ struct BilingualCatalogTests {
         let italian = try SyncFixture.cards("catalog-it.json")
         let translatedIDs = Set(italian.map(\.id))
 
-        #expect(english.count == 35)
-        #expect(italian.count == 22)
+        #expect(english.count > 30)
+        #expect(italian.count < english.count)
         #expect(translatedIDs.count < english.count, "la fixture deve avere carte non tradotte")
 
         try await database.read { db in
