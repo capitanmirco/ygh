@@ -11,6 +11,7 @@ public enum CatalogSchema {
         "v001_initial_catalog",
         "v002_card_limit_names",
         "v003_decks",
+        "v004_collection",
     ]
 
     public static var migrator: DatabaseMigrator {
@@ -34,7 +35,51 @@ public enum CatalogSchema {
             try createDeckTables(db)
         }
 
+        migrator.registerMigration("v004_collection") { db in
+            try createCollectionTables(db)
+        }
+
         return migrator
+    }
+
+    // MARK: - Collection
+
+    /// What the user physically owns, beside the catalog that describes it.
+    private static func createCollectionTables(_ db: Database) throws {
+        try db.create(table: "storage_location") { t in
+            t.autoIncrementedPrimaryKey("id")
+            t.column("name", .text).notNull()
+            t.column("notes", .text)
+        }
+
+        // A row is a lot: identical copies acquired together. One row per
+        // physical card would turn a ten-thousand-copy collection into ten
+        // thousand rows to answer questions that are all aggregates.
+        try db.create(table: "collection_entry") { t in
+            t.autoIncrementedPrimaryKey("id")
+            t.column("card_id", .integer).notNull().references("card")
+            // Null for the 552 cards the catalog lists no printing for, thirty
+            // of them legal in TCG and otherwise impossible to own.
+            t.column("print_id", .integer).references("card_print")
+            t.column("condition", .text).notNull()
+                .check { ["near_mint", "lightly_played", "moderately_played",
+                          "heavily_played", "damaged"].contains($0) }
+            t.column("quantity", .integer).notNull().check { $0 > 0 }
+            // Per copy. Null means unrecorded, which is not free.
+            t.column("purchase_price", .double)
+            t.column("acquired_at", .text)
+            // Null means unfiled. A deleted location releases its copies.
+            t.column("location_id", .integer)
+                .references("storage_location", onDelete: .setNull)
+            t.column("notes", .text)
+        }
+
+        try db.create(index: "collection_entry_card_idx", on: "collection_entry",
+                      columns: ["card_id"])
+        try db.create(index: "collection_entry_print_idx", on: "collection_entry",
+                      columns: ["print_id"])
+        try db.create(index: "collection_entry_location_idx", on: "collection_entry",
+                      columns: ["location_id"])
     }
 
     // MARK: - Decks
