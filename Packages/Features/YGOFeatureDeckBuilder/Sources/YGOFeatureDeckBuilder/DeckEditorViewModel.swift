@@ -1,6 +1,7 @@
 import Foundation
 import Observation
 import YGOCore
+import YGOValidation
 
 /// The regions keyboard focus moves through in the deck editor.
 public enum DeckEditorFocusRegion: Int, CaseIterable, Hashable, Sendable {
@@ -46,17 +47,27 @@ public final class DeckEditorViewModel {
 
     private let repository: any DeckBuilding
     private let validator: any DeckValidating
+    /// Finds cards to add. Absent means the editor can only remove.
+    private let catalogue: (any CardSearching)?
     private var index = DeckCardIndex(entries: [])
+
+    /// What a search of the catalog turned up, ready to be added.
+    public private(set) var candidates: [Card] = []
+    public var catalogueQuery: String = ""
 
     public init(
         repository: any DeckBuilding,
         validator: any DeckValidating,
+        catalogue: (any CardSearching)? = nil,
         language: CardLanguage = .italian
     ) {
         self.repository = repository
         self.validator = validator
+        self.catalogue = catalogue
         self.language = language
     }
+
+    public var canAddCards: Bool { catalogue != nil }
 
     // MARK: - Loading
 
@@ -108,6 +119,27 @@ public final class DeckEditorViewModel {
     }
 
     // MARK: - Editing
+
+    /// Searches the catalog for a card to add.
+    public func searchCatalogue() async {
+        guard let catalogue, !catalogueQuery.trimmingCharacters(in: .whitespaces).isEmpty else {
+            candidates = []
+            return
+        }
+        let outcome = try? await catalogue.search(CardQuery(text: catalogueQuery, limit: 40))
+        candidates = outcome?.cards ?? []
+    }
+
+    /// Adds a card, placing it by its frame unless a section was chosen.
+    ///
+    /// The placement rule is the validator's own, so a card the editor puts
+    /// somewhere is never then reported for being there.
+    public func add(_ card: Card, to section: DeckSection? = nil) async {
+        guard let deck, let artwork = card.artworks.first else { return }
+        let target = section ?? DeckValidator.defaultSection(for: card.frame)
+        try? await repository.addCard(artwork: artwork, section: target, to: deck.id)
+        await load(deckID: deck.id)
+    }
 
     public func add(artwork: ArtworkIdentifier, to section: DeckSection) async {
         guard let deck else { return }

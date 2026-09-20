@@ -27,10 +27,27 @@ public final class CollectionViewModel {
     public var query: String = ""
 
     private let reader: any CollectionReading
+    /// Absent when the collection is only being read, which keeps a read-only
+    /// screen from being able to change anything by accident.
+    private let writer: (any CollectionWriting)?
+    /// Finds cards to add. Absent means the screen cannot add any.
+    private let catalogue: (any CardSearching)?
 
-    public init(reader: any CollectionReading) {
+    /// What a search of the catalog turned up, for adding to the collection.
+    public private(set) var candidates: [Card] = []
+    public var catalogueQuery: String = ""
+
+    public init(
+        reader: any CollectionReading,
+        writer: (any CollectionWriting)? = nil,
+        catalogue: (any CardSearching)? = nil
+    ) {
         self.reader = reader
+        self.writer = writer
+        self.catalogue = catalogue
     }
+
+    public var canEdit: Bool { writer != nil }
 
     // MARK: - Loading
 
@@ -53,6 +70,61 @@ public final class CollectionViewModel {
     public var shortfallSentences: [String] { shortfall.map(\.sentence) }
 
     public var isShortfallSatisfied: Bool { shortfall.isEmpty }
+
+    // MARK: - Editing
+
+    /// Searches the catalog for a card to record.
+    public func searchCatalogue() async {
+        guard let catalogue, !catalogueQuery.trimmingCharacters(in: .whitespaces).isEmpty else {
+            candidates = []
+            return
+        }
+        let outcome = try? await catalogue.search(CardQuery(text: catalogueQuery, limit: 40))
+        candidates = outcome?.cards ?? []
+    }
+
+    /// Records one copy of a card, against no printing when none was chosen.
+    ///
+    /// A copy with no printing is how the 552 cards the catalog lists no
+    /// printing for get into a collection at all.
+    public func recordCopy(
+        of card: CardIdentifier,
+        printID: Int64? = nil,
+        condition: CardCondition = .nearMint,
+        locationID: Int64? = nil
+    ) async {
+        guard let writer else { return }
+        try? await writer.addCopy(cardID: card, printID: printID,
+                                  condition: condition, locationID: locationID)
+        await reload()
+    }
+
+    /// Sets how many copies of a card are held, removing the lot at zero.
+    public func setCopies(
+        _ quantity: Int,
+        of card: CardIdentifier,
+        printID: Int64? = nil,
+        condition: CardCondition = .nearMint,
+        locationID: Int64? = nil
+    ) async {
+        guard let writer else { return }
+        try? await writer.setQuantity(quantity, cardID: card, printID: printID,
+                                      condition: condition, locationID: locationID)
+        await reload()
+    }
+
+    /// Removes every lot of a card, once the removal has been confirmed.
+    ///
+    /// Copies are hand-entered and recoverable from nowhere, so this runs only
+    /// after `confirmedRemoval` has handed back what the user agreed to.
+    public func removeConfirmedCard() async {
+        guard let writer, let card = confirmedRemoval() else { return }
+        let lots = (try? await writer.entries(forCard: card)) ?? []
+        for lot in lots {
+            try? await writer.deleteEntry(lot.id, confirmed: true)
+        }
+        await reload()
+    }
 
     // MARK: - Removal
 

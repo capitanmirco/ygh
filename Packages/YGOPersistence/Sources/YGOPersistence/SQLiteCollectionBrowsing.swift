@@ -237,3 +237,49 @@ extension SQLiteCollectionRepository: CollectionReading {
         try await copiesByCard()
     }
 }
+
+extension SQLiteCollectionRepository {
+    /// The collection as the valuation needs it, with each lot's rarity and
+    /// binder resolved.
+    ///
+    /// Built here rather than in the view because rarity lives on the printing
+    /// and the binder on the location: assembling it upstream would mean two
+    /// more round trips and a place for the two to disagree.
+    public func valuationRows() async throws
+        -> [(card: CardIdentifier, quantity: Int, rarity: String?, location: String?)] {
+        try await writer.read { db in
+            try Row.fetchAll(db, sql: """
+                SELECT collection_entry.card_id AS card_id,
+                       collection_entry.quantity AS quantity,
+                       card_print.rarity AS rarity,
+                       storage_location.name AS location
+                FROM collection_entry
+                LEFT JOIN card_print ON card_print.id = collection_entry.print_id
+                LEFT JOIN storage_location ON storage_location.id = collection_entry.location_id
+                ORDER BY collection_entry.id
+                """).map { row in
+                (card: CardIdentifier(row["card_id"] as Int),
+                 quantity: row["quantity"] as Int,
+                 rarity: row["rarity"] as String?,
+                 location: row["location"] as String?)
+            }
+        }
+    }
+
+    /// Card names for a set of cards, for whichever screen needs to label them.
+    public func cardNames(for cards: Set<CardIdentifier>) async throws
+        -> [CardIdentifier: String] {
+        guard !cards.isEmpty else { return [:] }
+        return try await writer.read { db in
+            let placeholders = Array(repeating: "?", count: cards.count).joined(separator: ", ")
+            var result: [CardIdentifier: String] = [:]
+            for row in try Row.fetchAll(db, sql: """
+                SELECT id, name_it, name_en FROM card WHERE id IN (\(placeholders))
+                """, arguments: StatementArguments(cards.map(\.rawValue))) {
+                let id = CardIdentifier(row["id"] as Int)
+                result[id] = (row["name_it"] as String?) ?? (row["name_en"] as String? ?? "")
+            }
+            return result
+        }
+    }
+}

@@ -134,7 +134,7 @@ let package = Package(
 
         .target(
             name: "YGOFeatureDeckBuilder",
-            dependencies: ["YGOCore", "YGODesignSystem"],
+            dependencies: ["YGOCore", "YGODesignSystem", "YGOValidation"],
             path: "Packages/Features/YGOFeatureDeckBuilder/Sources/YGOFeatureDeckBuilder",
             swiftSettings: strictConcurrency),
 
@@ -196,7 +196,7 @@ let package = Package(
 
         .testTarget(
             name: "YGOSyncTests",
-            dependencies: ["YGOSync", "YGOCore", "YGOPersistence", "YGONetworking", "YGOValidation", "YGODeckIO", "YGOFeatureDeckBuilder", "YGOFeatureCollection",
+            dependencies: ["YGOSync", "YGOCore", "YGOPersistence", "YGONetworking", "YGOValidation", "YGODeckIO", "YGOFeatureDeckBuilder", "YGOFeatureCollection", "YGOPricing",
                            .product(name: "GRDB", package: "GRDB.swift")],
             path: "Tests/YGOSyncTests",
             swiftSettings: strictConcurrency),

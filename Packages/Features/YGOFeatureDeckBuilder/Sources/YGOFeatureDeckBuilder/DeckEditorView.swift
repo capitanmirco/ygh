@@ -1,5 +1,6 @@
 import SwiftUI
 import YGOCore
+import YGOValidation
 import YGODesignSystem
 
 /// The deck editor: the three sections, the cards in them, and what is wrong.
@@ -22,7 +23,10 @@ public struct DeckEditorView: View {
             Divider()
             HSplitView {
                 cardList
-                report
+                VStack(spacing: 0) {
+                    if model.canAddCards { picker; Divider() }
+                    report
+                }
             }
         }
         .background(Theme.Palette.surface)
@@ -136,6 +140,66 @@ public struct DeckEditorView: View {
         }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(item.accessibilityLabel)
+    }
+
+    // MARK: - Adding cards
+
+    /// Searching the catalog and adding what it finds. A deck builder that can
+    /// only remove is not a deck builder.
+    private var picker: some View {
+        VStack(alignment: .leading, spacing: Theme.Spacing.tight) {
+            HStack(spacing: Theme.Spacing.tight) {
+                Image(systemName: "plus.magnifyingglass")
+                    .foregroundStyle(Theme.Palette.secondaryText)
+                    .accessibilityHidden(true)
+                TextField("Cerca una carta da aggiungere", text: $model.catalogueQuery)
+                    .textFieldStyle(.plain)
+                    .font(Theme.Typography.body)
+                    .accessibilityLabel("Cerca una carta da aggiungere al mazzo")
+                    .onSubmit { Task { await model.searchCatalogue() } }
+            }
+
+            if !model.candidates.isEmpty {
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 0) {
+                        ForEach(model.candidates) { card in
+                            candidateRow(card)
+                        }
+                    }
+                }
+                .frame(maxHeight: 200)
+            }
+        }
+        .padding(Theme.Spacing.regular)
+    }
+
+    private func candidateRow(_ card: Card) -> some View {
+        let text = card.text(in: .italian)
+        // The section is the validator's own placement rule, so a card added
+        // here is never then reported for being where it was put.
+        let target = DeckValidator.defaultSection(for: card.frame)
+
+        return Button {
+            Task { await model.add(card) }
+        } label: {
+            HStack(spacing: Theme.Spacing.tight) {
+                VStack(alignment: .leading, spacing: 0) {
+                    Text(text.name).font(Theme.Typography.body)
+                    Text(card.humanReadableType)
+                        .font(Theme.Typography.caption)
+                        .foregroundStyle(Theme.Palette.secondaryText)
+                }
+                Spacer()
+                Text(target.italianName)
+                    .font(Theme.Typography.caption)
+                    .foregroundStyle(Theme.Palette.secondaryText)
+                Image(systemName: "plus.circle")
+            }
+            .contentShape(Rectangle())
+            .padding(.vertical, Theme.Spacing.hair)
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel("Aggiungi \(text.name) a \(target.italianName)")
     }
 
     // MARK: - Report

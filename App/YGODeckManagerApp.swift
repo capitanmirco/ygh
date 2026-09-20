@@ -195,7 +195,10 @@ private struct Detail: View {
                 artwork: environment.artworkStore,
                 banStatusProvider: environment.repository))
         case .collection:
-            CollectionView(model: CollectionViewModel(reader: environment.collection))
+            CollectionView(model: CollectionViewModel(
+                reader: environment.collection,
+                writer: environment.collection,
+                catalogue: environment.repository))
         case .analytics:
             analyticsDetail
         case .value:
@@ -223,10 +226,8 @@ private struct Detail: View {
     @ViewBuilder
     private var deckDetail: some View {
         if let selectedDeck {
-            DeckEditorView(model: DeckEditorViewModel(
-                repository: environment.deckRepository,
-                validator: environment.deckValidator))
-            .id(selectedDeck)
+            DeckEditorLoader(environment: environment, deckID: selectedDeck)
+                .id(selectedDeck)
         } else {
             ContentUnavailableView(
                 "Nessun mazzo",
@@ -355,32 +356,50 @@ private struct PricingLoader: View {
         }
         .task {
             let model = PricingViewModel(lookup: environment.prices)
-            let entries = (try? await environment.collection.entries()) ?? []
 
-            // Rarity and location come from the printing and the binder, which
-            // is why the valuation can be broken down by either.
-            var items: [ValuationItem] = []
-            var names: [CardIdentifier: String] = [:]
-            let locations = (try? await environment.collection.locations()) ?? []
-            let locationNames = Dictionary(
-                uniqueKeysWithValues: locations.map { ($0.id, $0.name) })
-
-            for entry in entries {
-                items.append(ValuationItem(
-                    card: entry.card,
-                    quantity: entry.quantity,
-                    rarity: nil,
-                    location: entry.locationID.flatMap { locationNames[$0] }))
-                if names[entry.card] == nil {
-                    names[entry.card] = (try? await environment.repository
-                        .card(with: entry.card))??.englishName ?? "Carta \(entry.card.rawValue)"
-                }
+            // Rarity comes from the printing and the binder from the location,
+            // both resolved in one query rather than assembled here.
+            let rows = (try? await environment.collection.valuationRows()) ?? []
+            let items = rows.map {
+                ValuationItem(card: $0.card, quantity: $0.quantity,
+                              rarity: $0.rarity, location: $0.location)
             }
-
+            let names = (try? await environment.collection
+                .cardNames(for: Set(rows.map(\.card)))) ?? [:]
             let totals = try? await environment.collection.totals()
+
             await model.load(
                 items: items, names: names,
                 recordedSpend: totals.map { Money(amount: $0.recordedSpend, currency: .eur) })
+            self.model = model
+        }
+    }
+}
+
+/// Builds a deck editor and loads the chosen deck into it.
+///
+/// The view model starts empty and has to be told which deck to show; without
+/// this the editor rendered an empty deck whichever one was selected.
+private struct DeckEditorLoader: View {
+    let environment: CatalogEnvironment
+    let deckID: Int64
+
+    @State private var model: DeckEditorViewModel?
+
+    var body: some View {
+        Group {
+            if let model {
+                DeckEditorView(model: model)
+            } else {
+                ProgressView()
+            }
+        }
+        .task {
+            let model = DeckEditorViewModel(
+                repository: environment.deckRepository,
+                validator: environment.deckValidator,
+                catalogue: environment.repository)
+            await model.load(deckID: deckID)
             self.model = model
         }
     }

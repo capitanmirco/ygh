@@ -142,3 +142,28 @@ public protocol CollectionReading: Sendable {
     func collectionTotals() async throws -> CollectionTotals
     func ownedCopiesByCard() async throws -> [CardIdentifier: Int]
 }
+
+/// Changing what the collection holds.
+///
+/// Declared here so the collection view can record copies without knowing that
+/// SQLite exists, and so removal keeps needing an explicit confirmation on the
+/// way through.
+public protocol CollectionWriting: Sendable {
+    func addCopy(
+        cardID: CardIdentifier,
+        printID: Int64?,
+        condition: CardCondition,
+        locationID: Int64?
+    ) async throws
+
+    func setQuantity(
+        _ quantity: Int,
+        cardID: CardIdentifier,
+        printID: Int64?,
+        condition: CardCondition,
+        locationID: Int64?
+    ) async throws
+
+    func deleteEntry(_ id: Int64, confirmed: Bool) async throws
+    func entries(forCard cardID: CardIdentifier) async throws -> [CollectionEntry]
+}

@@ -12,7 +12,7 @@ public enum CollectionError: Error, Equatable {
 }
 
 /// Records what the user physically owns.
-public struct SQLiteCollectionRepository: Sendable {
+public struct SQLiteCollectionRepository: CollectionWriting {
     private let database: any DatabaseWriter
 
     public init(database: any DatabaseWriter) {
