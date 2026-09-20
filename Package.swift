@@ -16,6 +16,9 @@ let package = Package(
         .library(name: "YGOImageStore", targets: ["YGOImageStore"]),
         .library(name: "YGODesignSystem", targets: ["YGODesignSystem"]),
         .library(name: "YGOFeatureBrowser", targets: ["YGOFeatureBrowser"]),
+        .library(name: "YGOFeatureDeckBuilder", targets: ["YGOFeatureDeckBuilder"]),
+        .library(name: "YGOValidation", targets: ["YGOValidation"]),
+        .library(name: "YGODeckIO", targets: ["YGODeckIO"]),
         .library(name: "YGOComposition", targets: ["YGOComposition"]),
         .executable(name: "YGODeckManager", targets: ["YGODeckManagerApp"]),
     ],
@@ -67,18 +70,53 @@ let package = Package(
             path: "Packages/Features/YGOFeatureBrowser/Sources/YGOFeatureBrowser",
             swiftSettings: strictConcurrency),
 
+        // The interchange formats. Depends on YGOCore alone, so a deck file
+        // can be read and written with no database in sight.
+        .target(
+            name: "YGODeckIO",
+            dependencies: ["YGOCore"],
+            path: "Packages/YGODeckIO/Sources/YGODeckIO",
+            swiftSettings: strictConcurrency),
+
+        .testTarget(
+            name: "YGODeckIOTests",
+            dependencies: ["YGODeckIO", "YGOCore"],
+            path: "Tests/YGODeckIOTests",
+            swiftSettings: strictConcurrency),
+
+        // Deck rules. Depends on YGOCore alone: no database, no network, no
+        // view, so every rule is testable as arithmetic.
+        .target(
+            name: "YGOValidation",
+            dependencies: ["YGOCore"],
+            path: "Packages/YGOValidation/Sources/YGOValidation",
+            swiftSettings: strictConcurrency),
+
+        .testTarget(
+            name: "YGOValidationTests",
+            dependencies: ["YGOValidation", "YGOCore"],
+            path: "Tests/YGOValidationTests",
+            swiftSettings: strictConcurrency),
+
+        .target(
+            name: "YGOFeatureDeckBuilder",
+            dependencies: ["YGOCore", "YGODesignSystem"],
+            path: "Packages/Features/YGOFeatureDeckBuilder/Sources/YGOFeatureDeckBuilder",
+            swiftSettings: strictConcurrency),
+
         // The composition root: the only target allowed to know every
         // concrete implementation at once.
         .target(
             name: "YGOComposition",
             dependencies: ["YGOCore", "YGOPersistence", "YGONetworking", "YGOSync",
-                           "YGOImageStore", .product(name: "GRDB", package: "GRDB.swift")],
+                           "YGOImageStore", "YGOValidation", "YGODeckIO",
+                           .product(name: "GRDB", package: "GRDB.swift")],
             path: "Packages/YGOComposition/Sources/YGOComposition",
             swiftSettings: strictConcurrency),
 
         .executableTarget(
             name: "YGODeckManagerApp",
-            dependencies: ["YGOComposition", "YGOCore", "YGOFeatureBrowser"],
+            dependencies: ["YGOComposition", "YGOCore", "YGOFeatureBrowser", "YGOFeatureDeckBuilder"],
             path: "App",
             swiftSettings: strictConcurrency),
 
@@ -104,7 +142,7 @@ let package = Package(
 
         .testTarget(
             name: "YGOSyncTests",
-            dependencies: ["YGOSync", "YGOCore", "YGOPersistence", "YGONetworking",
+            dependencies: ["YGOSync", "YGOCore", "YGOPersistence", "YGONetworking", "YGOValidation", "YGODeckIO", "YGOFeatureDeckBuilder",
                            .product(name: "GRDB", package: "GRDB.swift")],
             path: "Tests/YGOSyncTests",
             swiftSettings: strictConcurrency),
