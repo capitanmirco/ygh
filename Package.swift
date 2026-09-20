@@ -17,6 +17,7 @@ let package = Package(
         .library(name: "YGODesignSystem", targets: ["YGODesignSystem"]),
         .library(name: "YGOFeatureBrowser", targets: ["YGOFeatureBrowser"]),
         .library(name: "YGOFeatureDeckBuilder", targets: ["YGOFeatureDeckBuilder"]),
+        .library(name: "YGOFeatureCollection", targets: ["YGOFeatureCollection"]),
         .library(name: "YGOValidation", targets: ["YGOValidation"]),
         .library(name: "YGODeckIO", targets: ["YGODeckIO"]),
         .library(name: "YGOComposition", targets: ["YGOComposition"]),
@@ -104,6 +105,12 @@ let package = Package(
             path: "Packages/Features/YGOFeatureDeckBuilder/Sources/YGOFeatureDeckBuilder",
             swiftSettings: strictConcurrency),
 
+        .target(
+            name: "YGOFeatureCollection",
+            dependencies: ["YGOCore", "YGODesignSystem"],
+            path: "Packages/Features/YGOFeatureCollection/Sources/YGOFeatureCollection",
+            swiftSettings: strictConcurrency),
+
         // The composition root: the only target allowed to know every
         // concrete implementation at once.
         .target(
@@ -116,7 +123,8 @@ let package = Package(
 
         .executableTarget(
             name: "YGODeckManagerApp",
-            dependencies: ["YGOComposition", "YGOCore", "YGOFeatureBrowser", "YGOFeatureDeckBuilder"],
+            dependencies: ["YGOComposition", "YGOCore", "YGODesignSystem",
+                           "YGOFeatureBrowser", "YGOFeatureDeckBuilder", "YGOFeatureCollection"],
             path: "App",
             swiftSettings: strictConcurrency),
 
@@ -142,7 +150,7 @@ let package = Package(
 
         .testTarget(
             name: "YGOSyncTests",
-            dependencies: ["YGOSync", "YGOCore", "YGOPersistence", "YGONetworking", "YGOValidation", "YGODeckIO", "YGOFeatureDeckBuilder",
+            dependencies: ["YGOSync", "YGOCore", "YGOPersistence", "YGONetworking", "YGOValidation", "YGODeckIO", "YGOFeatureDeckBuilder", "YGOFeatureCollection",
                            .product(name: "GRDB", package: "GRDB.swift")],
             path: "Tests/YGOSyncTests",
             swiftSettings: strictConcurrency),

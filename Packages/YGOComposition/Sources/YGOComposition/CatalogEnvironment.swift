@@ -26,6 +26,7 @@ public struct CatalogEnvironment: Sendable {
     public let deckRepository: SQLiteDeckRepository
     public let deckValidator: DeckValidator
     public let deckImporter: DeckImporter
+    public let collection: SQLiteCollectionRepository
 
     /// Where the application keeps its data on a real machine.
     public static func defaultContainerURL() throws -> URL {
@@ -92,7 +93,8 @@ public struct CatalogEnvironment: Sendable {
                 fetcher: artworkFetcher, observe: observePrefetch),
             deckRepository: deckRepository,
             deckValidator: deckValidator,
-            deckImporter: DeckImporter(repository: deckRepository, validator: deckValidator))
+            deckImporter: DeckImporter(repository: deckRepository, validator: deckValidator),
+            collection: SQLiteCollectionRepository(database: database))
     }
 
     /// Runs the startup flow: bring the catalog up to date if upstream allows,
