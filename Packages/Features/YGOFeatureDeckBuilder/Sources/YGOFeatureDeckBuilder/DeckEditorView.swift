@@ -109,19 +109,53 @@ public struct DeckEditorView: View {
             })
         ) {
             ForEach(DeckSection.allCases, id: \.self) { section in
-                let entries = model.items.filter { $0.section == section }
-                if !entries.isEmpty {
-                    Section(section.italianName) {
-                        ForEach(entries) { item in
-                            row(item)
-                        }
-                    }
-                }
+                sectionRows(section)
             }
         }
         .focused($focus, equals: .cardList)
         .accessibilityLabel("Carte del mazzo")
         .frame(minWidth: 320)
+    }
+
+    /// One section of the list, with its rows and its drop target.
+    ///
+    /// Split out of the list body: the whole thing in one expression was more
+    /// than the type checker would take.
+    @ViewBuilder
+    private func sectionRows(_ section: DeckSection) -> some View {
+        let entries = model.items.filter { $0.section == section }
+        Section(sectionHeader(section)) {
+            ForEach(entries) { item in
+                row(item)
+                    .draggable(DeckDragPayload.deckCard(
+                        artwork: item.id, section: item.section, copies: 1))
+            }
+            if entries.isEmpty {
+                Text("Trascina qui una carta")
+                    .font(Theme.Typography.caption)
+                    .foregroundStyle(Theme.Palette.secondaryText)
+            }
+        }
+        // The whole section is the drop target, empty included - which is
+        // exactly when you most need to drop into it.
+        .dropDestination(for: DeckDragPayload.self) { payloads, _ in
+            guard let payload = payloads.first else { return false }
+            Task { await model.drop(payload, on: section) }
+            return true
+        } isTargeted: { isTargeted in
+            model.dragEntered(isTargeted ? section : nil)
+        }
+        .listRowBackground(dropHighlight(section))
+    }
+
+    private func dropHighlight(_ section: DeckSection) -> Color {
+        model.dropTarget == section ? Theme.Palette.accent.opacity(0.15) : Color.clear
+    }
+
+    /// The section's name with what it holds, so the count is visible while
+    /// dragging into it rather than only after.
+    private func sectionHeader(_ section: DeckSection) -> String {
+        "\(section.italianName) (\(model.deck?.count(in: section) ?? 0))"
     }
 
     private func row(_ item: DeckEntryItem) -> some View {
@@ -137,9 +171,44 @@ public struct DeckEditorView: View {
                     .font(Theme.Typography.caption)
                     .foregroundStyle(Theme.Palette.limited)
             }
+
+            // Everything the drag does, without a pointer.
+            quantityStepper(item)
+            moveMenu(item)
         }
-        .accessibilityElement(children: .ignore)
+        .accessibilityElement(children: .contain)
         .accessibilityLabel(item.accessibilityLabel)
+    }
+
+    /// Split out of `row`: the whole row in one expression was more than the
+    /// type checker would take.
+    private func quantityStepper(_ item: DeckEntryItem) -> some View {
+        Stepper {
+            EmptyView()
+        } onIncrement: {
+            Task { await model.setQuantity(item.quantity + 1, of: item.id, in: item.section) }
+        } onDecrement: {
+            Task { await model.setQuantity(item.quantity - 1, of: item.id, in: item.section) }
+        }
+        .labelsHidden()
+        .accessibilityLabel("Copie di \(item.title)")
+    }
+
+    private func moveMenu(_ item: DeckEntryItem) -> some View {
+        let targets = DeckSection.allCases.filter { $0 != item.section }
+        return Menu("Sposta") {
+            ForEach(targets, id: \.self) { target in
+                Button(target.italianName) {
+                    Task {
+                        await model.move(item.id, from: item.section,
+                                         to: target, copies: item.quantity)
+                    }
+                }
+            }
+        }
+        .menuStyle(.borderlessButton)
+        .fixedSize()
+        .accessibilityLabel("Sposta \(item.title) in un'altra sezione")
     }
 
     // MARK: - Adding cards

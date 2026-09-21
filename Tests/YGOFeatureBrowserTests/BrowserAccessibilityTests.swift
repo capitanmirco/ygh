@@ -18,8 +18,10 @@ struct BrowserAccessibilityTests {
             CardIdentifier(46986414): .semiLimited,
         ]
 
+        let repository = CountingSearchRepository(cards: cards)
         let model = BrowserViewModel(
-            repository: CountingSearchRepository(cards: cards),
+            repository: repository,
+            counter: repository,
             artwork: NoArtworkAvailable(),
             banStatusProvider: banProvider,
             language: .italian)

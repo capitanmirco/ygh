@@ -4,6 +4,7 @@ import YGOCore
 import YGODesignSystem
 import UniformTypeIdentifiers
 import YGOFeatureBrowser
+import YGOFeatureCardDetail
 import YGOFeatureAnalytics
 import YGOFeatureCollection
 import YGOFeatureDeckBuilder
@@ -182,6 +183,49 @@ private struct Sidebar: View {
     }
 }
 
+/// The grid and the panel beside it, sharing one selection.
+///
+/// An inspector column rather than a sheet: selecting the next card is one
+/// click, and the results keep their order and their place while the panel
+/// changes.
+private struct CatalogSection: View {
+    let environment: CatalogEnvironment
+
+    @State private var browser: BrowserViewModel
+    @State private var panel: CardDetailViewModel
+
+    init(environment: CatalogEnvironment) {
+        self.environment = environment
+        _browser = State(wrappedValue: BrowserViewModel(
+            repository: environment.repository,
+            counter: environment.repository,
+            artwork: environment.artworkStore,
+            banStatusProvider: environment.repository))
+        _panel = State(wrappedValue: CardDetailViewModel(
+            loader: CardDetailLoader(
+                catalog: environment.repository,
+                details: environment.cardDetails,
+                usage: environment.cardUsage,
+                priceLookup: environment.prices,
+                history: environment.banlistHistory,
+                provenance: environment.banlistHistory),
+            artwork: environment.artworkStore))
+    }
+
+    var body: some View {
+        HSplitView {
+            BrowserView(model: browser)
+                .frame(minWidth: 420)
+            CardDetailView(model: panel)
+                .frame(minWidth: 300, idealWidth: 360)
+        }
+        .onChange(of: browser.selectedCard) { _, card in
+            guard let card else { return }
+            Task { await panel.select(card, language: browser.language) }
+        }
+    }
+}
+
 private struct Detail: View {
     let section: RootView.Section
     let environment: CatalogEnvironment
@@ -190,10 +234,7 @@ private struct Detail: View {
     var body: some View {
         switch section {
         case .catalog:
-            BrowserView(model: BrowserViewModel(
-                repository: environment.repository,
-                artwork: environment.artworkStore,
-                banStatusProvider: environment.repository))
+            CatalogSection(environment: environment)
         case .collection:
             CollectionView(model: CollectionViewModel(
                 reader: environment.collection,
@@ -398,7 +439,8 @@ private struct DeckEditorLoader: View {
             let model = DeckEditorViewModel(
                 repository: environment.deckRepository,
                 validator: environment.deckValidator,
-                catalogue: environment.repository)
+                catalogue: environment.repository,
+                editing: environment.deckRepository)
             await model.load(deckID: deckID)
             self.model = model
         }

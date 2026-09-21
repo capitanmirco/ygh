@@ -18,10 +18,17 @@ public struct BrowserView: View {
     public var body: some View {
         VStack(spacing: 0) {
             searchBar
+            resultSummary
             Divider()
             content
         }
         .background(Theme.Palette.surface)
+        // The catalog opens showing cards. Waiting for a query would withhold
+        // something an unnarrowed search already pays for in 3.9 ms.
+        .task { await model.start() }
+        .onChange(of: model.queryText) { _, _ in
+            Task { await model.queryChanged() }
+        }
         .onChange(of: model.focusedRegion) { _, region in focus = region }
         .onChange(of: focus) { _, region in
             if let region, region != model.focusedRegion { model.focusRegion(region) }
@@ -29,6 +36,28 @@ public struct BrowserView: View {
     }
 
     // MARK: - Search
+
+    /// Two numbers, not one: how many cards match, and how many of them the
+    /// grid is holding. Showing 200 of 14,566 without saying so would read as
+    /// a catalog of 200.
+    @ViewBuilder
+    private var resultSummary: some View {
+        if case .results = model.state {
+            HStack {
+                Text(model.shownCount < model.matchCount
+                     ? "\(model.matchCount) carte · mostrate \(model.shownCount)"
+                     : "\(model.matchCount) carte")
+                    .font(Theme.Typography.caption)
+                    .foregroundStyle(Theme.Palette.secondaryText)
+                Spacer()
+            }
+            .padding(.horizontal, Theme.Spacing.regular)
+            .padding(.bottom, Theme.Spacing.snug)
+            .accessibilityElement(children: .combine)
+            .accessibilityLabel(
+                "\(model.matchCount) carte corrispondono, \(model.shownCount) mostrate")
+        }
+    }
 
     private var searchBar: some View {
         HStack(spacing: Theme.Spacing.snug) {
@@ -104,6 +133,16 @@ public struct BrowserView: View {
                 }
             }
             .padding(Theme.Spacing.regular)
+
+            if model.canShowMore {
+                Button("Mostra altre \(BrowserViewModel.batchSize)") {
+                    Task { await model.showMore() }
+                }
+                .buttonStyle(.link)
+                .font(Theme.Typography.body)
+                .padding(.bottom, Theme.Spacing.regular)
+                .accessibilityHint("Aggiunge le carte successive a quelle gi\u{00e0} mostrate")
+            }
         }
         .focused($focus, equals: .grid)
         .accessibilityLabel("Griglia carte, \(items.count) risultati")

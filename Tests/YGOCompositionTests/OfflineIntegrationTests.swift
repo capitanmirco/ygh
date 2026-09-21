@@ -143,6 +143,7 @@ struct OfflineIntegrationTests {
         // 7. The browser itself, driven through the same protocols the app uses.
         let model = await BrowserViewModel(
             repository: offline.repository,
+            counter: offline.repository,
             artwork: offline.artworkStore,
             banStatusProvider: offline.repository,
             language: .italian)

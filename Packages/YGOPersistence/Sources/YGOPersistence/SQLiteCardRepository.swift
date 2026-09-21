@@ -135,3 +135,18 @@ extension SQLiteCardRepository: CardSearching {
         return CardSearchOutcome(cards)
     }
 }
+
+extension SQLiteCardRepository: CardSearchCounting {
+    /// How many cards the query matches, whatever page it asked for.
+    ///
+    /// A query whose text holds nothing matchable matches nothing, which is the
+    /// same settled answer `search` gives it.
+    public func matchCount(for query: CardQuery) async throws -> Int {
+        guard let statement = CardQueryBuilder(query: query).makeCountStatement() else {
+            return 0
+        }
+        return try await database.read { db in
+            try Int.fetchOne(db, sql: statement.sql, arguments: statement.arguments) ?? 0
+        }
+    }
+}

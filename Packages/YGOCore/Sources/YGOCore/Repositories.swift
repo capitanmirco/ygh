@@ -54,3 +54,12 @@ public enum ArtworkVariant: String, Hashable, Sendable, Codable, CaseIterable {
     case thumbnail = "thumb"
     case full
 }
+
+/// How many cards a query matches, regardless of how many are shown.
+///
+/// A separate port rather than a method on `CardSearching`: every offline stub
+/// conforms to that protocol, and widening it would break each of them for one
+/// number.
+public protocol CardSearchCounting: Sendable {
+    func matchCount(for query: CardQuery) async throws -> Int
+}

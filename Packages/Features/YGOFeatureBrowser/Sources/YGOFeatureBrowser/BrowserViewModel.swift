@@ -19,6 +19,9 @@ public final class BrowserViewModel {
         case noMatches
     }
 
+    /// How many cards the current query matches, which is not how many are
+    /// shown: the grid holds a batch at a time.
+    public private(set) var matchCount: Int = 0
     public private(set) var state: State = .idle
     public private(set) var language: CardLanguage
     public private(set) var focusedRegion: BrowserFocusRegion = .searchField
@@ -28,9 +31,19 @@ public final class BrowserViewModel {
     public var queryText: String = ""
     public var filters = CardFilters()
 
+    /// One batch. Showing all 14,566 cards at once would put 417 MB of
+    /// thumbnails within reach of the layout to answer a question a stated
+    /// total answers better.
+    public static let batchSize = 200
+
     private let repository: any CardSearching
+    private let counter: any CardSearchCounting
     private let artwork: any ArtworkProviding
     private let banStatusProvider: any CardRepository
+    /// Bumped by every load. A result carrying an older number was asked for
+    /// by text the user has since moved past, so it is discarded rather than
+    /// shown.
+    private var generation = 0
     /// The cards behind the current results, kept so that a language change is
     /// a re-presentation rather than another query.
     private var loadedCards: [Card] = []
@@ -39,11 +52,13 @@ public final class BrowserViewModel {
 
     public init(
         repository: any CardSearching,
+        counter: any CardSearchCounting,
         artwork: any ArtworkProviding,
         banStatusProvider: any CardRepository,
         language: CardLanguage = .italian
     ) {
         self.repository = repository
+        self.counter = counter
         self.artwork = artwork
         self.banStatusProvider = banStatusProvider
         self.language = language
@@ -51,20 +66,57 @@ public final class BrowserViewModel {
 
     // MARK: - Searching
 
+    /// The first load, issued when the browser appears.
+    ///
+    /// The catalog is there to be looked through, not only queried, and an
+    /// unnarrowed query costs 3.9 ms. Waiting for the user to type would be
+    /// withholding something already paid for.
+    public func start() async {
+        await reload()
+    }
+
+    /// Called on every change to the query text. No debounce: the query is
+    /// cheap, and a timer would tax every keystroke to solve a problem the
+    /// measurements do not show.
+    public func queryChanged() async {
+        await reload()
+    }
+
+    public func filtersChanged() async {
+        await reload()
+    }
+
+    /// Kept so that existing callers submitting with Enter still work; it is
+    /// the same load the text change already started.
     public func search() async {
+        await reload()
+    }
+
+    private func reload() async {
+        generation += 1
+        let mine = generation
         state = .searching
-        let query = CardQuery(text: queryText, filters: filters, limit: 200)
+
+        let query = CardQuery(
+            text: queryText, filters: filters, limit: Self.batchSize, offset: 0)
 
         do {
             let outcome = try await repository.search(query)
+            let count = try await counter.matchCount(for: query)
+            guard mine == generation else { return }
+
             loadedCards = outcome.cards
+            matchCount = count
             await loadPresentationData(for: loadedCards)
+            guard mine == generation else { return }
             rebuildItems()
         } catch {
             // A local query failing is not a network problem; there is nothing
             // to retry, so the browser reports nothing found rather than
             // pretending to be busy for ever.
+            guard mine == generation else { return }
             loadedCards = []
+            matchCount = 0
             state = .noMatches
         }
     }
@@ -131,6 +183,54 @@ public final class BrowserViewModel {
         state = .results(items)
         if selectedIndex == nil { selectedIndex = 0 }
         selectedIndex = selectedIndex.map { min($0, items.count - 1) }
+    }
+
+    // MARK: - Paging
+
+    /// How many of the matching cards the grid currently holds.
+    public var shownCount: Int { loadedCards.count }
+
+    /// Whether a further batch exists. False at the end, so the interface can
+    /// stop offering an advance that would return nothing.
+    public var canShowMore: Bool { loadedCards.count < matchCount }
+
+    /// Adds the next batch to the ones already shown.
+    ///
+    /// The batch is tagged with the load that asked for it: if the query
+    /// changed while it was in flight, it belongs to a different result and is
+    /// discarded rather than appended to this one.
+    public func showMore() async {
+        guard canShowMore else { return }
+        let mine = generation
+
+        let query = CardQuery(
+            text: queryText, filters: filters,
+            limit: Self.batchSize, offset: loadedCards.count)
+
+        do {
+            let outcome = try await repository.search(query)
+            guard mine == generation else { return }
+
+            // Upstream paging is by offset, so a card already held would be a
+            // duplicate row rather than a new one.
+            let held = Set(loadedCards.map(\.id))
+            let fresh = outcome.cards.filter { !held.contains($0.id) }
+            guard !fresh.isEmpty else { return }
+
+            loadedCards += fresh
+            await loadPresentationData(for: loadedCards)
+            guard mine == generation else { return }
+            rebuildItems()
+        } catch {
+            // The batch is lost; what is already shown is not.
+        }
+    }
+
+    /// The card behind the highlighted tile, which is what the detail panel
+    /// opens on. The grid holds presentation; this is the card itself.
+    public var selectedCard: Card? {
+        guard let selectedIndex, loadedCards.indices.contains(selectedIndex) else { return nil }
+        return loadedCards[selectedIndex]
     }
 
     public var items: [CardGridItem] {

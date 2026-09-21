@@ -29,10 +29,13 @@ struct EditingAffordanceTests {
         #expect(model.canAddCards)
         #expect(model.items.isEmpty)
 
-        // Search finds cards, and an empty query finds none.
+        // An empty query offers the format's pool rather than nothing. That
+        // reverses what this test asserted before `deck-editing`'s R1.AC1:
+        // browsing for something to add is how a deck gets built.
         model.catalogueQuery = "  "
         await model.searchCatalogue()
-        #expect(model.candidates.isEmpty)
+        #expect(!model.candidates.isEmpty)
+        #expect(model.candidates.allSatisfy { $0.formats.contains(.goat) })
 
         let fusion = try #require(rig.cards.first { $0.frameType == "fusion" })
         model.catalogueQuery = try #require(fusion.name.split(separator: " ")

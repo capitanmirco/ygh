@@ -17,6 +17,7 @@ struct BrowserViewModelTests {
 
         return (BrowserViewModel(
             repository: repository,
+            counter: repository,
             artwork: artwork,
             banStatusProvider: banProvider,
             language: .italian), repository)
@@ -92,6 +93,7 @@ struct BrowserViewModelTests {
         let repository = CountingSearchRepository(cards: [])
         let model = BrowserViewModel(
             repository: repository,
+            counter: repository,
             artwork: NoArtworkAvailable(),
             banStatusProvider: StubBanStatusProvider())
 

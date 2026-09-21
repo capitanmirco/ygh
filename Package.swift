@@ -16,6 +16,7 @@ let package = Package(
         .library(name: "YGOImageStore", targets: ["YGOImageStore"]),
         .library(name: "YGODesignSystem", targets: ["YGODesignSystem"]),
         .library(name: "YGOFeatureBrowser", targets: ["YGOFeatureBrowser"]),
+        .library(name: "YGOFeatureCardDetail", targets: ["YGOFeatureCardDetail"]),
         .library(name: "YGOFeatureDeckBuilder", targets: ["YGOFeatureDeckBuilder"]),
         .library(name: "YGOFeatureCollection", targets: ["YGOFeatureCollection"]),
         .library(name: "YGOFeatureAnalytics", targets: ["YGOFeatureAnalytics"]),
@@ -86,6 +87,14 @@ let package = Package(
 
         // Valuation. Depends on YGOCore alone: the sums are checkable without
         // a database, and the prices arrive through a protocol.
+        // The detail panel. Depends on YGOCore protocols alone, so the whole
+        // of it is provable against stubs: no SQLite, no network, no view.
+        .target(
+            name: "YGOFeatureCardDetail",
+            dependencies: ["YGOCore", "YGODesignSystem", "YGOBanlistHistory"],
+            path: "Packages/Features/YGOFeatureCardDetail/Sources/YGOFeatureCardDetail",
+            swiftSettings: strictConcurrency),
+
         .target(
             name: "YGOPricing",
             dependencies: ["YGOCore"],
@@ -178,7 +187,8 @@ let package = Package(
         .executableTarget(
             name: "YGODeckManagerApp",
             dependencies: ["YGOComposition", "YGOCore", "YGODesignSystem",
-                           "YGOFeatureBrowser", "YGOFeatureDeckBuilder", "YGOFeatureCollection",
+                           "YGOFeatureBrowser", "YGOFeatureCardDetail",
+                           "YGOFeatureDeckBuilder", "YGOFeatureCollection",
                            "YGOFeatureAnalytics", "YGOFeaturePricing", "YGOPricing"],
             path: "App",
             swiftSettings: strictConcurrency),
@@ -208,6 +218,14 @@ let package = Package(
             dependencies: ["YGOSync", "YGOCore", "YGOPersistence", "YGONetworking", "YGOValidation", "YGODeckIO", "YGOFeatureDeckBuilder", "YGOFeatureCollection", "YGOPricing", "YGOBanlistHistory",
                            .product(name: "GRDB", package: "GRDB.swift")],
             path: "Tests/YGOSyncTests",
+            swiftSettings: strictConcurrency),
+
+        .testTarget(
+            name: "YGOFeatureCardDetailTests",
+            dependencies: ["YGOFeatureCardDetail", "YGOCore", "YGOBanlistHistory",
+                           "YGOFeatureBrowser", "YGOPersistence",
+                           .product(name: "GRDB", package: "GRDB.swift")],
+            path: "Tests/YGOFeatureCardDetailTests",
             swiftSettings: strictConcurrency),
 
         .testTarget(

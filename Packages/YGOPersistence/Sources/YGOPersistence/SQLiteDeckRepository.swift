@@ -263,3 +263,98 @@ public struct SQLiteDeckRepository: DeckRepository, DeckBuilding {
             updatedAt: date(row["updated_at"]))
     }
 }
+
+extension SQLiteDeckRepository: DeckEditing {
+    /// Makes a section hold exactly this many copies.
+    ///
+    /// Zero is removal, so `R2.AC2` needs no separate path. The count is not
+    /// judged: `deck-builder` settled that writing is permissive and the
+    /// validator reports what is wrong with the result.
+    public func setQuantity(
+        artwork: ArtworkIdentifier,
+        section: DeckSection,
+        to copies: Int,
+        in deckID: Int64
+    ) async throws {
+        let timestamp = Self.text(now())
+        try await database.write { db in
+            guard copies > 0 else {
+                try db.execute(sql: """
+                    DELETE FROM deck_slot
+                    WHERE deck_id = ? AND section = ? AND artwork_id = ?
+                    """, arguments: [deckID, section.rawValue, artwork.rawValue])
+                try Self.touch(deckID, at: timestamp, in: db)
+                return
+            }
+
+            guard let cardID = try Int.fetchOne(db, sql:
+                "SELECT card_id FROM card_artwork WHERE artwork_id = ?",
+                arguments: [artwork.rawValue]) else {
+                throw DeckRepositoryError.artworkNotInCatalog(artwork)
+            }
+
+            try db.execute(sql: """
+                INSERT INTO deck_slot (deck_id, section, artwork_id, card_id, quantity)
+                VALUES (?, ?, ?, ?, ?)
+                ON CONFLICT(deck_id, section, artwork_id) DO UPDATE SET
+                    quantity = excluded.quantity
+                """, arguments: [deckID, section.rawValue, artwork.rawValue, cardID, copies])
+            try Self.touch(deckID, at: timestamp, in: db)
+        }
+    }
+
+    /// Moves copies between two sections of one deck, in one transaction.
+    @discardableResult
+    public func move(
+        artwork: ArtworkIdentifier,
+        from source: DeckSection,
+        to destination: DeckSection,
+        copies: Int,
+        in deckID: Int64
+    ) async throws -> Int {
+        // A section onto itself is a no-op before any SQL runs, rather than a
+        // delete and an insert that happen to cancel out.
+        guard source != destination, copies > 0 else { return 0 }
+
+        let timestamp = Self.text(now())
+        return try await database.write { db in
+            guard let row = try Row.fetchOne(db, sql: """
+                SELECT card_id, quantity FROM deck_slot
+                WHERE deck_id = ? AND section = ? AND artwork_id = ?
+                """, arguments: [deckID, source.rawValue, artwork.rawValue])
+            else { return 0 }
+
+            let held: Int = row["quantity"]
+            let cardID: Int = row["card_id"]
+            // Asking for more than is there moves what is there (R3.AC6).
+            let moving = min(copies, held)
+            guard moving > 0 else { return 0 }
+
+            // The last copies are deleted rather than decremented to zero: the
+            // schema's check refuses a zero quantity before any tidying
+            // afterwards could run.
+            try db.execute(sql: """
+                DELETE FROM deck_slot
+                WHERE deck_id = ? AND section = ? AND artwork_id = ? AND quantity <= ?
+                """, arguments: [deckID, source.rawValue, artwork.rawValue, moving])
+
+            try db.execute(sql: """
+                UPDATE deck_slot SET quantity = quantity - ?
+                WHERE deck_id = ? AND section = ? AND artwork_id = ?
+                """, arguments: [moving, deckID, source.rawValue, artwork.rawValue])
+
+            // ON CONFLICT is what makes an occupied destination a sum rather
+            // than a second row for the same artwork.
+            try db.execute(sql: """
+                INSERT INTO deck_slot (deck_id, section, artwork_id, card_id, quantity)
+                VALUES (?, ?, ?, ?, ?)
+                ON CONFLICT(deck_id, section, artwork_id) DO UPDATE SET
+                    quantity = quantity + excluded.quantity
+                """, arguments: [deckID, destination.rawValue, artwork.rawValue,
+                                 cardID, moving])
+
+            try Self.touch(deckID, at: timestamp, in: db)
+            return moving
+        }
+    }
+}

@@ -50,6 +50,57 @@ struct CardQueryBuilder {
     /// them in construction order instead silently pairs each value with the
     /// wrong placeholder.
     func makeStatement() -> (sql: String, arguments: StatementArguments)? {
+        guard let parts = makeParts() else { return nil }
+
+        let sql = """
+            SELECT card.* FROM card
+            \(parts.joins.joined(separator: "\n"))
+            \(parts.conditions.isEmpty ? "" : "WHERE " + parts.conditions.joined(separator: "\n  AND "))
+            ORDER BY \(parts.ordering.joined(separator: ", "))
+            LIMIT ? OFFSET ?
+            """
+
+        var arguments = parts.joinArguments
+        arguments += parts.conditionArguments
+        arguments += parts.orderingArguments
+        arguments += [query.limit, query.offset]
+
+        return (sql, arguments)
+    }
+
+    /// How many cards the query matches, ignoring the page it asked for.
+    ///
+    /// The same joins and the same conditions, with the ordering and the page
+    /// removed - and their arguments removed with them. The ordering carries
+    /// bound values of its own, so leaving them in would shift every
+    /// placeholder and return a plausible wrong number rather than an error.
+    func makeCountStatement() -> (sql: String, arguments: StatementArguments)? {
+        guard let parts = makeParts() else { return nil }
+
+        let sql = """
+            SELECT COUNT(*) FROM card
+            \(parts.joins.joined(separator: "\n"))
+            \(parts.conditions.isEmpty ? "" : "WHERE " + parts.conditions.joined(separator: "\n  AND "))
+            """
+
+        var arguments = parts.joinArguments
+        arguments += parts.conditionArguments
+
+        return (sql, arguments)
+    }
+
+    /// The clauses both statements are assembled from, each carrying its own
+    /// arguments so that a caller concatenates them in placeholder order.
+    private struct Parts {
+        var joins: [String] = []
+        var joinArguments = StatementArguments()
+        var conditions: [String] = []
+        var conditionArguments = StatementArguments()
+        var ordering: [String] = []
+        var orderingArguments = StatementArguments()
+    }
+
+    private func makeParts() -> Parts? {
         var joins: [String] = []
         var joinArguments = StatementArguments()
         var conditions: [String] = []
@@ -128,20 +179,10 @@ struct CardQueryBuilder {
 
         // MARK: Assembly
 
-        let sql = """
-            SELECT card.* FROM card
-            \(joins.joined(separator: "\n"))
-            \(conditions.isEmpty ? "" : "WHERE " + conditions.joined(separator: "\n  AND "))
-            ORDER BY \(ordering.joined(separator: ", "))
-            LIMIT ? OFFSET ?
-            """
-
-        var arguments = joinArguments
-        arguments += conditionArguments
-        arguments += orderingArguments
-        arguments += [query.limit, query.offset]
-
-        return (sql, arguments)
+        return Parts(
+            joins: joins, joinArguments: joinArguments,
+            conditions: conditions, conditionArguments: conditionArguments,
+            ordering: ordering, orderingArguments: orderingArguments)
     }
 
     // MARK: - Condition helpers

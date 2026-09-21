@@ -124,3 +124,70 @@ public protocol DeckBuilding: Sendable {
     /// printing.
     func resolveArtwork(_ artwork: ArtworkIdentifier) async throws -> CardIdentifier?
 }
+
+/// Rearranging a deck: setting how many copies a section holds, and moving
+/// copies between sections.
+///
+/// A separate port rather than two more methods on `DeckBuilding`, which every
+/// stub in `deck-builder`'s offline proofs conforms to. Adding to that
+/// protocol would break each of them for operations they never call.
+public protocol DeckEditing: Sendable {
+    /// Makes `section` hold exactly `copies` of that artwork. Zero removes it.
+    ///
+    /// Permissive, like every other write here: a count that breaks a rule is
+    /// applied and the validator reports it.
+    func setQuantity(
+        artwork: ArtworkIdentifier,
+        section: DeckSection,
+        to copies: Int,
+        in deckID: Int64
+    ) async throws
+
+    /// Moves up to `copies` from one section to another, in one transaction.
+    ///
+    /// Returns how many actually moved, which is fewer when the source holds
+    /// fewer. A remove followed by an add would leave the deck short between
+    /// the two, and short for good if the second failed.
+    @discardableResult
+    func move(
+        artwork: ArtworkIdentifier,
+        from source: DeckSection,
+        to destination: DeckSection,
+        copies: Int,
+        in deckID: Int64
+    ) async throws -> Int
+}
+
+/// One reversible change to a deck.
+///
+/// Adding and removing are expressed as count changes, so the history has two
+/// cases rather than four and every inverse is an edit of the same kind. That
+/// is what lets undo reuse the two write operations instead of needing a third
+/// way to put a deck into a given state.
+public enum DeckEdit: Hashable, Sendable {
+    case quantity(
+        artwork: ArtworkIdentifier, section: DeckSection, from: Int, to: Int)
+    case move(
+        artwork: ArtworkIdentifier, from: DeckSection, to: DeckSection, copies: Int)
+
+    public var inverse: DeckEdit {
+        switch self {
+        case let .quantity(artwork, section, from, to):
+            .quantity(artwork: artwork, section: section, from: to, to: from)
+        case let .move(artwork, from, to, copies):
+            .move(artwork: artwork, from: to, to: from, copies: copies)
+        }
+    }
+}
+
+/// What is being dragged in the deck editor.
+///
+/// A value rather than a view type, so the drop it lands on is a function a
+/// test can call. The gesture that carries it is not covered by any automated
+/// proof, which `deck-editing`'s `C6` states.
+public enum DeckDragPayload: Hashable, Sendable, Codable {
+    /// A card already in the deck, dragged out of a section.
+    case deckCard(artwork: ArtworkIdentifier, section: DeckSection, copies: Int)
+    /// A card from the editor's candidate list.
+    case candidate(artwork: ArtworkIdentifier)
+}

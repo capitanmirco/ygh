@@ -28,6 +28,11 @@ public struct CatalogEnvironment: Sendable {
     public let deckImporter: DeckImporter
     public let collection: SQLiteCollectionRepository
     public let prices: SQLitePriceRepository
+    /// The catalog columns only a detail panel reads, and where a card's
+    /// copies are. Both read tables that already exist.
+    public let cardDetails: SQLiteCardDetailReader
+    public let cardUsage: SQLiteCardUsageReader
+    public let banlistHistory: SQLiteBanlistHistory
 
     /// Where the application keeps its data on a real machine.
     public static func defaultContainerURL() throws -> URL {
@@ -96,7 +101,10 @@ public struct CatalogEnvironment: Sendable {
             deckValidator: deckValidator,
             deckImporter: DeckImporter(repository: deckRepository, validator: deckValidator),
             collection: SQLiteCollectionRepository(database: database),
-            prices: SQLitePriceRepository(database: database))
+            prices: SQLitePriceRepository(database: database),
+            cardDetails: SQLiteCardDetailReader(database: database),
+            cardUsage: SQLiteCardUsageReader(database: database),
+            banlistHistory: SQLiteBanlistHistory(database: database))
     }
 
     /// Runs the startup flow: bring the catalog up to date if upstream allows,

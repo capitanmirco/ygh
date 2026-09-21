@@ -44,6 +44,12 @@ public final class DeckEditorViewModel {
     /// Set when an action was refused for want of a confirmation, so the
     /// interface can ask rather than the model deciding on the user's behalf.
     public private(set) var pendingDeletion: Int64?
+    /// What the last edit failed with, or `nil` when it succeeded.
+    ///
+    /// The editor used to call the repository with `try?`, so an edit that
+    /// threw left the deck unchanged and said nothing - indistinguishable from
+    /// one that succeeded and did nothing.
+    public private(set) var lastFailure: String?
 
     private let repository: any DeckBuilding
     private let validator: any DeckValidating
@@ -54,26 +60,44 @@ public final class DeckEditorViewModel {
     /// What a search of the catalog turned up, ready to be added.
     public private(set) var candidates: [Card] = []
     public var catalogueQuery: String = ""
+    /// One page of candidates. The panel is narrow; the deck is the point.
+    public static let candidateLimit = 40
+    private var candidateGeneration = 0
+    /// Undo and redo for as long as this deck is open.
+    private(set) var history = DeckEditHistory()
+
+    /// Rearranging: counts and moves. Absent means the editor can add and
+    /// remove but not rearrange.
+    private let editing: (any DeckEditing)?
 
     public init(
         repository: any DeckBuilding,
         validator: any DeckValidating,
         catalogue: (any CardSearching)? = nil,
+        editing: (any DeckEditing)? = nil,
         language: CardLanguage = .italian
     ) {
         self.repository = repository
         self.validator = validator
         self.catalogue = catalogue
+        self.editing = editing
         self.language = language
     }
 
     public var canAddCards: Bool { catalogue != nil }
+    public var canRearrange: Bool { editing != nil }
 
     // MARK: - Loading
 
     public func load(deckID: Int64) async {
+        // Opening a different deck discards the undo history of the one
+        // before it, so a ⌘Z cannot reach the wrong deck.
+        if deck?.id != deckID { history.clear() }
         guard let loaded = try? await repository.deck(with: deckID) else { return }
         await refresh(with: loaded)
+        // The editor opens with something to add. Waiting for the user to type
+        // withholds a query that costs a few milliseconds.
+        await searchCatalogue()
     }
 
     private func refresh(with deck: Deck) async {
@@ -121,12 +145,29 @@ public final class DeckEditorViewModel {
     // MARK: - Editing
 
     /// Searches the catalog for a card to add.
+    /// Offers cards to add, narrowed by the text and by the deck's format.
+    ///
+    /// An empty query offers the format's pool rather than nothing: browsing
+    /// for something to add is how a deck gets built. The format filter is
+    /// what stops a GOAT deck being offered a card it could never hold.
     public func searchCatalogue() async {
-        guard let catalogue, !catalogueQuery.trimmingCharacters(in: .whitespaces).isEmpty else {
+        guard let catalogue, let deck else {
             candidates = []
             return
         }
-        let outcome = try? await catalogue.search(CardQuery(text: catalogueQuery, limit: 40))
+
+        candidateGeneration += 1
+        let mine = candidateGeneration
+
+        var filters = CardFilters()
+        filters.format = deck.format
+        let query = CardQuery(
+            text: catalogueQuery, filters: filters, limit: Self.candidateLimit)
+
+        let outcome = try? await catalogue.search(query)
+        // A result for text the user has moved past belongs to a question no
+        // longer being asked.
+        guard mine == candidateGeneration else { return }
         candidates = outcome?.cards ?? []
     }
 
@@ -137,20 +178,178 @@ public final class DeckEditorViewModel {
     public func add(_ card: Card, to section: DeckSection? = nil) async {
         guard let deck, let artwork = card.artworks.first else { return }
         let target = section ?? DeckValidator.defaultSection(for: card.frame)
-        try? await repository.addCard(artwork: artwork, section: target, to: deck.id)
-        await load(deckID: deck.id)
+        await add(artwork: artwork, to: target)
     }
 
+    /// Adding and removing go through `DeckBuilding`, which is what an editor
+    /// built without the rearranging port still has. Only counts and moves
+    /// need `DeckEditing`.
     public func add(artwork: ArtworkIdentifier, to section: DeckSection) async {
         guard let deck else { return }
-        try? await repository.addCard(artwork: artwork, section: section, to: deck.id)
-        await load(deckID: deck.id)
+        let before = quantity(of: artwork, in: section)
+        await perform(
+            { try await self.repository.addCard(
+                artwork: artwork, section: section, to: deck.id) },
+            recording: .quantity(artwork: artwork, section: section,
+                                 from: before, to: before + 1),
+            in: deck.id)
     }
 
     public func remove(artwork: ArtworkIdentifier, from section: DeckSection) async {
         guard let deck else { return }
-        try? await repository.removeCard(artwork: artwork, section: section, from: deck.id)
-        await load(deckID: deck.id)
+        let before = quantity(of: artwork, in: section)
+        guard before > 0 else { return }
+        await perform(
+            { try await self.repository.removeCard(
+                artwork: artwork, section: section, from: deck.id) },
+            recording: .quantity(artwork: artwork, section: section,
+                                 from: before, to: before - 1),
+            in: deck.id)
+    }
+
+    /// Makes a section hold exactly this many copies.
+    public func setQuantity(
+        _ copies: Int, of artwork: ArtworkIdentifier, in section: DeckSection
+    ) async {
+        guard let deck else { return }
+        let before = quantity(of: artwork, in: section)
+        guard copies != before else { return }
+        await apply(.quantity(artwork: artwork, section: section,
+                              from: before, to: max(0, copies)), in: deck.id)
+    }
+
+    /// Moves copies from one section to another.
+    public func move(
+        _ artwork: ArtworkIdentifier, from source: DeckSection,
+        to destination: DeckSection, copies: Int = 1
+    ) async {
+        guard let deck, source != destination else { return }
+        let held = quantity(of: artwork, in: source)
+        let moving = min(copies, held)
+        guard moving > 0 else { return }
+        await apply(.move(artwork: artwork, from: source,
+                          to: destination, copies: moving), in: deck.id)
+    }
+
+    // MARK: - Dropping
+
+    /// The section a drag is currently over, or `nil` when nothing is being
+    /// dragged. The view highlights it; nothing else depends on it.
+    public private(set) var dropTarget: DeckSection?
+
+    public func dragEntered(_ section: DeckSection?) {
+        dropTarget = section
+    }
+
+    /// Applies a drop.
+    ///
+    /// This is the part a proof can reach: given what was dragged and where it
+    /// landed, it moves or adds. What no proof here covers is SwiftUI
+    /// delivering the drag to it, which is checked by hand.
+    @discardableResult
+    public func drop(_ payload: DeckDragPayload, on section: DeckSection) async -> Bool {
+        dropTarget = nil
+        switch payload {
+        case let .deckCard(artwork, source, copies):
+            guard source != section else { return false }
+            await move(artwork, from: source, to: section, copies: copies)
+            return lastFailure == nil
+        case let .candidate(artwork):
+            await add(artwork: artwork, to: section)
+            return lastFailure == nil
+        }
+    }
+
+    // MARK: - Keyboard
+
+    /// Moves the selected card to another section without a pointer.
+    public func moveSelection(to section: DeckSection, copies: Int = 1) async {
+        guard let item = selectedItem else { return }
+        await move(item.id, from: item.section, to: section, copies: copies)
+    }
+
+    /// Changes the selected card's count without a pointer.
+    public func changeSelectedQuantity(by delta: Int) async {
+        guard let item = selectedItem else { return }
+        await setQuantity(item.quantity + delta, of: item.id, in: item.section)
+    }
+
+    // MARK: - Undo
+
+    /// Undo replays edits through the rearranging port, so an editor built
+    /// without one cannot offer it.
+    public var canUndo: Bool { editing != nil && history.canUndo }
+    public var canRedo: Bool { editing != nil && history.canRedo }
+
+    /// Puts the deck back the way it was before the last edit.
+    @discardableResult
+    public func undo() async -> Bool {
+        guard let deck else { return false }
+        guard let inverse = history.takeUndo() else {
+            lastFailure = "Non c'è niente da annullare."
+            return false
+        }
+        // Recorded already: applying the inverse must not become a new edit.
+        return await apply(inverse, in: deck.id, recordingHistory: false)
+    }
+
+    @discardableResult
+    public func redo() async -> Bool {
+        guard let deck else { return false }
+        guard let edit = history.takeRedo() else {
+            lastFailure = "Non c'è niente da ripetere."
+            return false
+        }
+        return await apply(edit, in: deck.id, recordingHistory: false)
+    }
+
+    /// How many copies a section holds of an artwork right now.
+    public func quantity(of artwork: ArtworkIdentifier, in section: DeckSection) -> Int {
+        deck?.slots.first { $0.artwork == artwork && $0.section == section }?.quantity ?? 0
+    }
+
+    /// The one place an edit reaches storage.
+    ///
+    /// It catches, reports, and reloads the deck from storage afterwards, so
+    /// what is shown is what is stored rather than what was hoped for.
+    @discardableResult
+    private func perform(
+        _ write: () async throws -> Void,
+        recording edit: DeckEdit?,
+        in deckID: Int64
+    ) async -> Bool {
+        do {
+            try await write()
+            lastFailure = nil
+            if let edit { history.record(edit) }
+            await load(deckID: deckID)
+            return true
+        } catch {
+            lastFailure = "Modifica non riuscita: \(error)"
+            // Reloaded even on failure: what is shown must be what is stored,
+            // whichever of the two the user was expecting.
+            await load(deckID: deckID)
+            return false
+        }
+    }
+
+    @discardableResult
+    func apply(_ edit: DeckEdit, in deckID: Int64, recordingHistory: Bool = true) async -> Bool {
+        guard let editing else {
+            lastFailure = "Questo editor non può riorganizzare il mazzo."
+            return false
+        }
+
+        return await perform({
+            switch edit {
+            case let .quantity(artwork, section, _, to):
+                try await editing.setQuantity(
+                    artwork: artwork, section: section, to: to, in: deckID)
+            case let .move(artwork, from, to, copies):
+                try await editing.move(
+                    artwork: artwork, from: from, to: to, copies: copies, in: deckID)
+            }
+        }, recording: recordingHistory ? edit : nil, in: deckID)
     }
 
     /// Asks rather than acts. A deck is irreplaceable, so the confirmation is

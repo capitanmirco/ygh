@@ -5,14 +5,20 @@ portfolio. Single local user, offline-first, no accounts and no server.
 
 ## Status
 
-Six specifications are complete and certified: `card-catalog`, `deck-builder`,
-`collection-tracker`, `deck-analytics`, `pricing` and `banlist-history`. The
-application acquires the full card pool, keeps it current, stores artwork
-locally, and browses, builds, tracks, analyses and prices entirely offline.
+Eight specifications are complete and certified: `card-catalog`, `deck-builder`,
+`collection-tracker`, `deck-analytics`, `pricing`, `banlist-history`,
+`card-detail` and `deck-editing`. The application acquires the full card pool, keeps it current,
+stores artwork locally, and browses, builds, tracks, analyses and prices
+entirely offline.
 
-`banlist-history` acquires and stores the published Forbidden & Limited Lists
-and answers what a card's status was on any of them; displaying that history is
-the `card-detail` specification's work and is not built yet.
+The catalog opens showing cards and narrows as you type, 200 at a time against
+a stated total. Selecting a card opens a panel beside the results carrying its
+text, its release dates, its printings, all five price sources, the copies you
+own, the decks using it, and what every published Forbidden & Limited List has
+said about it since 1999.
+
+A deck is freely editable: search and insert, set a count outright, drag a card
+from one section to another or move it from the keyboard, and undo any of it.
 
 ## Requirements
 
@@ -47,7 +53,8 @@ everything else lives in local packages.
 | `YGOBanlistHistory` | A card's status across every published list, and when it changed. Depends on `YGOCore` alone. |
 | `YGOImageStore` | The on-disk artwork store and its background prefetcher. |
 | `YGODesignSystem` | Spacing, colour and typography tokens. |
-| `YGOFeatureBrowser` | Card browsing, searching, filtering. |
+| `YGOFeatureBrowser` | Card browsing, searching, filtering, paging. |
+| `YGOFeatureCardDetail` | The panel beside the results: one card, assembled from every other module's ports. |
 | `YGOComposition` | The composition root: the only place that knows every concrete implementation. |
 
 Feature modules depend on `YGOCore` protocols, never on a concrete persistence
@@ -100,7 +107,10 @@ Taken from the live API and from the test suite, not estimated:
 | Banlist history | 177 lists, 28,648 entries, 0.43 MB |
 | Search latency, p95 | under 100 ms in a debug build |
 | Card history latency | under 20 ms, worst case, debug build |
-| Tests | 317, all green |
+| Card detail, opening | under 100 ms, worst case, debug build |
+| Narrowing, per keystroke | under 150 ms against 14,566 cards |
+| Deck edit, applied and reloaded | under 100 ms on a 70-card deck |
+| Tests | 394, all green |
 
 ## Specification workflow
 
@@ -128,3 +138,12 @@ entries upstream publishes for a handful of cards. No test contacts a live host.
 The banlist fixtures are the complete published record rather than a sample: all
 177 lists are recorded, because a proof that the stored list count matches the
 published one cannot be made from three sampled lists.
+
+Where a guard exists to discard stale work — a search result for text the user
+has moved past — the test that covers it was checked by removing the guard and
+confirming the test fails. A test that passes either way proves nothing.
+
+One thing here is deliberately not proven automatically: the drag gesture in the
+deck editor. What is proven is the drop handler beneath it and the keyboard path
+beside it, so the gesture is an affordance rather than the only way to do
+something. `deck-editing`'s `C6` says so rather than leaving it implied.
