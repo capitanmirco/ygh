@@ -85,16 +85,21 @@ public struct BanlistListEntry: Hashable, Sendable {
     public let name: String?
     public let italianName: String?
     public let status: BanlistStatus
+    /// What the card is, for grouping a list by kind. Nil when the catalog
+    /// cannot match the entry — the same condition that leaves `cardID` and
+    /// `name` nil.
+    public let frame: CardFrame?
 
     public init(
         konamiID: Int, cardID: Int?, name: String?,
-        italianName: String?, status: BanlistStatus
+        italianName: String?, status: BanlistStatus, frame: CardFrame? = nil
     ) {
         self.konamiID = konamiID
         self.cardID = cardID
         self.name = name
         self.italianName = italianName
         self.status = status
+        self.frame = frame
     }
 
     public var displayName: String {

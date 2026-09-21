@@ -3,6 +3,7 @@ import YGOComposition
 import YGOCore
 import YGODesignSystem
 import UniformTypeIdentifiers
+import YGOFeatureBanlist
 import YGOFeatureBrowser
 import YGOFeatureCardDetail
 import YGOFeatureAnalytics
@@ -57,6 +58,7 @@ struct RootView: View {
         case decks = "Mazzi"
         case collection = "Collezione"
         case analytics = "Statistiche"
+        case banlist = "Banlist"
         case value = "Valore"
         var id: String { rawValue }
 
@@ -66,6 +68,7 @@ struct RootView: View {
             case .decks: "rectangle.stack"
             case .collection: "tray.full"
             case .analytics: "chart.bar"
+            case .banlist: "hand.raised"
             case .value: "eurosign.circle"
             }
         }
@@ -415,6 +418,8 @@ private struct Detail: View {
                 reader: environment.collection,
                 writer: environment.collection,
                 catalogue: environment.repository))
+        case .banlist:
+            BanlistSection(environment: environment)
         case .analytics:
             analyticsDetail
         case .value:
@@ -589,6 +594,43 @@ private struct PricingLoader: View {
                 recordedSpend: totals.map { Money(amount: $0.recordedSpend, currency: .eur) })
             self.model = model
         }
+    }
+}
+
+/// A Forbidden & Limited List, with the card detail beside it.
+private struct BanlistSection: View {
+    let environment: CatalogEnvironment
+
+    @State private var model: BanlistBrowserViewModel
+    @State private var panel: CardDetailViewModel
+    @State private var sync: BanlistSyncCoordinator
+
+    init(environment: CatalogEnvironment) {
+        self.environment = environment
+        _model = State(wrappedValue: BanlistBrowserViewModel(
+            history: environment.banlistHistory,
+            catalog: environment.repository))
+        _panel = State(wrappedValue: CardDetailViewModel(
+            loader: CardDetailLoader(
+                catalog: environment.repository,
+                details: environment.cardDetails,
+                usage: environment.cardUsage,
+                priceLookup: environment.prices,
+                history: environment.banlistHistory,
+                provenance: environment.banlistHistory),
+            artwork: environment.artworkStore))
+        _sync = State(wrappedValue: BanlistSyncCoordinator(environment: environment))
+    }
+
+    var body: some View {
+        BanlistBrowserView(
+            model: model,
+            preview: AnyView(CardDetailView(model: panel)),
+            onSynchronise: { Task { await sync.synchronize(); await model.load(format: model.format) } })
+            .onChange(of: model.previewCard) { _, card in
+                guard let card else { return }
+                Task { await panel.select(card, language: .italian) }
+            }
     }
 }
 

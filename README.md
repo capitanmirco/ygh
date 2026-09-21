@@ -5,11 +5,11 @@ portfolio. Single local user, offline-first, no accounts and no server.
 
 ## Status
 
-Thirteen specifications are complete and certified: `card-catalog`,
+Fourteen specifications are complete and certified: `card-catalog`,
 `deck-builder`, `collection-tracker`, `deck-analytics`, `pricing`,
 `banlist-history`, `card-detail`, `deck-editing`, `visual-language`,
-`catalog-filters`, `italian-vocabulary`, `deck-card-preview` and
-`deck-authoring`. The application acquires the full card pool, keeps it current,
+`catalog-filters`, `italian-vocabulary`, `deck-card-preview`,
+`deck-authoring` and `banlist-browser`. The application acquires the full card pool, keeps it current,
 stores artwork locally, and browses, builds, tracks, analyses and prices
 entirely offline.
 
@@ -24,6 +24,10 @@ A deck can be started from nothing, filled, rearranged and taken out again as a
 count outright, drag a card from one section to another or move it from the
 keyboard, and undo any of it. Selecting a card shows it beside the deck, in the
 same panel the catalog uses.
+
+A Forbidden & Limited List can be read as a list rather than as a filter:
+grouped into forbidden, limited and semi-limited, each block ordered monsters,
+spells, traps, then by name — the way a list is published and discussed.
 
 The catalog narrows ten ways: card type, attribute, level, monster type,
 archetype, attack and defence, release year, format, cards owned, and
@@ -134,7 +138,7 @@ Taken from the live API and from the test suite, not estimated:
 | Palette separation | ΔE ≥ 25 from any restriction colour, ≥ 18 within a deck section |
 | Contrast | markers ≥ 3:1, text ≥ 4.5:1, both appearances |
 | Vocabulary | 47 card kinds, 33 monster types, 7 attributes translated |
-| Tests | 513, all green |
+| Tests | 538, all green |
 
 ## Specification workflow
 

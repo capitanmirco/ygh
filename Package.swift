@@ -17,6 +17,7 @@ let package = Package(
         .library(name: "YGODesignSystem", targets: ["YGODesignSystem"]),
         .library(name: "YGOFeatureBrowser", targets: ["YGOFeatureBrowser"]),
         .library(name: "YGOFeatureCardDetail", targets: ["YGOFeatureCardDetail"]),
+        .library(name: "YGOFeatureBanlist", targets: ["YGOFeatureBanlist"]),
         .library(name: "YGOFeatureDeckBuilder", targets: ["YGOFeatureDeckBuilder"]),
         .library(name: "YGOFeatureCollection", targets: ["YGOFeatureCollection"]),
         .library(name: "YGOFeatureAnalytics", targets: ["YGOFeatureAnalytics"]),
@@ -90,6 +91,14 @@ let package = Package(
         // a database, and the prices arrive through a protocol.
         // The detail panel. Depends on YGOCore protocols alone, so the whole
         // of it is provable against stubs: no SQLite, no network, no view.
+        // Reading a Forbidden & Limited List as a document rather than as a
+        // filter over the catalog.
+        .target(
+            name: "YGOFeatureBanlist",
+            dependencies: ["YGOCore", "YGODesignSystem", "YGOFeatureCardDetail"],
+            path: "Packages/Features/YGOFeatureBanlist/Sources/YGOFeatureBanlist",
+            swiftSettings: strictConcurrency),
+
         .target(
             name: "YGOFeatureCardDetail",
             dependencies: ["YGOCore", "YGODesignSystem", "YGOBanlistHistory"],
@@ -189,7 +198,7 @@ let package = Package(
         .executableTarget(
             name: "YGODeckManagerApp",
             dependencies: ["YGOComposition", "YGOCore", "YGODesignSystem",
-                           "YGOFeatureBrowser", "YGOFeatureCardDetail",
+                           "YGOFeatureBrowser", "YGOFeatureCardDetail", "YGOFeatureBanlist",
                            "YGOFeatureDeckBuilder", "YGOFeatureCollection",
                            "YGOFeatureAnalytics", "YGOFeaturePricing", "YGOPricing"],
             path: "App",
@@ -217,9 +226,15 @@ let package = Package(
 
         .testTarget(
             name: "YGOSyncTests",
-            dependencies: ["YGOSync", "YGOCore", "YGOPersistence", "YGONetworking", "YGOValidation", "YGODeckIO", "YGOFeatureDeckBuilder", "YGOFeatureCollection", "YGOFeatureBrowser", "YGOFeatureCardDetail", "YGOPricing", "YGOBanlistHistory", "YGOComposition",
+            dependencies: ["YGOSync", "YGOCore", "YGOPersistence", "YGONetworking", "YGOValidation", "YGODeckIO", "YGOFeatureDeckBuilder", "YGOFeatureCollection", "YGOFeatureBrowser", "YGOFeatureCardDetail", "YGOFeatureBanlist", "YGOPricing", "YGOBanlistHistory", "YGOComposition",
                            .product(name: "GRDB", package: "GRDB.swift")],
             path: "Tests/YGOSyncTests",
+            swiftSettings: strictConcurrency),
+
+        .testTarget(
+            name: "YGOFeatureBanlistTests",
+            dependencies: ["YGOFeatureBanlist", "YGOCore"],
+            path: "Tests/YGOFeatureBanlistTests",
             swiftSettings: strictConcurrency),
 
         .testTarget(

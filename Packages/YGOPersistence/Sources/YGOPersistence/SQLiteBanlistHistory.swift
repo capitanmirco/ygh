@@ -102,7 +102,7 @@ extension SQLiteBanlistHistory: BanlistHistoryReading {
         try database.read { db in
             try Row.fetchAll(db, sql: """
                 SELECT e.konami_id, e.status, c.id AS card_id,
-                       c.name_en, c.name_it
+                       c.name_en, c.name_it, c.frame_type
                 FROM banlist_entry e
                 JOIN banlist_revision r ON r.id = e.revision_id
                 LEFT JOIN card c ON c.konami_id = e.konami_id
@@ -116,7 +116,8 @@ extension SQLiteBanlistHistory: BanlistHistoryReading {
                     cardID: row["card_id"],
                     name: row["name_en"],
                     italianName: row["name_it"],
-                    status: status)
+                    status: status,
+                    frame: (row["frame_type"] as String?).flatMap(CardFrame.init(rawValue:)))
             }
         }
     }
