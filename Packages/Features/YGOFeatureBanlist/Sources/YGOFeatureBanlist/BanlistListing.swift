@@ -38,15 +38,9 @@ public enum BanlistListing {
     /// Monsters, then spells, then traps. A player looks for them in that
     /// order because that is the order a decklist is built in.
     static func rank(_ frame: CardFrame?) -> Int {
-        switch frame?.cardType {
-        case .monster: 0
-        case .spell: 1
-        case .trap: 2
-        case .other: 3
         // No kind at all: the catalog could not match the entry, so it sorts
         // last within its group rather than vanishing from it.
-        case nil: 4
-        }
+        frame?.cardType.listingOrder ?? 4
     }
 
     public static func groups(from entries: [BanlistListEntry]) -> [BanlistGroup] {

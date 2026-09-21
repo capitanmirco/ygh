@@ -57,13 +57,27 @@ public struct DeckEditorView: View {
         .onChange(of: focus) { _, region in
             if let region, region != model.focusedRegion { model.focusRegion(region) }
         }
+        // The deck is captured while the dialog is built rather than read
+        // inside the button's action. Tapping a dialog button dismisses it
+        // first, and the dismissal runs this binding's setter — so the action
+        // found nothing pending and `confirmDeletion()` returned false
+        // without deleting anything.
         .confirmationDialog(
             "Eliminare questo mazzo?",
             isPresented: Binding(
                 get: { model.pendingDeletion != nil },
                 set: { if !$0 { model.cancelDeletion() } })
         ) {
-            Button("Elimina", role: .destructive) { Task { await model.confirmDeletion() } }
+            let pending = model.pendingDeletion
+            Button("Elimina", role: .destructive) {
+                guard let pending else { return }
+                Task {
+                    // Re-assert what the user confirmed: the dismissal has
+                    // already cleared it.
+                    model.requestDeletion(pending)
+                    await model.confirmDeletion()
+                }
+            }
             Button("Annulla", role: .cancel) { model.cancelDeletion() }
         } message: {
             Text("Un mazzo eliminato non può essere recuperato.")

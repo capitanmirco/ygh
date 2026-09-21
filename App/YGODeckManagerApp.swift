@@ -76,22 +76,18 @@ struct RootView: View {
 
     @State private var section: Section = .catalog
     @State private var selectedDeck: Int64?
-    @State private var decks: [Deck] = []
     @State private var importing = false
     @State private var library: DeckLibraryViewModel
     @State private var importReport: String?
 
     var body: some View {
         NavigationSplitView {
-            Sidebar(section: $section, decks: decks, selectedDeck: $selectedDeck,
+            Sidebar(section: $section, selectedDeck: $selectedDeck,
                     importing: $importing, progress: progress, library: library)
         } detail: {
             Detail(section: section, environment: environment, selectedDeck: selectedDeck)
         }
         .task(id: section) { await reloadDecks() }
-        // A deck created, duplicated or deleted from the sidebar changes the
-        // library's list; the sidebar follows it.
-        .onChange(of: library.decks.count) { _, _ in decks = library.decks }
         .fileImporter(isPresented: $importing,
                       allowedContentTypes: [.data],
                       allowsMultipleSelection: true) { outcome in
@@ -107,12 +103,13 @@ struct RootView: View {
         }
     }
 
-    /// One source for the list. The library owns it, and the sidebar shows
-    /// what the library holds — two loaders would drift the first time a deck
-    /// was created from one of them.
+    /// One source for the list, read straight from the library.
+    ///
+    /// A copy kept in step by comparing counts was worse than no copy at all:
+    /// it missed a rename, because renaming does not change how many decks
+    /// there are.
     private func reloadDecks() async {
         await library.load()
-        decks = library.decks
     }
 
     /// A .ydk carries no format, so the importer proposes the one the deck
@@ -142,8 +139,20 @@ struct RootView: View {
         }
 
         await reloadDecks()
-        selectedDeck = decks.last?.id
+        selectedDeck = library.decks.last?.id
         importReport = lines.joined(separator: "\n")
+    }
+}
+
+/// Hosts the new-deck sheet on its own level, so it does not compete with the
+/// rename alert, the delete alert and the exporter for the one presentation
+/// SwiftUI will show at a time.
+private struct CreateDeckSheet<Sheet: View>: ViewModifier {
+    @Binding var isPresented: Bool
+    @ViewBuilder let content: () -> Sheet
+
+    func body(content base: Content) -> some View {
+        base.sheet(isPresented: $isPresented) { self.content() }
     }
 }
 
@@ -170,7 +179,6 @@ private struct DeckFileDocument: FileDocument {
 
 private struct Sidebar: View {
     @Binding var section: RootView.Section
-    let decks: [Deck]
     @Binding var selectedDeck: Int64?
     @Binding var importing: Bool
     let progress: String?
@@ -197,30 +205,51 @@ private struct Sidebar: View {
         }
         .navigationSplitViewColumnWidth(min: 200, ideal: 230)
         .safeAreaInset(edge: .bottom) { footer }
-        .sheet(isPresented: $creatingDeck) { newDeckSheet }
-        .alert("Rinomina il mazzo", isPresented: Binding(
-            get: { renamingDeck != nil },
-            set: { if !$0 { renamingDeck = nil } })) {
-            TextField("Nome", text: $renameText)
-            Button("Rinomina") {
-                if let id = renamingDeck {
-                    Task { await library.rename(id, to: renameText) }
+        // Each presentation sits on its own level. Stacked on one view,
+        // SwiftUI shows the first and silently drops the rest — which is why
+        // a deck could be renamed and not deleted.
+        .modifier(CreateDeckSheet(
+            isPresented: $creatingDeck, content: { newDeckSheet }))
+        .background {
+            Color.clear
+                // Captured while the alert is built, for the same reason as
+                // the deletion below: the dismissal clears it before the
+                // action runs.
+                .alert("Rinomina il mazzo", isPresented: Binding(
+                    get: { renamingDeck != nil },
+                    set: { if !$0 { renamingDeck = nil } })
+                ) {
+                    let pending = renamingDeck
+                    TextField("Nome", text: $renameText)
+                    Button("Rinomina") {
+                        guard let pending else { return }
+                        let name = renameText
+                        Task { await library.rename(pending, to: name) }
+                    }
+                    Button("Annulla", role: .cancel) { renamingDeck = nil }
                 }
-                renamingDeck = nil
-            }
-            Button("Annulla", role: .cancel) { renamingDeck = nil }
         }
-        .confirmationDialog(
-            "Eliminare questo mazzo?",
-            isPresented: Binding(
-                get: { library.pendingDeletion != nil },
-                set: { if !$0 { library.cancelDeletion() } }),
-            titleVisibility: .visible
+        // Deliberately an alert on the sidebar itself rather than a
+        // confirmation dialog on the List: a dialog raised from a context
+        // menu is presented as the menu's host is being dismissed, and never
+        // appears — which is why a deck could not be deleted.
+        // The deck is captured while the alert is built, not read inside the
+        // button's action. Tapping an alert button dismisses it first, and
+        // the dismissal runs this binding's setter — so by the time the
+        // action ran, `pendingDeletion` was already nil and
+        // `confirmDeletion()` returned false without deleting anything.
+        .alert("Eliminare questo mazzo?", isPresented: Binding(
+            get: { library.pendingDeletion != nil },
+            set: { if !$0 { library.cancelDeletion() } })
         ) {
+            let pending = library.pendingDeletion
             Button("Elimina", role: .destructive) {
+                guard let pending else { return }
                 Task {
-                    let deleted = library.pendingDeletion
-                    if await library.confirmDeletion(), selectedDeck == deleted {
+                    // Re-assert what the user confirmed: the dismissal has
+                    // already cleared it.
+                    library.requestDeletion(pending)
+                    if await library.confirmDeletion(), selectedDeck == pending {
                         selectedDeck = nil
                     }
                 }
@@ -229,15 +258,18 @@ private struct Sidebar: View {
         } message: {
             Text("L'operazione non si può annullare.")
         }
-        .fileExporter(
-            isPresented: Binding(
-                get: { exportingDeck != nil },
-                set: { if !$0 { exportingDeck = nil } }),
-            document: DeckFileDocument(
-                text: library.exportText(for: exportingDeck) ?? ""),
-            contentType: .data,
-            defaultFilename: library.exportName(for: exportingDeck)
-        ) { _ in exportingDeck = nil }
+        .background {
+            Color.clear
+                .fileExporter(
+                    isPresented: Binding(
+                        get: { exportingDeck != nil },
+                        set: { if !$0 { exportingDeck = nil } }),
+                    document: DeckFileDocument(
+                        text: library.exportText(for: exportingDeck) ?? ""),
+                    contentType: .data,
+                    defaultFilename: library.exportName(for: exportingDeck)
+                ) { _ in exportingDeck = nil }
+        }
     }
 
     @ViewBuilder
@@ -257,7 +289,7 @@ private struct Sidebar: View {
             }
             .buttonStyle(.plain)
 
-            ForEach(decks) { deck in
+            ForEach(library.decks) { deck in
                 Button { selectedDeck = deck.id } label: {
                     VStack(alignment: .leading, spacing: 1) {
                         Text(deck.name).font(Theme.Typography.body)

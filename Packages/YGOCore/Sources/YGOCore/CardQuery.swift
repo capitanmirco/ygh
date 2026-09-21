@@ -186,6 +186,20 @@ public enum CardType: String, Hashable, Sendable, CaseIterable {
     }
 }
 
+extension CardType {
+    /// Monsters, then spells, then traps. A decklist is read in that order,
+    /// so every list that groups cards by kind takes its rank from here
+    /// rather than each one deciding for itself.
+    public var listingOrder: Int {
+        switch self {
+        case .monster: 0
+        case .spell: 1
+        case .trap: 2
+        case .other: 3
+        }
+    }
+}
+
 extension CardFrame {
     public var cardType: CardType {
         switch self {

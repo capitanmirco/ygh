@@ -193,3 +193,51 @@ struct DeckRemovalTests {
         #expect(model.quantity(of: artwork, in: .main) == 3)
     }
 }
+
+@MainActor
+@Suite("Deck editor deletion sequencing")
+struct DeckEditorDeletionSequencingTests {
+    /// The same trap as the sidebar's, in the editor's own dialog: deleting a
+    /// deck from the editor never worked, because the dialog's dismissal
+    /// cleared what was pending before the button's action asked to confirm.
+    ///
+    /// `deck-builder` proved the model, which was right all along. Nothing
+    /// proved the sequence the view used around it.
+    @Test func confirmingAfterTheDialogDismissalDeletesNothing() async throws {
+        let (database, decks) = try RealDeck.seededRepository()
+        let deck = try await decks.createDeck(name: "Da eliminare", format: .tcg)
+        let model = DeckEditorViewModel(
+            repository: decks, validator: DeckValidator(),
+            catalogue: SQLiteCardRepository(database: database), editing: decks)
+        await model.load(deckID: deck.id)
+
+        model.requestDeletion()
+        #expect(model.pendingDeletion == deck.id)
+
+        // What the dialog's dismissal did before the action ran.
+        model.cancelDeletion()
+        #expect(await model.confirmDeletion() == false)
+        #expect(try await decks.deck(with: deck.id) != nil, "it deleted without a request")
+    }
+
+    /// And the sequence the view uses now.
+    @Test func reAssertingTheCapturedDeckDeletesItFromTheEditor() async throws {
+        let (database, decks) = try RealDeck.seededRepository()
+        let deck = try await decks.createDeck(name: "Da eliminare", format: .tcg)
+        let keep = try await decks.createDeck(name: "Da tenere", format: .tcg)
+        let model = DeckEditorViewModel(
+            repository: decks, validator: DeckValidator(),
+            catalogue: SQLiteCardRepository(database: database), editing: decks)
+        await model.load(deckID: deck.id)
+
+        model.requestDeletion()
+        let captured = try #require(model.pendingDeletion)
+        model.cancelDeletion()
+
+        model.requestDeletion(captured)
+        #expect(await model.confirmDeletion())
+
+        #expect(try await decks.deck(with: deck.id) == nil)
+        #expect(try await decks.deck(with: keep.id) != nil, "it deleted the wrong deck")
+    }
+}

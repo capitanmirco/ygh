@@ -231,3 +231,139 @@ struct DeckLibraryTests {
         #expect(editor.candidates.allSatisfy { $0.formats.contains(.goat) })
     }
 }
+
+@MainActor
+@Suite("Deck library list freshness")
+struct DeckLibraryFreshnessTests {
+    /// The sidebar showed a copy of the list, refreshed when its *count*
+    /// changed. A rename does not change how many decks there are, so the old
+    /// name stayed on screen; a delete did change it, but the copy was one
+    /// step behind.
+    ///
+    /// The fix was to read the library's list directly. This is what that
+    /// list has to do for the fix to hold: change on every operation,
+    /// including the ones that leave the count alone.
+    @Test func thePublishedListReflectsEveryOperationNotOnlyTheCounting() async throws {
+        let (_, decks) = try RealDeck.seededRepository()
+        let model = DeckLibraryViewModel(repository: decks, listing: decks, library: decks)
+        await model.load()
+
+        let first = try #require(await model.createDeck(named: "Primo", format: .tcg))
+        #expect(model.decks.map(\.name) == ["Primo"])
+
+        // A rename leaves the count alone and must still be visible.
+        let countBefore = model.decks.count
+        await model.rename(first.id, to: "Rinominato")
+        #expect(model.decks.count == countBefore)
+        #expect(model.decks.map(\.name) == ["Rinominato"])
+
+        // So does a format change.
+        await model.changeFormat(first.id, to: .goat)
+        #expect(model.decks.count == countBefore)
+        #expect(model.decks.first?.format == .goat)
+
+        // A duplicate adds one, with its own name.
+        let copy = try #require(await model.duplicate(first.id))
+        #expect(model.decks.count == 2)
+        #expect(Set(model.decks.map(\.name)) == ["Rinominato", "Rinominato (copia)"])
+
+        // And a deletion removes exactly the one asked for.
+        model.requestDeletion(copy.id)
+        #expect(await model.confirmDeletion())
+        #expect(model.decks.map(\.id) == [first.id])
+        #expect(model.decks.map(\.name) == ["Rinominato"])
+    }
+
+    /// Deleting the deck that is open has to be possible, which is the case
+    /// the user hit. The model's part of it is that the list loses the deck
+    /// and the identifier stops resolving.
+    @Test func theDeckBeingEditedCanBeDeleted() async throws {
+        let (database, decks) = try RealDeck.seededRepository()
+        let model = DeckLibraryViewModel(repository: decks, listing: decks, library: decks)
+        await model.load()
+        let deck = try #require(await model.createDeck(named: "Aperto", format: .tcg))
+
+        // Put a card in it, so it is not an empty row being removed.
+        let editor = DeckEditorViewModel(
+            repository: decks, validator: DeckValidator(),
+            catalogue: SQLiteCardRepository(database: database), editing: decks)
+        await editor.load(deckID: deck.id)
+        let card = try #require(editor.candidates.first { !$0.frame.belongsInExtraDeck })
+        await editor.add(card, to: .main)
+        #expect(editor.items.count == 1)
+
+        model.requestDeletion(deck.id)
+        #expect(model.pendingDeletion == deck.id)
+        #expect(await model.confirmDeletion())
+
+        #expect(model.decks.isEmpty)
+        #expect(model.lastFailure == nil)
+        #expect(try await decks.deck(with: deck.id) == nil)
+
+        // And nothing is left behind: the deck's slots went with it.
+        // Non-async closure on purpose, or GRDB's async `read` is chosen.
+        func readSync<T>(_ body: (Database) throws -> T) throws -> T {
+            try database.read(body)
+        }
+        let orphans = try readSync { db in
+            try Int.fetchOne(db, sql: "SELECT COUNT(*) FROM deck_slot WHERE deck_id = ?",
+                             arguments: [deck.id])
+        }
+        #expect(orphans == 0)
+    }
+}
+
+@MainActor
+@Suite("Deck deletion sequencing")
+struct DeckDeletionSequencingTests {
+    /// The trap that made a deck undeletable from the interface.
+    ///
+    /// `confirmDeletion` reads `pendingDeletion` and returns false when it is
+    /// nil. A SwiftUI alert dismisses itself before running its button's
+    /// action, and that dismissal ran `cancelDeletion` — so by the time the
+    /// action asked to confirm, there was nothing pending and the deck
+    /// survived. The model behaved exactly as specified; the sequence around
+    /// it was wrong.
+    ///
+    /// This is that sequence, written down so it cannot come back silently.
+    @Test func confirmingAfterACancelDeletesNothing() async throws {
+        let (_, decks) = try RealDeck.seededRepository()
+        let model = DeckLibraryViewModel(repository: decks, listing: decks, library: decks)
+        await model.load()
+        let deck = try #require(await model.createDeck(named: "Da eliminare", format: .tcg))
+
+        model.requestDeletion(deck.id)
+        // What the alert's dismissal did, before the button's action ran.
+        model.cancelDeletion()
+
+        #expect(await model.confirmDeletion() == false)
+        #expect(model.decks.count == 1, "the deck was deleted without a pending request")
+        #expect(try await decks.deck(with: deck.id) != nil)
+    }
+
+    /// And the sequence the interface uses now: the deck is captured while
+    /// the alert is built, and re-asserted before confirming.
+    @Test func reAssertingTheCapturedDeckDeletesIt() async throws {
+        let (_, decks) = try RealDeck.seededRepository()
+        let model = DeckLibraryViewModel(repository: decks, listing: decks, library: decks)
+        await model.load()
+        let deck = try #require(await model.createDeck(named: "Da eliminare", format: .tcg))
+        let other = try #require(await model.createDeck(named: "Da tenere", format: .tcg))
+
+        model.requestDeletion(deck.id)
+        // The alert captures this while it is being built.
+        let captured = try #require(model.pendingDeletion)
+        // Then dismisses, clearing it.
+        model.cancelDeletion()
+        #expect(model.pendingDeletion == nil)
+
+        // The action re-asserts what the user confirmed.
+        model.requestDeletion(captured)
+        #expect(await model.confirmDeletion())
+
+        #expect(model.decks.map(\.id) == [other.id])
+        #expect(try await decks.deck(with: deck.id) == nil)
+        #expect(try await decks.deck(with: other.id) != nil, "it deleted the wrong deck")
+        #expect(model.lastFailure == nil)
+    }
+}

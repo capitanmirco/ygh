@@ -129,11 +129,6 @@ public final class DeckEditorViewModel {
         }
 
         items = deck.slots
-            .sorted { lhs, rhs in
-                lhs.section.rawValue == rhs.section.rawValue
-                    ? lhs.artwork.rawValue < rhs.artwork.rawValue
-                    : lhs.section.rawValue < rhs.section.rawValue
-            }
             .map { slot in
                 let entry = index[slot.card]
                 return DeckEntryItem(
@@ -145,11 +140,39 @@ public final class DeckEditorViewModel {
                     banStatus: entry?.banStatus ?? .unlimited,
                     frame: entry?.frame ?? .token)
             }
+            .sorted(by: Self.precedes)
 
         legality = validator.legality(of: deck, using: index)
 
         if items.isEmpty { selectedIndex = nil }
         else { selectedIndex = min(selectedIndex ?? 0, items.count - 1) }
+    }
+
+    /// Sections in the order they are drawn, then monsters, spells and traps,
+    /// then name.
+    ///
+    /// Sorts the built items rather than the slots: a slot carries an artwork
+    /// and a count, and neither the kind nor the name a reader sorts by.
+    ///
+    /// The section comes first even though the list draws each section
+    /// separately, because keyboard selection walks `items` in this order and
+    /// would otherwise jump between sections in a different order than the
+    /// eye does.
+    static func precedes(_ lhs: DeckEntryItem, _ rhs: DeckEntryItem) -> Bool {
+        if lhs.section != rhs.section {
+            return lhs.section.listingOrder < rhs.section.listingOrder
+        }
+
+        let left = lhs.frame.cardType.listingOrder
+        let right = rhs.frame.cardType.listingOrder
+        if left != right { return left < right }
+
+        let byName = lhs.title.localizedCaseInsensitiveCompare(rhs.title)
+        if byName != .orderedSame { return byName == .orderedAscending }
+
+        // Two printings of one card: ordered by artwork so that the list does
+        // not reshuffle them from one edit to the next.
+        return lhs.id.rawValue < rhs.id.rawValue
     }
 
     /// Re-evaluates without touching storage, for measuring the edit budget.
@@ -431,6 +454,15 @@ public final class DeckEditorViewModel {
     /// a separate step the interface has to take deliberately.
     public func requestDeletion() {
         pendingDeletion = deck?.id
+    }
+
+    /// Re-asserts a deletion the user has already confirmed.
+    ///
+    /// A dialog dismisses itself before running its button's action, and the
+    /// dismissal clears what was pending — so the action has to put back the
+    /// deck it captured while the dialog was being built.
+    public func requestDeletion(_ deckID: Int64) {
+        pendingDeletion = deckID
     }
 
     public func cancelDeletion() {

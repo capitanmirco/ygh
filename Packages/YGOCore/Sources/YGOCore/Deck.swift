@@ -6,6 +6,17 @@ public enum DeckSection: String, Hashable, Sendable, Codable, CaseIterable {
     case extra
     case side
 
+    /// The order the sections are shown in, which is not the order their
+    /// stored names sort in: `extra` comes before `main` alphabetically and
+    /// after it on screen.
+    public var listingOrder: Int {
+        switch self {
+        case .main: 0
+        case .extra: 1
+        case .side: 2
+        }
+    }
+
     /// The rules cap each section differently, and the main section is the
     /// only one with a floor.
     public var permittedRange: ClosedRange<Int> {
