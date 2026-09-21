@@ -24,6 +24,7 @@ let package = Package(
         .library(name: "YGODeckIO", targets: ["YGODeckIO"]),
         .library(name: "YGOAnalytics", targets: ["YGOAnalytics"]),
         .library(name: "YGOPricing", targets: ["YGOPricing"]),
+        .library(name: "YGOBanlistHistory", targets: ["YGOBanlistHistory"]),
         .library(name: "YGOComposition", targets: ["YGOComposition"]),
         .executable(name: "YGODeckManager", targets: ["YGODeckManagerApp"]),
     ],
@@ -48,6 +49,14 @@ let package = Package(
             name: "YGONetworking",
             dependencies: ["YGOCore"],
             path: "Packages/YGONetworking/Sources/YGONetworking",
+            swiftSettings: strictConcurrency),
+
+        // A timeline is a list of dated statuses, so this depends on YGOCore
+        // alone and every question it answers is provable without a database.
+        .target(
+            name: "YGOBanlistHistory",
+            dependencies: ["YGOCore"],
+            path: "Packages/YGOBanlistHistory/Sources/YGOBanlistHistory",
             swiftSettings: strictConcurrency),
 
         .target(
@@ -196,9 +205,15 @@ let package = Package(
 
         .testTarget(
             name: "YGOSyncTests",
-            dependencies: ["YGOSync", "YGOCore", "YGOPersistence", "YGONetworking", "YGOValidation", "YGODeckIO", "YGOFeatureDeckBuilder", "YGOFeatureCollection", "YGOPricing",
+            dependencies: ["YGOSync", "YGOCore", "YGOPersistence", "YGONetworking", "YGOValidation", "YGODeckIO", "YGOFeatureDeckBuilder", "YGOFeatureCollection", "YGOPricing", "YGOBanlistHistory",
                            .product(name: "GRDB", package: "GRDB.swift")],
             path: "Tests/YGOSyncTests",
+            swiftSettings: strictConcurrency),
+
+        .testTarget(
+            name: "YGOBanlistHistoryTests",
+            dependencies: ["YGOBanlistHistory", "YGOCore"],
+            path: "Tests/YGOBanlistHistoryTests",
             swiftSettings: strictConcurrency),
 
         .testTarget(

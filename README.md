@@ -5,10 +5,14 @@ portfolio. Single local user, offline-first, no accounts and no server.
 
 ## Status
 
-The `card-catalog` feature is complete: the application acquires the full card
-pool, keeps it current, stores artwork locally, and browses and searches it
-entirely offline. Deck building, collection tracking, statistics and pricing are
-separate specifications that consume this catalog and are not built yet.
+Six specifications are complete and certified: `card-catalog`, `deck-builder`,
+`collection-tracker`, `deck-analytics`, `pricing` and `banlist-history`. The
+application acquires the full card pool, keeps it current, stores artwork
+locally, and browses, builds, tracks, analyses and prices entirely offline.
+
+`banlist-history` acquires and stores the published Forbidden & Limited Lists
+and answers what a card's status was on any of them; displaying that history is
+the `card-detail` specification's work and is not built yet.
 
 ## Requirements
 
@@ -39,7 +43,8 @@ everything else lives in local packages.
 | `YGOCore` | Domain types and every protocol the other modules meet across. Depends on nothing. |
 | `YGOPersistence` | SQLite schema, migrations, repositories, the catalog writer. |
 | `YGONetworking` | Upstream client, artwork fetcher, and the one rate limiter both pass through. |
-| `YGOSync` | Seeding and updating the catalog. |
+| `YGOSync` | Seeding and updating the catalog, and the banlist history. |
+| `YGOBanlistHistory` | A card's status across every published list, and when it changed. Depends on `YGOCore` alone. |
 | `YGOImageStore` | The on-disk artwork store and its background prefetcher. |
 | `YGODesignSystem` | Spacing, colour and typography tokens. |
 | `YGOFeatureBrowser` | Card browsing, searching, filtering. |
@@ -66,6 +71,18 @@ Ban lists are published for TCG, OCG and GOAT only. Edison and Master Duel
 expose format membership but no restrictions, so those lists are maintained by
 hand and preserved across catalog updates.
 
+**Historical** lists come from a second, independent upstream:
+[`yaml-yugi-limit-regulation`](https://github.com/DawnbrandBots/yaml-yugi-limit-regulation),
+which publishes 177 lists across TCG, OCG, Master Duel and Rush Duel, from
+1999-08-01 onwards. Its dated files are served but not indexed, so the dates are
+enumerated through the GitHub contents API and the bodies fetched from GitHub
+Pages — two hosts for one source. Its TCG dates are the European effective
+dates, so the April 2024 list is 2024-04-22 and not the American 2024-04-15.
+
+The two sources are never reconciled. Where they disagree about a card, both
+figures are reported. On the 222 cards they both described on 2026-09-21 there
+were no disagreements, which is evidence rather than a guarantee.
+
 Card names, text and artwork are copyright Konami Digital Entertainment and are
 stored here for personal local use.
 
@@ -77,9 +94,13 @@ Taken from the live API and from the test suite, not estimated:
 | --- | --- |
 | Cards | 14,566 English, 11,599 Italian |
 | Artwork identifiers | 14,730 |
-| Database, full catalog | 35 MB (budget 250 MB) |
-| Thumbnails, projected | 337 MB (budget 500 MB) |
+| Database, full catalog | 40 MB (budget 250 MB) |
+| Artwork on disk | 388.4 MB, all 14,730 downloaded (budget 500 MB) |
+| Printings / prices | 44,491 / 64,503 |
+| Banlist history | 177 lists, 28,648 entries, 0.43 MB |
 | Search latency, p95 | under 100 ms in a debug build |
+| Card history latency | under 20 ms, worst case, debug build |
+| Tests | 317, all green |
 
 ## Specification workflow
 
@@ -88,13 +109,13 @@ Work is governed by [Walden](https://github.com/andrearaponi/walden) specs under
 executable task plan whose proofs are re-run on demand:
 
 ```bash
-walden status card-catalog
-walden verify card-catalog
+walden status banlist-history
+walden verify banlist-history
+walden release check --strict
 ```
 
-`.walden/specs/card-catalog/design.md` records the architectural decisions and
-the alternatives weighed against them, so there is no separate ADR directory for
-this feature.
+Each `design.md` records the architectural decisions and the alternatives
+weighed against them, so there is no separate ADR directory.
 
 ## Tests
 
@@ -103,3 +124,7 @@ against recorded fixtures in `fixtures/`, captured from the live endpoints and
 chosen to cover the structural edge cases the real data contains — untranslated
 cards, cards with several artworks, every ban status, and the duplicate format
 entries upstream publishes for a handful of cards. No test contacts a live host.
+
+The banlist fixtures are the complete published record rather than a sample: all
+177 lists are recorded, because a proof that the stored list count matches the
+published one cannot be made from three sampled lists.

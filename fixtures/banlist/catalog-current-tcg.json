@@ -1,0 +1,1338 @@
+{
+ "source": "YGOPRODeck API v7 cardinfo.php?banlist=tcg",
+ "recorded_at": "2026-09-21T07:53:46Z",
+ "cards": [
+  {
+   "id": 80181649,
+   "name": "\"A Case for K9\"",
+   "konami_id": 21385,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 21044178,
+   "name": "Abyss Dweller",
+   "konami_id": 10354,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 62320425,
+   "name": "Agido the Ancient Sentinel",
+   "konami_id": 17606,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 13332685,
+   "name": "Ame no Habakiri no Mitsurugi",
+   "konami_id": 21349,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 58921041,
+   "name": "Anti-Spell Fragrance",
+   "konami_id": 5008,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 4280258,
+   "name": "Apollousa, Bow of the Goddess",
+   "konami_id": 14496,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 43262273,
+   "name": "Appointer of the Red Lotus",
+   "konami_id": 8515,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 6728559,
+   "name": "Archnemeses Protos",
+   "konami_id": 14994,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 80237445,
+   "name": "Artifact Mjollnir",
+   "konami_id": 13398,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 20292186,
+   "name": "Artifact Scythe",
+   "konami_id": 11195,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 76794549,
+   "name": "Astrograph Sorcerer",
+   "konami_id": 12906,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 440556,
+   "name": "Bahamut Shark",
+   "konami_id": 10332,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 84815190,
+   "name": "Baronne de Fleur",
+   "konami_id": 16386,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 19740112,
+   "name": "Barrier Statue of the Drought",
+   "konami_id": 6886,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 47961808,
+   "name": "Barrier Statue of the Inferno",
+   "konami_id": 6884,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 73356503,
+   "name": "Barrier Statue of the Stormwinds",
+   "konami_id": 6885,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 10963799,
+   "name": "Barrier Statue of the Torrent",
+   "konami_id": 6883,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 27552504,
+   "name": "Beatrice, Lady of the Eternal",
+   "konami_id": 12108,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 9929398,
+   "name": "Blackwing - Gofu the Vague Shadow",
+   "konami_id": 12412,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 94689206,
+   "name": "Block Dragon",
+   "konami_id": 12433,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 85106525,
+   "name": "Bonfire",
+   "konami_id": 19027,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 27548199,
+   "name": "Borreload Savage Dragon",
+   "konami_id": 14114,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 1041278,
+   "name": "Branded Expulsion",
+   "konami_id": 17472,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 44362883,
+   "name": "Branded Fusion",
+   "konami_id": 17066,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 7394770,
+   "name": "Brilliant Fusion",
+   "konami_id": 11840,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 69243953,
+   "name": "Butterfly Dagger - Elma",
+   "konami_id": 5724,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 6637331,
+   "name": "Bystial Druiswurm",
+   "konami_id": 17764,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 33854624,
+   "name": "Bystial Magnamhut",
+   "konami_id": 17762,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 24224830,
+   "name": "Called by the Grave",
+   "konami_id": 13619,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 72892473,
+   "name": "Card Destruction",
+   "konami_id": 4821,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 59750328,
+   "name": "Card of Demise",
+   "konami_id": 5576,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 57953380,
+   "name": "Card of Safe Return",
+   "konami_id": 5123,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 91623717,
+   "name": "Chain Strike",
+   "konami_id": 6904,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 3040496,
+   "name": "Chaos Ruler, the Chaotic Magical Dragon",
+   "konami_id": 15277,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 99266988,
+   "name": "Chaos Space",
+   "konami_id": 15478,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 67616300,
+   "name": "Chicken Game",
+   "konami_id": 11851,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 60682203,
+   "name": "Cold Wave",
+   "konami_id": 5127,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 17375316,
+   "name": "Confiscation",
+   "konami_id": 4900,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 65681983,
+   "name": "Crossout Designator",
+   "konami_id": 14627,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 50588353,
+   "name": "Crystron Halqifibrax",
+   "konami_id": 13508,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 31603289,
+   "name": "Cupsy\u2605Yummy Way",
+   "konami_id": 21368,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 31425736,
+   "name": "Cupsy\u2606Yummy",
+   "konami_id": 21365,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 98095162,
+   "name": "Curious, the Lightsworn Dominion",
+   "konami_id": 13492,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 3685372,
+   "name": "CXyz Gimmick Puppet Fanatix Machinix",
+   "konami_id": 20222,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 69015963,
+   "name": "Cyber-Stein",
+   "konami_id": 4426,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 581014,
+   "name": "Daigusto Emeral",
+   "konami_id": 9822,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 15341821,
+   "name": "Dandylion",
+   "konami_id": 6654,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 44763025,
+   "name": "Delinquent Duo",
+   "konami_id": 4901,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 23557835,
+   "name": "Dimension Fusion",
+   "konami_id": 5906,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 91800273,
+   "name": "Dimension Shifter",
+   "konami_id": 14740,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 83326048,
+   "name": "Dimensional Barrier",
+   "konami_id": 12668,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 15854426,
+   "name": "Divine Wind of Mist Valley",
+   "konami_id": 9350,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 8903700,
+   "name": "Djinn Releaser of Rituals",
+   "konami_id": 8472,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 33760966,
+   "name": "Dracotail Arthalion",
+   "konami_id": 21359,
+   "ban_tcg": "Semi-Limited"
+  },
+  {
+   "id": 75003700,
+   "name": "Dracotail Lukias",
+   "konami_id": 21354,
+   "ban_tcg": "Semi-Limited"
+  },
+  {
+   "id": 7375867,
+   "name": "Dracotail Mululu",
+   "konami_id": 21358,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 94145021,
+   "name": "Droll & Lock Bird",
+   "konami_id": 9279,
+   "ban_tcg": "Semi-Limited"
+  },
+  {
+   "id": 51858306,
+   "name": "Eclipse Wyvern",
+   "konami_id": 9957,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 17412721,
+   "name": "Elder Entity Norden",
+   "konami_id": 11207,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 38273745,
+   "name": "Evilswarm Ouroboros",
+   "konami_id": 10007,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 33396948,
+   "name": "Exodia the Forbidden One",
+   "konami_id": 4027,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 34022970,
+   "name": "Ext Ryzeal",
+   "konami_id": 20575,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 55623480,
+   "name": "Fairy Tail - Snow",
+   "konami_id": 12441,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 78706415,
+   "name": "Fiber Jar",
+   "konami_id": 5371,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 46640168,
+   "name": "Fiendsmith's Lacrima",
+   "konami_id": 20214,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 95308449,
+   "name": "Final Countdown",
+   "konami_id": 5788,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 93369354,
+   "name": "Fishborg Blaster",
+   "konami_id": 8318,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 81439173,
+   "name": "Foolish Burial",
+   "konami_id": 5236,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 42009836,
+   "name": "Fossil Dyna Pachycephalo",
+   "konami_id": 7405,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 27970830,
+   "name": "Gateway of the Six",
+   "konami_id": 8602,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 39512984,
+   "name": "Gem-Knight Master Diamond",
+   "konami_id": 10001,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 42703248,
+   "name": "Giant Trunade",
+   "konami_id": 4910,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 55204071,
+   "name": "Gimmick Puppet Nightmare",
+   "konami_id": 10695,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 75500286,
+   "name": "Gold Sarcophagus",
+   "konami_id": 6161,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 53334471,
+   "name": "Gozen Match",
+   "konami_id": 7934,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 79571449,
+   "name": "Graceful Charity",
+   "konami_id": 4812,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 75732622,
+   "name": "Grinder Golem",
+   "konami_id": 7386,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 59537380,
+   "name": "Guardragon Agarpain",
+   "konami_id": 14130,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 86148577,
+   "name": "Guardragon Elpy",
+   "konami_id": 14128,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 18144507,
+   "name": "Harpie's Feather Duster",
+   "konami_id": 4678,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 87639778,
+   "name": "Harpie's Feather Storm",
+   "konami_id": 12900,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 19613556,
+   "name": "Heavy Storm",
+   "konami_id": 4891,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 24094258,
+   "name": "Heavymetalfoes Electrumite",
+   "konami_id": 13507,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 79606837,
+   "name": "Herald of the Arc Light",
+   "konami_id": 11384,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 62242678,
+   "name": "Hot Red Dragon Archfiend King Calamity",
+   "konami_id": 12080,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 8633261,
+   "name": "Ice Ryzeal",
+   "konami_id": 20574,
+   "ban_tcg": "Semi-Limited"
+  },
+  {
+   "id": 61740673,
+   "name": "Imperial Order",
+   "konami_id": 4960,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 66957584,
+   "name": "Infernity Launcher",
+   "konami_id": 8823,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 1845204,
+   "name": "Instant Fusion",
+   "konami_id": 6901,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 93946239,
+   "name": "Into the Void",
+   "konami_id": 8824,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 59934749,
+   "name": "Isolde, Two Tales of the Noble Knights",
+   "konami_id": 13500,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 41855169,
+   "name": "Jowgen the Spiritualist",
+   "konami_id": 5247,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 47960073,
+   "name": "K9-04 Noroi",
+   "konami_id": 21791,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 28642461,
+   "name": "K9-66a Jokul",
+   "konami_id": 21377,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 35059553,
+   "name": "Kaiser Colosseum",
+   "konami_id": 5605,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 48626373,
+   "name": "Kashtira Arise-Heart",
+   "konami_id": 18191,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 25926710,
+   "name": "Kelbek the Ancient Vanguard",
+   "konami_id": 17605,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 63542003,
+   "name": "Keldo the Sacred Protector",
+   "konami_id": 17603,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 6153210,
+   "name": "Ketu Dracotail",
+   "konami_id": 21361,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 11398059,
+   "name": "King of the Feral Imps",
+   "konami_id": 10537,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 39064822,
+   "name": "Knightmare Goblin",
+   "konami_id": 13598,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 65330383,
+   "name": "Knightmare Gryphon",
+   "konami_id": 13602,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 3679218,
+   "name": "Knightmare Mermaid",
+   "konami_id": 13597,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 28566710,
+   "name": "Last Turn",
+   "konami_id": 5406,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 85602018,
+   "name": "Last Will",
+   "konami_id": 4885,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 34086406,
+   "name": "Lavalval Chain",
+   "konami_id": 9821,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 7902349,
+   "name": "Left Arm of the Forbidden One",
+   "konami_id": 4026,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 44519536,
+   "name": "Left Leg of the Forbidden One",
+   "konami_id": 4024,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 57421866,
+   "name": "Level Eater",
+   "konami_id": 8440,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 30342076,
+   "name": "Link Decoder",
+   "konami_id": 18664,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 85243784,
+   "name": "Linkross",
+   "konami_id": 15035,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 41999284,
+   "name": "Linkuriboh",
+   "konami_id": 13346,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 4423206,
+   "name": "M-X-Saber Invoker",
+   "konami_id": 9874,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 32723153,
+   "name": "Magical Explosion",
+   "konami_id": 6444,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 71650854,
+   "name": "Magical Mid-Breaker Field",
+   "konami_id": 12466,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 34206604,
+   "name": "Magical Scientist",
+   "konami_id": 5657,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 68337209,
+   "name": "Maliss in Underground",
+   "konami_id": 20588,
+   "ban_tcg": "Semi-Limited"
+  },
+  {
+   "id": 34906152,
+   "name": "Mass Driver",
+   "konami_id": 5671,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 36521307,
+   "name": "Mathmech Circular",
+   "konami_id": 17430,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 23434538,
+   "name": "Maxx \"C\"",
+   "konami_id": 9455,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 44097050,
+   "name": "Mecha Phantom Beast Auroradon",
+   "konami_id": 14940,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 46411259,
+   "name": "Metamorphosis",
+   "konami_id": 5539,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 96782886,
+   "name": "Mind Master",
+   "konami_id": 7714,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 41482598,
+   "name": "Mirage of Nightmare",
+   "konami_id": 5433,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 38572779,
+   "name": "Miscellaneousaurus",
+   "konami_id": 12763,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 43040603,
+   "name": "Monster Gate",
+   "konami_id": 5980,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 83764719,
+   "name": "Monster Reborn",
+   "konami_id": 4842,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 71818935,
+   "name": "Moon of the Closed Heaven",
+   "konami_id": 19932,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 99937011,
+   "name": "Mudora the Sword Oracle",
+   "konami_id": 17604,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 76375976,
+   "name": "Mystic Mine",
+   "konami_id": 14314,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 61049315,
+   "name": "Naturia Rosewhip",
+   "konami_id": 8102,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 3734202,
+   "name": "Naturia Sacred Tree",
+   "konami_id": 11408,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 54719828,
+   "name": "Number 16: Shock Master",
+   "konami_id": 9860,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 75433814,
+   "name": "Number 40: Gimmick Puppet of Strings",
+   "konami_id": 10216,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 10389142,
+   "name": "Number 42: Galaxy Tomahawk",
+   "konami_id": 10480,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 35772782,
+   "name": "Number 67: Pair-a-Dice Smasher",
+   "konami_id": 13824,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 63504681,
+   "name": "Number 86: Heroic Champion - Rhongomyniad",
+   "konami_id": 11296,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 58820923,
+   "name": "Number 95: Galaxy-Eyes Dark Matter Dragon",
+   "konami_id": 11651,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 69170557,
+   "name": "Number C40: Gimmick Puppet of Dark Strings",
+   "konami_id": 11015,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 52653092,
+   "name": "Number S0: Utopic ZEXAL",
+   "konami_id": 11932,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 72537897,
+   "name": "Obedience Schooled",
+   "konami_id": 10992,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 33782437,
+   "name": "One Day of Peace",
+   "konami_id": 9778,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 2295440,
+   "name": "One for One",
+   "konami_id": 8197,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 89023486,
+   "name": "Original Sinful Spoils - Snake-Eye",
+   "konami_id": 19199,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 34945480,
+   "name": "Outer Entity Azathot",
+   "konami_id": 11518,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 74191942,
+   "name": "Painful Choice",
+   "konami_id": 4911,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 80453041,
+   "name": "Phantom of Yubel",
+   "konami_id": 20037,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 23558733,
+   "name": "Phoenixian Cluster Amaryllis",
+   "konami_id": 8159,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 55144522,
+   "name": "Pot of Greed",
+   "konami_id": 4844,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 84211599,
+   "name": "Pot of Prosperity",
+   "konami_id": 15756,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 25725326,
+   "name": "Prank-Kids Meow-Meow-Mu",
+   "konami_id": 15528,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 70369116,
+   "name": "Predaplant Verte Anaconda",
+   "konami_id": 14944,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 70828912,
+   "name": "Premature Burial",
+   "konami_id": 4966,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 38814750,
+   "name": "PSY-Framegear Gamma",
+   "konami_id": 12070,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 74586817,
+   "name": "PSY-Framelord Omega",
+   "konami_id": 12074,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 55584558,
+   "name": "Purrely Delicious Memory",
+   "konami_id": 18013,
+   "ban_tcg": "Semi-Limited"
+  },
+  {
+   "id": 21347668,
+   "name": "Purrely Sleepy Memory",
+   "konami_id": 18524,
+   "ban_tcg": "Semi-Limited"
+  },
+  {
+   "id": 67115133,
+   "name": "Radiant Typhoon Chant",
+   "konami_id": 21827,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 32548318,
+   "name": "Rahu Dracotail",
+   "konami_id": 21362,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 58577036,
+   "name": "Reasoning",
+   "konami_id": 5530,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 23002292,
+   "name": "Red Reboot",
+   "konami_id": 13622,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 32807846,
+   "name": "Reinforcement of the Army",
+   "konami_id": 5328,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 27174286,
+   "name": "Return from the Different Dimension",
+   "konami_id": 6078,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 70903634,
+   "name": "Right Arm of the Forbidden One",
+   "konami_id": 4025,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 8124921,
+   "name": "Right Leg of the Forbidden One",
+   "konami_id": 4023,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 90846359,
+   "name": "Rivalry of Warlords",
+   "konami_id": 5622,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 1357146,
+   "name": "Ronintoadin",
+   "konami_id": 8809,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 93016201,
+   "name": "Royal Oppression",
+   "konami_id": 5399,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 92107604,
+   "name": "Runick Fountain",
+   "konami_id": 17381,
+   "ban_tcg": "Semi-Limited"
+  },
+  {
+   "id": 34909328,
+   "name": "Ryzeal Detonator",
+   "konami_id": 20578,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 66730191,
+   "name": "Sangen Kaimen",
+   "konami_id": 19901,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 30336082,
+   "name": "Sangen Summoning",
+   "konami_id": 19900,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 24940422,
+   "name": "Sekka's Light",
+   "konami_id": 13616,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 57585212,
+   "name": "Self-Destruct Button",
+   "konami_id": 5916,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 73468603,
+   "name": "Set Rotation",
+   "konami_id": 12978,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 72330894,
+   "name": "Simorgh, Bird of Sovereignty",
+   "konami_id": 14935,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 3280747,
+   "name": "Sixth Sense",
+   "konami_id": 5945,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 82732705,
+   "name": "Skill Drain",
+   "konami_id": 5740,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 52340444,
+   "name": "Sky Striker Mecha - Hornet Drones",
+   "konami_id": 13674,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 71344451,
+   "name": "Slash Draw",
+   "konami_id": 13814,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 63789924,
+   "name": "Smoke Grenade of the Thief",
+   "konami_id": 5389,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 41420027,
+   "name": "Solemn Judgment",
+   "konami_id": 4861,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 54447022,
+   "name": "Soul Charge",
+   "konami_id": 11159,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 59859086,
+   "name": "Splash Mage",
+   "konami_id": 15034,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 27381364,
+   "name": "Spright Elf",
+   "konami_id": 17451,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 91258852,
+   "name": "SPYRAL Master Plan",
+   "konami_id": 12825,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 73539069,
+   "name": "Striker Dragon",
+   "konami_id": 14721,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 20663556,
+   "name": "Substitoad",
+   "konami_id": 7601,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 23516703,
+   "name": "Summon Limit",
+   "konami_id": 7652,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 61665245,
+   "name": "Summon Sorceress",
+   "konami_id": 13554,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 93896655,
+   "name": "Sunavalon Dryas",
+   "konami_id": 15861,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 65563871,
+   "name": "Sunvine Healer",
+   "konami_id": 15866,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 33918636,
+   "name": "Superheavy Samurai Scarecrow",
+   "konami_id": 14337,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 43387895,
+   "name": "Supreme King Dragon Starving Venom",
+   "konami_id": 13077,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 35844557,
+   "name": "Sword Ryzeal",
+   "konami_id": 20572,
+   "ban_tcg": "Semi-Limited"
+  },
+  {
+   "id": 99243014,
+   "name": "Synchro Overtake",
+   "konami_id": 16256,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 90953320,
+   "name": "T.G. Hyper Librarian",
+   "konami_id": 9554,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 37961969,
+   "name": "Tearlaments Havnis",
+   "konami_id": 17416,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 92731385,
+   "name": "Tearlaments Kitkallos",
+   "konami_id": 17444,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 74078255,
+   "name": "Tearlaments Merrli",
+   "konami_id": 17414,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 572850,
+   "name": "Tearlaments Scheiren",
+   "konami_id": 17415,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 63101919,
+   "name": "Tempest Magician",
+   "konami_id": 8085,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 91810826,
+   "name": "Tenpai Dragon Chundra",
+   "konami_id": 19859,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 73628505,
+   "name": "Terraforming",
+   "konami_id": 5537,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 11110587,
+   "name": "That Grass Looks Greener",
+   "konami_id": 12801,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 42829885,
+   "name": "The Forceful Sentry",
+   "konami_id": 4907,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 88071625,
+   "name": "The Tyrant Neptune",
+   "konami_id": 8733,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 24207889,
+   "name": "There Can Be Only One",
+   "konami_id": 13447,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 22593417,
+   "name": "Topologic Gumblar Dragon",
+   "konami_id": 13836,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 64697231,
+   "name": "Trap Dustshoot",
+   "konami_id": 5446,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 25311006,
+   "name": "Triple Tactics Talent",
+   "konami_id": 15296,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 88581108,
+   "name": "True King of All Calamities",
+   "konami_id": 12960,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 80604092,
+   "name": "Ultimate Offering",
+   "konami_id": 4851,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 41165831,
+   "name": "Unchained Soul of Sharvara",
+   "konami_id": 18806,
+   "ban_tcg": "Semi-Limited"
+  },
+  {
+   "id": 83152482,
+   "name": "Union Carrier",
+   "konami_id": 14932,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 5851097,
+   "name": "Vanity's Emptiness",
+   "konami_id": 9153,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 93156774,
+   "name": "Vanquish Soul Hollie Sue",
+   "konami_id": 21433,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 44910027,
+   "name": "Victory Dragon",
+   "konami_id": 5868,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 81122844,
+   "name": "Wind-Up Carrier Zenmaity",
+   "konami_id": 9918,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 30581601,
+   "name": "Yummy\u2605Snatchy",
+   "konami_id": 21371,
+   "ban_tcg": "Limited"
+  },
+  {
+   "id": 85115440,
+   "name": "Zoodiac Broadbull",
+   "konami_id": 12786,
+   "ban_tcg": "Forbidden"
+  },
+  {
+   "id": 78872731,
+   "name": "Zoodiac Ratpier",
+   "konami_id": 12749,
+   "ban_tcg": "Limited"
+  }
+ ]
+}

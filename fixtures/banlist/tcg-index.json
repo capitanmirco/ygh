@@ -1,0 +1,594 @@
+[
+ {
+  "name": "1999-08-01.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "1999-08-01.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2000-04-01.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2000-04-01.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2000-11-01.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2000-11-01.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2001-05-01.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2001-05-01.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2003-01-01.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2003-01-01.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2003-09-01.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2003-09-01.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2004-03-01.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2004-03-01.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2004-09-01.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2004-09-01.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2005-03-01.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2005-03-01.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2005-09-01.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2005-09-01.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2006-03-01.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2006-03-01.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2006-09-01.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2006-09-01.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2007-03-01.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2007-03-01.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2007-09-01.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2007-09-01.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2008-03-01.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2008-03-01.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2008-09-01.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2008-09-01.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2009-03-01.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2009-03-01.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2009-09-01.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2009-09-01.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2010-03-01.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2010-03-01.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2010-09-01.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2010-09-01.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2011-03-01.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2011-03-01.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2011-09-01.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2011-09-01.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2012-03-01.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2012-03-01.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2012-09-01.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2012-09-01.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2013-03-01.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2013-03-01.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2013-09-01.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2013-09-01.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2014-01-01.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2014-01-01.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2014-04-01.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2014-04-01.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2014-07-01.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2014-07-01.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2014-10-01.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2014-10-01.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2015-01-01.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2015-01-01.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2015-04-01.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2015-04-01.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2015-07-01.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2015-07-01.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2015-11-01.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2015-11-01.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2016-04-01.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2016-04-01.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2016-08-01.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2016-08-01.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2017-03-01.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2017-03-01.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2017-06-01.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2017-06-01.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2017-09-01.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2017-09-01.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2017-11-01.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2017-11-01.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2018-02-01.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2018-02-01.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2018-05-01.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2018-05-01.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2018-09-01.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2018-09-01.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2018-12-01.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2018-12-01.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2019-01-01.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2019-01-01.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2019-04-01.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2019-04-01.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2019-07-01.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2019-07-01.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2019-10-01.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2019-10-01.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2020-01-01.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2020-01-01.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2020-04-01.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2020-04-01.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2020-06-01.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2020-06-01.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2020-09-01.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2020-09-01.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2020-12-01.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2020-12-01.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2021-03-01.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2021-03-01.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2021-07-01.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2021-07-01.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2021-10-01.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2021-10-01.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2022-02-07.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2022-02-07.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2022-05-23.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2022-05-23.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2022-10-03.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2022-10-03.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2022-12-01.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2022-12-01.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2023-02-13.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2023-02-13.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2023-06-05.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2023-06-05.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2023-09-25.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2023-09-25.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2024-01-01.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2024-01-01.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2024-04-22.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2024-04-22.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2024-09-02.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2024-09-02.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2024-12-06.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2024-12-06.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2024-12-09.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2024-12-09.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2025-04-07.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2025-04-07.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2025-09-15.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2025-09-15.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2025-10-27.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2025-10-27.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2026-02-02.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2026-02-02.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "2026-05-18.raw.json",
+  "type": "file"
+ },
+ {
+  "name": "2026-05-18.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "current.vector.json",
+  "type": "file"
+ },
+ {
+  "name": "options.json",
+  "type": "file"
+ }
+]

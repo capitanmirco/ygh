@@ -12,6 +12,7 @@ public enum CatalogSchema {
         "v002_card_limit_names",
         "v003_decks",
         "v004_collection",
+        "v005_banlist_history",
     ]
 
     public static var migrator: DatabaseMigrator {
@@ -39,7 +40,61 @@ public enum CatalogSchema {
             try createCollectionTables(db)
         }
 
+        migrator.registerMigration("v005_banlist_history") { db in
+            try createBanlistHistoryTables(db)
+        }
+
         return migrator
+    }
+
+    // MARK: - Banlist history
+
+    /// The published Forbidden & Limited Lists, from a second upstream.
+    ///
+    /// `ban_status` is deliberately untouched. It holds the catalog's current
+    /// view and is already certified by `card-catalog`; these tables answer a
+    /// different question and `R4.AC3` reports when the two disagree rather
+    /// than reconciling them.
+    private static func createBanlistHistoryTables(_ db: Database) throws {
+        try db.create(table: "banlist_revision") { t in
+            t.autoIncrementedPrimaryKey("id")
+            t.column("format_code", .text).notNull()
+                .check { ["tcg", "ocg", "master-duel", "rush"].contains($0) }
+            t.column("effective_date", .text).notNull()
+            // On the revision, not in a constant: a row that knows its own
+            // origin survives a second source being added (R4.AC1).
+            t.column("source", .text).notNull()
+            t.column("fetched_at", .text).notNull()
+            // Makes a second synchronisation a question rather than a
+            // download, which is what R1.AC4 asks for.
+            t.uniqueKey(["format_code", "effective_date"])
+        }
+
+        // Keyed by the identifier the source published rather than by card.
+        // 203 of the catalog's 14,566 cards carry no konami_id, and a list can
+        // name a card released since the last catalog sync; storing the
+        // identifier lets those entries become answerable later without
+        // re-fetching anything (R1.AC6).
+        //
+        // There is no `unlimited` status: absence from a list carries that
+        // meaning, and storing it would be a quarter of a million rows.
+        try db.create(table: "banlist_entry") { t in
+            t.column("revision_id", .integer).notNull()
+                .references("banlist_revision", onDelete: .cascade)
+            t.column("konami_id", .integer).notNull()
+            t.column("status", .text).notNull()
+                .check { ["forbidden", "limited", "semi_limited"].contains($0) }
+            t.primaryKey(["revision_id", "konami_id"])
+        }
+
+        try db.create(index: "banlist_entry_konami_idx", on: "banlist_entry",
+                      columns: ["konami_id"])
+        try db.create(index: "banlist_revision_format_idx", on: "banlist_revision",
+                      columns: ["format_code", "effective_date"])
+
+        // The join key. Additive: the catalog's own tables are unchanged, and
+        // without it every history lookup would scan 14,566 cards.
+        try db.create(index: "card_konami_id_idx", on: "card", columns: ["konami_id"])
     }
 
     // MARK: - Collection
