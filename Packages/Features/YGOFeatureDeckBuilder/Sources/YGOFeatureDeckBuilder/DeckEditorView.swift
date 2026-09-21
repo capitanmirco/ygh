@@ -9,27 +9,50 @@ import YGODesignSystem
 /// says and where the keyboard goes are all decided in the model, so the same
 /// decisions are asserted in tests without rendering anything.
 public struct DeckEditorView: View {
+    /// The card detail beside the deck. Supplied by the composition root,
+    /// because the panel is `card-detail`'s and this screen only gives it a
+    /// card and a column.
+    private let preview: AnyView?
+
     @State private var model: DeckEditorViewModel
     @FocusState private var focus: DeckEditorFocusRegion?
     @State private var chosenSection: DeckSection = .main
 
-    public init(model: DeckEditorViewModel) {
+    public init(model: DeckEditorViewModel, preview: AnyView? = nil) {
         _model = State(wrappedValue: model)
+        self.preview = preview
     }
 
     public var body: some View {
-        VStack(spacing: 0) {
-            header
-            Divider()
-            HSplitView {
-                cardList
-                VStack(spacing: 0) {
-                    if model.canAddCards { picker; Divider() }
-                    report
+        GeometryReader { geometry in
+            VStack(spacing: 0) {
+                header
+                Divider()
+                HStack(spacing: 0) {
+                    HSplitView {
+                        cardList
+                        VStack(spacing: 0) {
+                            if model.canAddCards { picker; Divider() }
+                            report
+                        }
+                    }
+                    .frame(maxWidth: .infinity)
+
+                    if let preview, model.isPreviewVisible {
+                        Divider()
+                        preview
+                            .frame(width: Theme.Inspector.width(
+                                forWindowWidth: geometry.size.width))
+                    }
                 }
             }
         }
         .background(Theme.Palette.surface)
+        // An arrow key through the deck list is what this feature exists to
+        // make useful, so the selection drives the panel.
+        .onChange(of: model.selectedIndex) { _, _ in
+            Task { await model.previewSelection() }
+        }
         .onChange(of: model.focusedRegion) { _, region in focus = region }
         .onChange(of: focus) { _, region in
             if let region, region != model.focusedRegion { model.focusRegion(region) }
@@ -51,6 +74,23 @@ public struct DeckEditorView: View {
 
     private var header: some View {
         HStack(spacing: Theme.Spacing.regular) {
+            if preview != nil {
+                Button {
+                    model.isPreviewVisible ? model.dismissPreview() : model.restorePreview()
+                } label: {
+                    Image(systemName: model.isPreviewVisible
+                          ? "sidebar.trailing" : "sidebar.right")
+                }
+                .buttonStyle(.borderless)
+                .keyboardShortcut("i", modifiers: .command)
+                .help(model.isPreviewVisible
+                      ? "Nascondi il dettaglio carta"
+                      : "Mostra il dettaglio carta")
+                .accessibilityLabel(model.isPreviewVisible
+                                    ? "Nascondi il dettaglio carta"
+                                    : "Mostra il dettaglio carta")
+            }
+
             VStack(alignment: .leading, spacing: Theme.Spacing.hair) {
                 Text(model.deck?.name ?? "Nessun mazzo")
                     .font(Theme.Typography.sectionTitle)

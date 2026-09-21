@@ -43,6 +43,15 @@ struct RootView: View {
     let environment: CatalogEnvironment
     let progress: String?
 
+    init(environment: CatalogEnvironment, progress: String?) {
+        self.environment = environment
+        self.progress = progress
+        _library = State(wrappedValue: DeckLibraryViewModel(
+            repository: environment.deckRepository,
+            listing: environment.deckRepository,
+            library: environment.deckRepository))
+    }
+
     enum Section: String, CaseIterable, Identifiable {
         case catalog = "Catalogo"
         case decks = "Mazzi"
@@ -66,16 +75,20 @@ struct RootView: View {
     @State private var selectedDeck: Int64?
     @State private var decks: [Deck] = []
     @State private var importing = false
+    @State private var library: DeckLibraryViewModel
     @State private var importReport: String?
 
     var body: some View {
         NavigationSplitView {
             Sidebar(section: $section, decks: decks, selectedDeck: $selectedDeck,
-                    importing: $importing, progress: progress)
+                    importing: $importing, progress: progress, library: library)
         } detail: {
             Detail(section: section, environment: environment, selectedDeck: selectedDeck)
         }
         .task(id: section) { await reloadDecks() }
+        // A deck created, duplicated or deleted from the sidebar changes the
+        // library's list; the sidebar follows it.
+        .onChange(of: library.decks.count) { _, _ in decks = library.decks }
         .fileImporter(isPresented: $importing,
                       allowedContentTypes: [.data],
                       allowsMultipleSelection: true) { outcome in
@@ -91,8 +104,12 @@ struct RootView: View {
         }
     }
 
+    /// One source for the list. The library owns it, and the sidebar shows
+    /// what the library holds — two loaders would drift the first time a deck
+    /// was created from one of them.
     private func reloadDecks() async {
-        decks = (try? await environment.deckRepository.allDecks()) ?? []
+        await library.load()
+        decks = library.decks
     }
 
     /// A .ydk carries no format, so the importer proposes the one the deck
@@ -127,12 +144,43 @@ struct RootView: View {
     }
 }
 
+/// Carries a deck's `.ydk` text to the save panel.
+///
+/// A document rather than a URL write, because that is what a file exporter
+/// takes and it puts the sandbox's permission where the user granted it.
+private struct DeckFileDocument: FileDocument {
+    static var readableContentTypes: [UTType] { [.data] }
+
+    let text: String
+
+    init(text: String) { self.text = text }
+
+    init(configuration: ReadConfiguration) throws {
+        text = configuration.file.regularFileContents
+            .flatMap { String(data: $0, encoding: .utf8) } ?? ""
+    }
+
+    func fileWrapper(configuration: WriteConfiguration) throws -> FileWrapper {
+        FileWrapper(regularFileWithContents: Data(text.utf8))
+    }
+}
+
 private struct Sidebar: View {
     @Binding var section: RootView.Section
     let decks: [Deck]
     @Binding var selectedDeck: Int64?
     @Binding var importing: Bool
     let progress: String?
+    /// Creating, renaming, duplicating, exporting and deleting. The sidebar is
+    /// where a deck is chosen, so it is where a deck is managed.
+    let library: DeckLibraryViewModel
+
+    @State private var creatingDeck = false
+    @State private var newDeckName = ""
+    @State private var newDeckFormat: CardFormat = .tcg
+    @State private var exportingDeck: Int64?
+    @State private var renamingDeck: Int64?
+    @State private var renameText = ""
 
     var body: some View {
         List(selection: $section) {
@@ -146,11 +194,61 @@ private struct Sidebar: View {
         }
         .navigationSplitViewColumnWidth(min: 200, ideal: 230)
         .safeAreaInset(edge: .bottom) { footer }
+        .sheet(isPresented: $creatingDeck) { newDeckSheet }
+        .alert("Rinomina il mazzo", isPresented: Binding(
+            get: { renamingDeck != nil },
+            set: { if !$0 { renamingDeck = nil } })) {
+            TextField("Nome", text: $renameText)
+            Button("Rinomina") {
+                if let id = renamingDeck {
+                    Task { await library.rename(id, to: renameText) }
+                }
+                renamingDeck = nil
+            }
+            Button("Annulla", role: .cancel) { renamingDeck = nil }
+        }
+        .confirmationDialog(
+            "Eliminare questo mazzo?",
+            isPresented: Binding(
+                get: { library.pendingDeletion != nil },
+                set: { if !$0 { library.cancelDeletion() } }),
+            titleVisibility: .visible
+        ) {
+            Button("Elimina", role: .destructive) {
+                Task {
+                    let deleted = library.pendingDeletion
+                    if await library.confirmDeletion(), selectedDeck == deleted {
+                        selectedDeck = nil
+                    }
+                }
+            }
+            Button("Annulla", role: .cancel) { library.cancelDeletion() }
+        } message: {
+            Text("L'operazione non si può annullare.")
+        }
+        .fileExporter(
+            isPresented: Binding(
+                get: { exportingDeck != nil },
+                set: { if !$0 { exportingDeck = nil } }),
+            document: DeckFileDocument(
+                text: library.exportText(for: exportingDeck) ?? ""),
+            contentType: .data,
+            defaultFilename: library.exportName(for: exportingDeck)
+        ) { _ in exportingDeck = nil }
     }
 
     @ViewBuilder
     private var deckSection: some View {
         SwiftUI.Section("I tuoi mazzi") {
+            Button {
+                newDeckName = ""
+                newDeckFormat = .tcg
+                creatingDeck = true
+            } label: {
+                Label("Nuovo mazzo", systemImage: "plus")
+            }
+            .buttonStyle(.plain)
+
             Button { importing = true } label: {
                 Label("Importa un .ydk", systemImage: "square.and.arrow.down")
             }
@@ -166,7 +264,61 @@ private struct Sidebar: View {
                     }
                 }
                 .buttonStyle(.plain)
+                .contextMenu { deckMenu(deck) }
             }
+        }
+    }
+
+    /// Naming a deck and choosing its format, which is everything needed to
+    /// start one. Leaving the name empty is allowed: the library names it.
+    private var newDeckSheet: some View {
+        VStack(alignment: .leading, spacing: Theme.Spacing.regular) {
+            Text("Nuovo mazzo").font(Theme.Typography.sectionTitle)
+
+            TextField("Nome", text: $newDeckName)
+                .textFieldStyle(.roundedBorder)
+
+            Picker("Formato", selection: $newDeckFormat) {
+                ForEach(CardFormat.allCases, id: \.self) { format in
+                    Text(format.rawValue).tag(format)
+                }
+            }
+
+            HStack {
+                Spacer()
+                Button("Annulla") { creatingDeck = false }
+                Button("Crea") {
+                    Task {
+                        if let deck = await library.createDeck(
+                            named: newDeckName, format: newDeckFormat) {
+                            selectedDeck = deck.id
+                            section = .decks
+                        }
+                        creatingDeck = false
+                    }
+                }
+                .keyboardShortcut(.defaultAction)
+            }
+        }
+        .padding(Theme.Spacing.loose)
+        .frame(width: 340)
+    }
+
+    /// Everything a deck can have done to it, in one place: the sidebar is
+    /// where a deck is chosen, so it is where a deck is managed.
+    @ViewBuilder
+    private func deckMenu(_ deck: Deck) -> some View {
+        Button("Rinomina…") {
+            renameText = deck.name
+            renamingDeck = deck.id
+        }
+        Button("Duplica") {
+            Task { await library.duplicate(deck.id) }
+        }
+        Button("Esporta come .ydk…") { exportingDeck = deck.id }
+        Divider()
+        Button("Elimina…", role: .destructive) {
+            library.requestDeletion(deck.id)
         }
     }
 
@@ -227,7 +379,7 @@ private struct CatalogSection: View {
                     .frame(maxWidth: .infinity)
                 Divider()
                 CardDetailView(model: panel)
-                    .frame(width: max(260, geometry.size.width * 0.25))
+                    .frame(width: Theme.Inspector.width(forWindowWidth: geometry.size.width))
             }
         }
         .onChange(of: browser.selectedCard) { _, card in
@@ -449,11 +601,18 @@ private struct DeckEditorLoader: View {
     let deckID: Int64
 
     @State private var model: DeckEditorViewModel?
+    @State private var panel: CardDetailViewModel?
 
     var body: some View {
         Group {
-            if let model {
-                DeckEditorView(model: model)
+            if let model, let panel {
+                DeckEditorView(
+                    model: model,
+                    preview: AnyView(CardDetailView(model: panel)))
+                    .onChange(of: model.previewCard) { _, card in
+                        guard let card else { return }
+                        Task { await panel.select(card, language: model.language) }
+                    }
             } else {
                 ProgressView()
             }
@@ -463,7 +622,17 @@ private struct DeckEditorLoader: View {
                 repository: environment.deckRepository,
                 validator: environment.deckValidator,
                 catalogue: environment.repository,
-                editing: environment.deckRepository)
+                editing: environment.deckRepository,
+                reader: environment.repository)
+            self.panel = CardDetailViewModel(
+                loader: CardDetailLoader(
+                    catalog: environment.repository,
+                    details: environment.cardDetails,
+                    usage: environment.cardUsage,
+                    priceLookup: environment.prices,
+                    history: environment.banlistHistory,
+                    provenance: environment.banlistHistory),
+                artwork: environment.artworkStore)
             await model.load(deckID: deckID)
             self.model = model
         }

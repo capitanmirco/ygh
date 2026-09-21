@@ -358,3 +358,6 @@ extension SQLiteDeckRepository: DeckEditing {
         }
     }
 }
+
+
+extension SQLiteDeckRepository: DeckLibraryWriting {}

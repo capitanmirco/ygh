@@ -217,7 +217,7 @@ let package = Package(
 
         .testTarget(
             name: "YGOSyncTests",
-            dependencies: ["YGOSync", "YGOCore", "YGOPersistence", "YGONetworking", "YGOValidation", "YGODeckIO", "YGOFeatureDeckBuilder", "YGOFeatureCollection", "YGOFeatureBrowser", "YGOPricing", "YGOBanlistHistory", "YGOComposition",
+            dependencies: ["YGOSync", "YGOCore", "YGOPersistence", "YGONetworking", "YGOValidation", "YGODeckIO", "YGOFeatureDeckBuilder", "YGOFeatureCollection", "YGOFeatureBrowser", "YGOFeatureCardDetail", "YGOPricing", "YGOBanlistHistory", "YGOComposition",
                            .product(name: "GRDB", package: "GRDB.swift")],
             path: "Tests/YGOSyncTests",
             swiftSettings: strictConcurrency),

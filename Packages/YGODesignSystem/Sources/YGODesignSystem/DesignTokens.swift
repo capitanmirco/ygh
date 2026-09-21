@@ -94,3 +94,29 @@ public enum Theme {
         public static let spacing: CGFloat = 14
     }
 }
+
+extension Theme {
+    /// How wide an inspector is allowed to be.
+    ///
+    /// A rule rather than a number in a view, so both screens that show one
+    /// follow it and so the rule itself can be checked without rendering.
+    public enum Inspector {
+        /// The most of the window an inspector may take. A card detail beside
+        /// a grid and a filter panel is a third column, and three columns at
+        /// laptop width are three strips.
+        public static let maximumShare: CGFloat = 0.25
+        /// Narrow enough to leave room, wide enough to read a card's effect.
+        /// Below this the window narrows the content beside it instead.
+        public static let minimumWidth: CGFloat = 260
+
+        public static func width(forWindowWidth total: CGFloat) -> CGFloat {
+            max(minimumWidth, total * maximumShare)
+        }
+
+        /// True when the window is too narrow to honour both the share and
+        /// the floor, which is when the floor wins.
+        public static func isFloorApplied(forWindowWidth total: CGFloat) -> Bool {
+            total * maximumShare < minimumWidth
+        }
+    }
+}

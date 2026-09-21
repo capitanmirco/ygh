@@ -194,14 +194,8 @@ struct CardTile: View {
     let isSelected: Bool
 
     var body: some View {
-        HStack(spacing: Theme.Spacing.tight) {
-            // The frame's colour, as a bar down the leading edge. Never behind
-            // the title, which would put text on a saturated colour.
-            FrameMarker(item.frame, shape: .bar)
-
-            tileBody
-        }
-        .padding(Theme.Spacing.tight)
+        tileBody
+            .padding(Theme.Spacing.tight)
         .background(
             RoundedRectangle(cornerRadius: Theme.Radius.card)
                 .fill(isSelected ? Theme.Palette.selection : Theme.Elevation.raised))
@@ -227,10 +221,16 @@ struct CardTile: View {
                 .foregroundStyle(Theme.Palette.primaryText)
                 .lineLimit(2)
 
-            Text(item.subtitle)
-                .font(Theme.Typography.cardSubtitle)
-                .foregroundStyle(Theme.Palette.secondaryText)
-                .lineLimit(1)
+            // The frame's colour as a dot beside the kind it names, rather
+            // than a bar down the tile's edge: the same fact, without a stripe
+            // beside every card in the grid.
+            HStack(spacing: Theme.Spacing.tight) {
+                FrameMarker(item.frame, shape: .dot)
+                Text(item.subtitle)
+                    .lineLimit(1)
+            }
+            .font(Theme.Typography.cardSubtitle)
+            .foregroundStyle(Theme.Palette.secondaryText)
         }
     }
 

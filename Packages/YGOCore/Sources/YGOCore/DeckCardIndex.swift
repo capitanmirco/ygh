@@ -191,3 +191,19 @@ public enum DeckDragPayload: Hashable, Sendable, Codable {
     /// A card from the editor's candidate list.
     case candidate(artwork: ArtworkIdentifier)
 }
+
+/// Renaming and duplicating a deck.
+///
+/// Both are implemented on the concrete repository and appear in no protocol,
+/// so nothing depending on `YGOCore` can reach them. A separate port rather
+/// than two more methods on `DeckBuilding`, which every stub in
+/// `deck-builder`'s offline proofs conforms to.
+public protocol DeckLibraryWriting: Sendable {
+    func rename(_ deckID: Int64, to name: String) async throws
+
+    /// Copies a deck's slots in one transaction, artworks included. A
+    /// create-then-add replay would be N writes, would leave a half-built deck
+    /// if one failed, and would rebuild the slots rather than copy them.
+    @discardableResult
+    func duplicate(_ deckID: Int64, named name: String) async throws -> Deck
+}

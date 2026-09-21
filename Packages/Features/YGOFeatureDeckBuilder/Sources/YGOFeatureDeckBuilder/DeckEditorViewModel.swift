@@ -73,18 +73,28 @@ public final class DeckEditorViewModel {
     /// Rearranging: counts and moves. Absent means the editor can add and
     /// remove but not rearrange.
     private let editing: (any DeckEditing)?
+    /// Resolves a deck entry's identifier into the card the preview panel
+    /// needs. Absent means entries do not preview; candidates still do,
+    /// because they are already cards.
+    private let reader: (any CardRepository)?
+    /// Bumped by every preview. Walking a deck with the arrow keys issues a
+    /// read per row, and one that answers after the selection moved on
+    /// belongs to a card the user is no longer looking at.
+    private var previewGeneration = 0
 
     public init(
         repository: any DeckBuilding,
         validator: any DeckValidating,
         catalogue: (any CardSearching)? = nil,
         editing: (any DeckEditing)? = nil,
+        reader: (any CardRepository)? = nil,
         language: CardLanguage = .italian
     ) {
         self.repository = repository
         self.validator = validator
         self.catalogue = catalogue
         self.editing = editing
+        self.reader = reader
         self.language = language
     }
 
@@ -234,6 +244,66 @@ public final class DeckEditorViewModel {
         guard moving > 0 else { return }
         await apply(.move(artwork: artwork, from: source,
                           to: destination, copies: moving), in: deck.id)
+    }
+
+    // MARK: - Preview
+
+    /// The card the panel is showing.
+    public private(set) var previewCard: Card?
+    /// Why the panel has nothing to show, when that is a failure rather than
+    /// an absence. "Nothing selected" invites a selection; "this could not be
+    /// read" reports a problem, and a screen has to say different things.
+    public private(set) var previewFailure: String?
+    /// Whether the panel is on screen. Dismissing keeps the card, so bringing
+    /// it back is not a second search for something already found.
+    public private(set) var isPreviewVisible = true
+
+    public func previewEntry(_ item: DeckEntryItem) async {
+        guard let reader else {
+            previewFailure = "Questo editor non può aprire il dettaglio delle carte."
+            return
+        }
+
+        previewGeneration += 1
+        let mine = previewGeneration
+
+        do {
+            let card = try await reader.card(with: item.card)
+            guard mine == previewGeneration else { return }
+            if let card {
+                previewCard = card
+                previewFailure = nil
+            } else {
+                previewCard = nil
+                previewFailure = "\(item.title) non è più nel catalogo."
+            }
+        } catch {
+            guard mine == previewGeneration else { return }
+            previewCard = nil
+            previewFailure = "Carta non leggibile: \(error)"
+        }
+    }
+
+    /// A search result is already a card, so this needs no read at all.
+    public func previewCandidate(_ card: Card) {
+        previewGeneration += 1
+        previewCard = card
+        previewFailure = nil
+        isPreviewVisible = true
+    }
+
+    /// Previews whatever is selected now, which is what an arrow key does.
+    public func previewSelection() async {
+        guard let item = selectedItem else { return }
+        await previewEntry(item)
+    }
+
+    public func dismissPreview() {
+        isPreviewVisible = false
+    }
+
+    public func restorePreview() {
+        isPreviewVisible = true
     }
 
     // MARK: - Dropping
