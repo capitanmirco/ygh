@@ -135,7 +135,7 @@ public struct CollectionView: View {
             HStack {
                 VStack(alignment: .leading, spacing: 0) {
                     Text(text.name).font(Theme.Typography.body)
-                    Text(card.humanReadableType)
+                    Text(Vocabulary.cardKind(card.humanReadableType))
                         .font(Theme.Typography.caption)
                         .foregroundStyle(Theme.Palette.secondaryText)
                 }

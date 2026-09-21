@@ -36,6 +36,33 @@ public enum CardFormat: String, Hashable, Sendable, Codable, CaseIterable {
         }
     }
 
+    /// Which published list set describes this format.
+    ///
+    /// GOAT and Edison are TCG formats frozen at a particular list, so their
+    /// lists come from the TCG set rather than from a set of their own — the
+    /// source publishes none for them.
+    public var banlistFormat: BanlistFormat {
+        switch self {
+        case .ocg, .ocgGoat: .ocg
+        case .masterDuel: .masterDuel
+        case .tcg, .goat, .edison, .duelLinks, .speedDuel, .commonCharity: .tcg
+        }
+    }
+
+    /// The published list this format is frozen at, when it is one.
+    ///
+    /// GOAT is the TCG list the source dates 2005-03-01: Change of Heart,
+    /// Magical Scientist and Fiber Jar forbidden, Graceful Charity and Black
+    /// Luster Soldier still limited. Edison is 2010-03-01, with Brionac and
+    /// Dark Armed Dragon limited.
+    public var definingListDate: String? {
+        switch self {
+        case .goat, .ocgGoat: "2005-03-01"
+        case .edison: "2010-03-01"
+        default: nil
+        }
+    }
+
     public var hasUpstreamBanList: Bool {
         switch self {
         case .tcg, .ocg, .goat: true

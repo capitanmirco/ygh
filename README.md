@@ -5,9 +5,10 @@ portfolio. Single local user, offline-first, no accounts and no server.
 
 ## Status
 
-Ten specifications are complete and certified: `card-catalog`, `deck-builder`,
-`collection-tracker`, `deck-analytics`, `pricing`, `banlist-history`,
-`card-detail`, `deck-editing`, `visual-language` and `catalog-filters`. The application acquires the full card pool, keeps it current,
+Eleven specifications are complete and certified: `card-catalog`,
+`deck-builder`, `collection-tracker`, `deck-analytics`, `pricing`,
+`banlist-history`, `card-detail`, `deck-editing`, `visual-language`,
+`catalog-filters` and `italian-vocabulary`. The application acquires the full card pool, keeps it current,
 stores artwork locally, and browses, builds, tracks, analyses and prices
 entirely offline.
 
@@ -24,6 +25,12 @@ The catalog narrows ten ways: card type, attribute, level, monster type,
 archetype, attack and defence, release year, format, cards owned, and
 membership of a published Forbidden & Limited List — choose the list from March
 2005 and the grid shows the cards it named, with the statuses it gave them.
+
+The catalog's vocabulary reads in Italian. The upstream localises a card's name
+and text and nothing else — a card reads *Un Oceano Leggendario* and, under it,
+*Field Spell* — so the kinds, attributes, monster types and the rarities the
+Italian market renames are translated here. A term the table does not hold is
+shown as published rather than blanked: the game keeps adding kinds.
 
 Colour carries meaning rather than decorating. A card's frame — monster, spell,
 trap, fusion, synchro, Xyz, link — is marked in its own colour wherever the card
@@ -122,7 +129,8 @@ Taken from the live API and from the test suite, not estimated:
 | Frame colours | 11, covering 17 frames |
 | Palette separation | ΔE ≥ 25 from any restriction colour, ≥ 18 within a deck section |
 | Contrast | markers ≥ 3:1, text ≥ 4.5:1, both appearances |
-| Tests | 457, all green |
+| Vocabulary | 47 card kinds, 33 monster types, 7 attributes translated |
+| Tests | 477, all green |
 
 ## Specification workflow
 

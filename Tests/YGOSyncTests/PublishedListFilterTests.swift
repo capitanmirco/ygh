@@ -172,3 +172,51 @@ struct PublishedListFilterTests {
         #expect(model.unmatchedOnList == 0)
     }
 }
+
+@MainActor
+@Suite("Retro format lists")
+struct RetroFormatListTests {
+    /// The chooser was hard-coded to the TCG, so picking GOAT offered no list
+    /// at all — which read as "the April 2005 banlist is missing".
+    ///
+    /// It is not missing. The source publishes no GOAT set, and the list that
+    /// defines the format is the TCG one it dates 2005-03-01.
+    @Test func eachCardFormatPointsAtTheListSetThatDescribesIt() {
+        #expect(CardFormat.tcg.banlistFormat == .tcg)
+        #expect(CardFormat.ocg.banlistFormat == .ocg)
+        #expect(CardFormat.masterDuel.banlistFormat == .masterDuel)
+
+        // The retro formats are TCG formats frozen at a list, so they read the
+        // TCG set rather than a set of their own.
+        #expect(CardFormat.goat.banlistFormat == .tcg)
+        #expect(CardFormat.edison.banlistFormat == .tcg)
+        #expect(CardFormat.ocgGoat.banlistFormat == .ocg)
+
+        // And each names the list it is frozen at.
+        #expect(CardFormat.goat.definingListDate == "2005-03-01")
+        #expect(CardFormat.edison.definingListDate == "2010-03-01")
+        #expect(CardFormat.tcg.definingListDate == nil)
+        #expect(CardFormat.masterDuel.definingListDate == nil)
+    }
+
+    /// Evidence that the defining list is the one players mean by "GOAT": the
+    /// statuses that make the format what it is.
+    @Test func theGoatListIsTheOneWithChangeOfHeartForbiddenAndGracefulCharityLimited() throws {
+        let directory = RecordedBanlistSource.directory.appending(path: "tcg")
+        let data = try Data(contentsOf: directory.appending(path: "2005-03-01.vector.json"))
+        let list = try JSONDecoder().decode(PublishedBanlist.self, from: data)
+
+        #expect(list.count == 77)
+        // Change of Heart (4030), Magical Scientist (64360) and Fiber Jar
+        // (78706415 → konami 4443) define the format's forbidden side.
+        #expect(list.konamiIDs(at: .forbidden).count == 18)
+        #expect(list.konamiIDs(at: .limited).count == 44)
+
+        // September 2005 ends the format: Graceful Charity goes forbidden.
+        let next = try JSONDecoder().decode(
+            PublishedBanlist.self,
+            from: Data(contentsOf: directory.appending(path: "2005-09-01.vector.json")))
+        #expect(next.konamiIDs(at: .forbidden).count == 22)
+        #expect(next.count != list.count)
+    }
+}

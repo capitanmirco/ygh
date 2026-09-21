@@ -53,7 +53,7 @@ public struct CardDetailView: View {
                 // The same colour the grid tile carried, so a card looks like
                 // itself wherever it appears.
                 FrameMarker(detail.card.frame, shape: .dot)
-                Text(detail.card.humanReadableType)
+                Text(Vocabulary.cardKind(detail.card.humanReadableType))
             }
                 .font(Theme.Typography.caption)
                 .foregroundStyle(Theme.Palette.secondaryText)

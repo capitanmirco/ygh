@@ -123,7 +123,8 @@ public struct FilterPanel: View {
                 completionField(
                     "Cerca un tipo", query: $panel.monsterTypeQuery,
                     suggestions: panel.monsterTypeSuggestions,
-                    chosen: browser.filters.races) { value in
+                    chosen: browser.filters.races,
+                    display: panel.displayName(forMonsterType:)) { value in
                         var filters = browser.filters
                         if filters.races.contains(value) { filters.races.remove(value) }
                         else { filters.races.insert(value) }
@@ -202,8 +203,10 @@ public struct FilterPanel: View {
     }
 
     private var publishedListSection: some View {
-        section(.publishedList) {
-            let lists = browser.availableLists(for: .tcg)
+        let cardFormat = browser.filters.format ?? .tcg
+        let banlistFormat = cardFormat.banlistFormat
+        return section(.publishedList) {
+            let lists = browser.availableLists(for: banlistFormat)
             if lists.isEmpty {
                 Text("Nessuna lista scaricata.")
                     .font(Theme.Typography.caption)
@@ -214,16 +217,27 @@ public struct FilterPanel: View {
                     set: { date in
                         var filters = browser.filters
                         filters.publishedList = date.map {
-                            PublishedListSelection(format: .tcg, effectiveDate: $0)
+                            PublishedListSelection(format: banlistFormat, effectiveDate: $0)
                         }
                         apply(filters)
                     })) {
                     Text("Nessuna").tag(String?.none)
                     ForEach(lists, id: \.effectiveDate) { revision in
-                        Text(revision.effectiveDate).tag(String?.some(revision.effectiveDate))
+                        Text(label(for: revision.effectiveDate, in: cardFormat))
+                            .tag(String?.some(revision.effectiveDate))
                     }
                 }
                 .labelsHidden()
+                if let defining = cardFormat.definingListDate {
+                    Button("Usa la lista di \(cardFormat.rawValue)") {
+                        var filters = browser.filters
+                        filters.publishedList = PublishedListSelection(
+                            format: banlistFormat, effectiveDate: defining)
+                        apply(filters)
+                    }
+                    .buttonStyle(.link)
+                    .font(Theme.Typography.caption)
+                }
                 if browser.unmatchedOnList > 0 {
                     Text("\(browser.unmatchedOnList) carte della lista non sono nel catalogo")
                         .font(Theme.Typography.caption)
@@ -231,6 +245,13 @@ public struct FilterPanel: View {
                 }
             }
         }
+    }
+
+    /// A retro format's own list is named, because its date is not the one
+    /// players use for it: GOAT is remembered as April 2005 and the source
+    /// dates it 2005-03-01.
+    private func label(for date: String, in format: CardFormat) -> String {
+        date == format.definingListDate ? "\(date) — lista \(format.rawValue)" : date
     }
 
     private var ownedSection: some View {
@@ -253,6 +274,7 @@ public struct FilterPanel: View {
         query: Binding<String>,
         suggestions: [String],
         chosen: Set<String>,
+        display: @escaping (String) -> String = { $0 },
         toggle: @escaping (String) -> Void
     ) -> some View {
         VStack(alignment: .leading, spacing: Theme.Spacing.tight) {
@@ -261,14 +283,14 @@ public struct FilterPanel: View {
                 .font(Theme.Typography.caption)
             ForEach(Array(chosen).sorted(), id: \.self) { value in
                 Button { toggle(value) } label: {
-                    Label(value, systemImage: "checkmark")
+                    Label(display(value), systemImage: "checkmark")
                 }
                 .buttonStyle(.link)
                 .font(Theme.Typography.caption)
             }
             if !query.wrappedValue.isEmpty {
                 ForEach(suggestions.prefix(8), id: \.self) { value in
-                    Button(value) { toggle(value) }
+                    Button(display(value)) { toggle(value) }
                         .buttonStyle(.link)
                         .font(Theme.Typography.caption)
                 }

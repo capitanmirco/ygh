@@ -228,7 +228,7 @@ public final class BrowserViewModel {
             return CardGridItem(
                 id: card.id,
                 title: text.name,
-                subtitle: card.humanReadableType,
+                subtitle: Vocabulary.cardKind(card.humanReadableType),
                 isUntranslated: text.isFallbackToEnglish,
                 artwork: presentation,
                 banStatus: loadedBanStatuses[card.id] ?? .unlimited,

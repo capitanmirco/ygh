@@ -51,8 +51,18 @@ public final class FilterPanelModel {
     }
 
     /// 87 values. A menu of them is a wall, so typing narrows it.
+    ///
+    /// Matched on the Italian term as well as the upstream one: a field that
+    /// shows "Incantatore" and finds nothing when you type it is worse than
+    /// one that shows English.
     public var monsterTypeSuggestions: [String] {
-        Self.narrow(allMonsterTypes, by: monsterTypeQuery)
+        Self.narrow(allMonsterTypes, by: monsterTypeQuery, translating: Vocabulary.monsterType)
+    }
+
+    /// What a monster type reads as. The list shows these; the filter stores
+    /// the upstream term, because that is what the catalog holds.
+    public func displayName(forMonsterType upstream: String) -> String {
+        Vocabulary.monsterType(upstream)
     }
 
     /// 662 values, which is the one that makes this necessary rather than
@@ -61,11 +71,18 @@ public final class FilterPanelModel {
         Self.narrow(allArchetypes, by: archetypeQuery)
     }
 
-    static func narrow(_ values: [String], by query: String) -> [String] {
+    static func narrow(
+        _ values: [String], by query: String,
+        translating translate: ((String) -> String)? = nil
+    ) -> [String] {
         let trimmed = query.trimmingCharacters(in: .whitespaces)
         guard !trimmed.isEmpty else { return values }
         // Matches anywhere, so "eyes" finds "Blue-Eyes" as well as "Red-Eyes".
-        return values.filter { $0.range(of: trimmed, options: .caseInsensitive) != nil }
+        return values.filter { value in
+            if value.range(of: trimmed, options: .caseInsensitive) != nil { return true }
+            guard let translate else { return false }
+            return translate(value).range(of: trimmed, options: .caseInsensitive) != nil
+        }
     }
 
     // MARK: - Keyboard

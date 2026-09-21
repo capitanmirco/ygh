@@ -218,11 +218,17 @@ private struct CatalogSection: View {
     }
 
     var body: some View {
-        HSplitView {
-            BrowserView(model: browser, filters: filters)
-                .frame(minWidth: 420)
-            CardDetailView(model: panel)
-                .frame(minWidth: 300, idealWidth: 360)
+        // The detail is an inspector, not a second half: it takes at most a
+        // quarter of the window, so opening the filters does not squeeze the
+        // grid between two panels.
+        GeometryReader { geometry in
+            HStack(spacing: 0) {
+                BrowserView(model: browser, filters: filters)
+                    .frame(maxWidth: .infinity)
+                Divider()
+                CardDetailView(model: panel)
+                    .frame(width: max(260, geometry.size.width * 0.25))
+            }
         }
         .onChange(of: browser.selectedCard) { _, card in
             guard let card else { return }
