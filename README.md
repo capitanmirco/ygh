@@ -5,9 +5,9 @@ portfolio. Single local user, offline-first, no accounts and no server.
 
 ## Status
 
-Eight specifications are complete and certified: `card-catalog`, `deck-builder`,
+Nine specifications are complete and certified: `card-catalog`, `deck-builder`,
 `collection-tracker`, `deck-analytics`, `pricing`, `banlist-history`,
-`card-detail` and `deck-editing`. The application acquires the full card pool, keeps it current,
+`card-detail`, `deck-editing` and `visual-language`. The application acquires the full card pool, keeps it current,
 stores artwork locally, and browses, builds, tracks, analyses and prices
 entirely offline.
 
@@ -19,6 +19,10 @@ said about it since 1999.
 
 A deck is freely editable: search and insert, set a count outright, drag a card
 from one section to another or move it from the keyboard, and undo any of it.
+
+Colour carries meaning rather than decorating. A card's frame — monster, spell,
+trap, fusion, synchro, Xyz, link — is marked in its own colour wherever the card
+appears, so a grid or a deck list can be read without reading every label.
 
 ## Requirements
 
@@ -52,7 +56,7 @@ everything else lives in local packages.
 | `YGOSync` | Seeding and updating the catalog, and the banlist history. |
 | `YGOBanlistHistory` | A card's status across every published list, and when it changed. Depends on `YGOCore` alone. |
 | `YGOImageStore` | The on-disk artwork store and its background prefetcher. |
-| `YGODesignSystem` | Spacing, colour and typography tokens. |
+| `YGODesignSystem` | Spacing, colour and typography tokens, and the measured frame palette. |
 | `YGOFeatureBrowser` | Card browsing, searching, filtering, paging. |
 | `YGOFeatureCardDetail` | The panel beside the results: one card, assembled from every other module's ports. |
 | `YGOComposition` | The composition root: the only place that knows every concrete implementation. |
@@ -110,7 +114,10 @@ Taken from the live API and from the test suite, not estimated:
 | Card detail, opening | under 100 ms, worst case, debug build |
 | Narrowing, per keystroke | under 150 ms against 14,566 cards |
 | Deck edit, applied and reloaded | under 100 ms on a 70-card deck |
-| Tests | 394, all green |
+| Frame colours | 11, covering 17 frames |
+| Palette separation | ΔE ≥ 25 from any restriction colour, ≥ 18 within a deck section |
+| Contrast | markers ≥ 3:1, text ≥ 4.5:1, both appearances |
+| Tests | 423, all green |
 
 ## Specification workflow
 
@@ -142,6 +149,13 @@ published one cannot be made from three sampled lists.
 Where a guard exists to discard stale work — a search result for text the user
 has moved past — the test that covers it was checked by removing the guard and
 confirming the test fails. A test that passes either way proves nothing.
+
+The palette is arithmetic, not taste. Every frame colour is measured against
+every restriction colour and against every other frame it can share a deck
+section with, and against the surface it is drawn on, in both appearances. The
+game's own effect-monster orange and normal-monster yellow are this
+application's "limited" and "semi-limited", which is the kind of collision only
+measuring catches.
 
 One thing here is deliberately not proven automatically: the drag gesture in the
 deck editor. What is proven is the drop handler beneath it and the keyboard path

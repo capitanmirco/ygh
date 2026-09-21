@@ -7,6 +7,17 @@ public struct OwnedCard: Hashable, Sendable, Identifiable {
     public let card: CardIdentifier
     public let name: String
     public let copies: Int
+    /// What the card is, carried so a collection row can mark it.
+    public let frame: CardFrame
+
+    public init(
+        card: CardIdentifier, name: String, copies: Int, frame: CardFrame = .token
+    ) {
+        self.card = card
+        self.name = name
+        self.copies = copies
+        self.frame = frame
+    }
 
     public var id: CardIdentifier { card }
 }
@@ -125,6 +136,7 @@ extension SQLiteCollectionRepository {
         return try await writer.read { db in
             var sql = """
                 SELECT card.id AS id, card.name_en AS name,
+                       card.frame_type AS frame_type,
                        sum(collection_entry.quantity) AS copies
                 FROM collection_entry
                 JOIN card ON card.id = collection_entry.card_id
@@ -139,7 +151,8 @@ extension SQLiteCollectionRepository {
 
             return try Row.fetchAll(db, sql: sql, arguments: arguments).map { row in
                 OwnedCard(card: CardIdentifier(row["id"] as Int),
-                          name: row["name"], copies: row["copies"])
+                          name: row["name"], copies: row["copies"],
+                          frame: CardFrame(rawValue: row["frame_type"]) ?? .token)
             }
         }
     }
@@ -225,7 +238,7 @@ extension SQLiteCollectionRepository {
 extension SQLiteCollectionRepository: CollectionReading {
     public func ownedCardItems(matching query: String) async throws -> [OwnedCardItem] {
         try await ownedCards(named: query).map {
-            OwnedCardItem(id: $0.card, name: $0.name, copies: $0.copies)
+            OwnedCardItem(id: $0.card, name: $0.name, copies: $0.copies, frame: $0.frame)
         }
     }
 

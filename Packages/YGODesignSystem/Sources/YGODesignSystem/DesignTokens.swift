@@ -15,6 +15,7 @@ public enum Theme {
     public enum Radius {
         public static let card: CGFloat = 8
         public static let control: CGFloat = 6
+        public static let marker: CGFloat = 2
     }
 
     public enum Palette {
@@ -22,10 +23,18 @@ public enum Theme {
         /// the surrounding surfaces stay neutral and let it carry the page.
         public static let surface = Color(nsColor: .windowBackgroundColor)
         public static let raisedSurface = Color(nsColor: .controlBackgroundColor)
-        public static let primaryText = Color(nsColor: .labelColor)
-        public static let secondaryText = Color(nsColor: .secondaryLabelColor)
+        /// Defined from the measured components in `FramePalette.swift`, not
+        /// from the system aliases: the secondary label does not hold 4.5:1
+        /// against the overlay surface in dark appearance.
+        public static var primaryText: Color { text }
+        public static var secondaryText: Color { secondary }
         public static let separator = Color(nsColor: .separatorColor)
         public static let accent = Color.accentColor
+
+        /// State tints. Named so nobody has to decide what 0.18 meant.
+        public static let selection = accent.opacity(0.18)
+        public static let dropTarget = accent.opacity(0.15)
+        public static let chartFill = accent.opacity(0.65)
 
         /// Restriction badges. Red reads as forbidden across the game's own
         /// materials, so it is kept for exactly that.
@@ -34,12 +43,47 @@ public enum Theme {
         public static let semiLimited = Color(red: 0.72, green: 0.62, blue: 0.10)
     }
 
+    /// Five sizes between 11 and 13 points is not a scale, it is a wall. The
+    /// levels below are ordered so a screen has a shape: a title you land on,
+    /// headings you scan, body you read, figures you compare and captions you
+    /// consult.
     public enum Typography {
-        public static let cardTitle = Font.system(size: 12, weight: .medium)
-        public static let cardSubtitle = Font.system(size: 11, weight: .regular)
-        public static let sectionTitle = Font.system(size: 13, weight: .semibold)
+        /// The one figure a screen is about: a collection's worth, a deck's
+        /// cost. Larger than a section heading because it is the answer, not a
+        /// label for one.
+        public static let heroFigure = Font.system(size: 34, weight: .semibold).monospacedDigit()
+        public static let screenTitle = Font.system(size: 22, weight: .semibold)
+        public static let sectionTitle = Font.system(size: 15, weight: .semibold)
+        /// Numbers, in a form whose digits do not change width. A total that
+        /// shifts the text beside it as it changes is the kind of thing nobody
+        /// reports and everybody notices.
+        public static let figure = Font.system(size: 17, weight: .medium).monospacedDigit()
         public static let body = Font.system(size: 13)
         public static let caption = Font.system(size: 11)
+        /// The smallest thing on screen: a one-letter restriction badge.
+        public static let badge = Font.system(size: 10, weight: .bold)
+
+        public static let cardTitle = Font.system(size: 12, weight: .medium)
+        public static let cardSubtitle = Font.system(size: 11, weight: .regular)
+
+        /// The scale's own description, so its ordering can be checked rather
+        /// than eyeballed.
+        public enum Level: String, CaseIterable, Sendable {
+            case screenTitle, figure, sectionTitle, body, caption
+
+            /// Point size and weight, most prominent first.
+            public var size: Double {
+                switch self {
+                case .screenTitle: 22
+                case .figure: 17
+                case .sectionTitle: 15
+                case .body: 13
+                case .caption: 11
+                }
+            }
+
+            public var isMonospacedDigit: Bool { self == .figure }
+        }
     }
 
     /// Grid geometry. Card art is 421 by 614, so tiles keep that ratio and the

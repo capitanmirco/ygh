@@ -18,6 +18,10 @@ public struct DeckEntryItem: Identifiable, Hashable, Sendable {
     public let section: DeckSection
     public let quantity: Int
     public let banStatus: BanStatus
+    /// What the card is. A deck list is where frame colour earns its keep:
+    /// seven extra-deck frames sorted into one section, told apart without
+    /// reading a word.
+    public let frame: CardFrame
 
     public var accessibilityLabel: String {
         var parts = ["\(quantity)× \(title)", section.italianName]
@@ -128,7 +132,8 @@ public final class DeckEditorViewModel {
                     title: entry?.name ?? "Carta \(slot.card.rawValue)",
                     section: slot.section,
                     quantity: slot.quantity,
-                    banStatus: entry?.banStatus ?? .unlimited)
+                    banStatus: entry?.banStatus ?? .unlimited,
+                    frame: entry?.frame ?? .token)
             }
 
         legality = validator.legality(of: deck, using: index)

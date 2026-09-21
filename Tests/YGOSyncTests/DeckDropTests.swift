@@ -144,3 +144,52 @@ struct DeckDropTests {
         #expect(model.items.isEmpty)
     }
 }
+
+@MainActor
+@Suite("Deck removal")
+struct DeckRemovalTests {
+    /// Taking a card out was reachable only by stepping its count down to
+    /// zero. The operation was there; nothing in the interface said so.
+    ///
+    /// Both routes are exercised here: one copy at a time, and all at once.
+    @Test func aCardCanBeTakenOutOneCopyAtATimeOrAllAtOnce() async throws {
+        let (database, repository) = try RealDeck.seededRepository()
+        let deck = try await repository.createDeck(name: "Nuovo", format: .tcg)
+        let model = DeckEditorViewModel(
+            repository: repository, validator: DeckValidator(),
+            catalogue: SQLiteCardRepository(database: database), editing: repository)
+        await model.load(deckID: deck.id)
+
+        let card = try #require(model.candidates.first { !$0.frame.belongsInExtraDeck })
+        await model.add(card, to: .main)
+        let artwork = try #require(model.items.first?.id)
+        await model.setQuantity(3, of: artwork, in: .main)
+
+        // One copy at a time, down to the last one.
+        await model.remove(artwork: artwork, from: .main)
+        #expect(model.quantity(of: artwork, in: .main) == 2)
+        await model.remove(artwork: artwork, from: .main)
+        #expect(model.quantity(of: artwork, in: .main) == 1)
+
+        // The last copy takes the card out of the deck entirely.
+        await model.remove(artwork: artwork, from: .main)
+        #expect(model.quantity(of: artwork, in: .main) == 0)
+        #expect(model.items.isEmpty)
+        #expect(model.lastFailure == nil)
+
+        // And all at once, from a card held three times.
+        await model.add(card, to: .main)
+        await model.setQuantity(3, of: artwork, in: .main)
+        await model.setQuantity(0, of: artwork, in: .main)
+        #expect(model.items.isEmpty)
+
+        // Removing is undoable like every other edit.
+        await model.undo()
+        #expect(model.quantity(of: artwork, in: .main) == 3)
+
+        // Removing a card that is not there is not a failure.
+        await model.remove(artwork: artwork, from: .side)
+        #expect(model.lastFailure == nil)
+        #expect(model.quantity(of: artwork, in: .main) == 3)
+    }
+}

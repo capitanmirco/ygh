@@ -1,6 +1,6 @@
 /// The shape of a card, which decides where it may be placed in a deck and how
 /// it is drawn in the interface.
-public enum CardFrame: String, Hashable, Sendable, Codable {
+public enum CardFrame: String, Hashable, Sendable, Codable, CaseIterable {
     case normal, effect, ritual, fusion, synchro, xyz, link
     case normalPendulum = "normal_pendulum"
     case effectPendulum = "effect_pendulum"

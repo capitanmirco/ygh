@@ -12,6 +12,9 @@ public struct CardGridItem: Identifiable, Hashable, Sendable {
     public let isUntranslated: Bool
     public let artwork: ArtworkPresentation
     public let banStatus: BanStatus
+    /// What the card is. Carried here so the tile marks it without asking the
+    /// catalog again, and so the marker can be asserted without rendering.
+    public let frame: CardFrame
 
     public init(
         id: CardIdentifier,
@@ -19,7 +22,8 @@ public struct CardGridItem: Identifiable, Hashable, Sendable {
         subtitle: String,
         isUntranslated: Bool,
         artwork: ArtworkPresentation,
-        banStatus: BanStatus
+        banStatus: BanStatus,
+        frame: CardFrame
     ) {
         self.id = id
         self.title = title
@@ -27,6 +31,7 @@ public struct CardGridItem: Identifiable, Hashable, Sendable {
         self.isUntranslated = isUntranslated
         self.artwork = artwork
         self.banStatus = banStatus
+        self.frame = frame
     }
 
     /// What assistive technology reads out.

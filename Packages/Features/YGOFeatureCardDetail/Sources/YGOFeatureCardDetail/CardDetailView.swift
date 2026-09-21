@@ -47,9 +47,14 @@ public struct CardDetailView: View {
 
         VStack(alignment: .leading, spacing: Theme.Spacing.tight) {
             Text(detail.text.name)
-                .font(Theme.Typography.sectionTitle)
+                .font(Theme.Typography.screenTitle)
                 .accessibilityLabel("Carta \(detail.text.name)")
-            Text(detail.card.humanReadableType)
+            HStack(spacing: Theme.Spacing.tight) {
+                // The same colour the grid tile carried, so a card looks like
+                // itself wherever it appears.
+                FrameMarker(detail.card.frame, shape: .dot)
+                Text(detail.card.humanReadableType)
+            }
                 .font(Theme.Typography.caption)
                 .foregroundStyle(Theme.Palette.secondaryText)
             if detail.isUntranslated {

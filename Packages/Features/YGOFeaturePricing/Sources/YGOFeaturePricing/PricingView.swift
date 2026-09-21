@@ -81,7 +81,7 @@ public struct PricingView: View {
     private func headline(_ value: Valuation) -> some View {
         VStack(alignment: .leading, spacing: Theme.Spacing.tight) {
             Text(value.total.formatted)
-                .font(.system(size: 34, weight: .semibold).monospacedDigit())
+                .font(Theme.Typography.heroFigure)
 
             if let gain = model.gainOverSpend, let spend = model.recordedSpend {
                 Text("Speso \(spend.formatted), differenza \(gain.formatted)")
@@ -113,7 +113,7 @@ public struct PricingView: View {
                     Text(key ?? "Non specificato").font(Theme.Typography.body)
                     Spacer()
                     Text(value.total.formatted)
-                        .font(Theme.Typography.body.monospacedDigit())
+                        .font(Theme.Typography.figure)
                         .foregroundStyle(Theme.Palette.secondaryText)
                 }
                 .accessibilityElement(children: .combine)
@@ -150,7 +150,7 @@ public struct PricingView: View {
                         }
                         Spacer()
                         Text(card.totalValue.formatted)
-                            .font(Theme.Typography.body.monospacedDigit())
+                            .font(Theme.Typography.figure)
                     }
                     .accessibilityElement(children: .ignore)
                     .accessibilityLabel(card.sentence)

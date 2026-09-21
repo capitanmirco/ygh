@@ -87,11 +87,15 @@ public struct AnalyticsView: View {
                 let count = breakdown.byKind[kind] ?? 0
                 if count > 0 {
                     HStack {
+                        // The colour of the frame the category is mostly made
+                        // of, so a breakdown reads like the cards it counts.
+                        FrameMarker(BreakdownPalette.frame(forKind: kind.rawValue),
+                                    shape: .dot)
                         Text(kind.italianName).font(Theme.Typography.body)
                         Spacer()
                         Text("\(count)")
-                            .font(Theme.Typography.body.monospacedDigit())
-                            .foregroundStyle(Theme.Palette.secondaryText)
+                            .font(Theme.Typography.figure)
+                            .foregroundStyle(Theme.Palette.primaryText)
                     }
                     .accessibilityElement(children: .combine)
                     .accessibilityLabel("\(kind.italianName): \(count) carte")
@@ -113,7 +117,7 @@ public struct AnalyticsView: View {
                         .frame(width: 44, alignment: .leading)
                     GeometryReader { geometry in
                         RoundedRectangle(cornerRadius: Theme.Radius.control)
-                            .fill(Theme.Palette.accent.opacity(0.65))
+                            .fill(Theme.Palette.chartFill)
                             .frame(width: geometry.size.width
                                    * CGFloat(entry.count) / CGFloat(peak))
                     }
@@ -157,7 +161,7 @@ public struct AnalyticsView: View {
                         Text(entry.cardName).font(Theme.Typography.body)
                         Spacer()
                         Text(String(format: "%.1f%%", entry.atLeastOne * 100))
-                            .font(Theme.Typography.body.monospacedDigit())
+                            .font(Theme.Typography.figure)
                             .foregroundStyle(Theme.Palette.secondaryText)
                     }
                     .accessibilityElement(children: .ignore)

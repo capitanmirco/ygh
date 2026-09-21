@@ -208,6 +208,7 @@ private struct OwnedRow: View {
 
     var body: some View {
         HStack(spacing: Theme.Spacing.tight) {
+            FrameMarker(item.frame, shape: .dot)
             Text(item.name).font(Theme.Typography.body)
             Spacer()
             if canEdit {

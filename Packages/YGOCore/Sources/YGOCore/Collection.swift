@@ -123,11 +123,17 @@ public struct OwnedCardItem: Identifiable, Hashable, Sendable {
     public let id: CardIdentifier
     public let name: String
     public let copies: Int
+    /// What the card is, so a collection row carries the same marker the grid
+    /// and the deck list do.
+    public let frame: CardFrame
 
-    public init(id: CardIdentifier, name: String, copies: Int) {
+    public init(
+        id: CardIdentifier, name: String, copies: Int, frame: CardFrame = .token
+    ) {
         self.id = id
         self.name = name
         self.copies = copies
+        self.frame = frame
     }
 
     public var accessibilityLabel: String {

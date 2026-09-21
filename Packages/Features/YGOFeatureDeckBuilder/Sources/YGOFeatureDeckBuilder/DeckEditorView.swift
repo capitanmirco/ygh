@@ -149,7 +149,7 @@ public struct DeckEditorView: View {
     }
 
     private func dropHighlight(_ section: DeckSection) -> Color {
-        model.dropTarget == section ? Theme.Palette.accent.opacity(0.15) : Color.clear
+        model.dropTarget == section ? Theme.Palette.dropTarget : Color.clear
     }
 
     /// The section's name with what it holds, so the count is visible while
@@ -160,6 +160,7 @@ public struct DeckEditorView: View {
 
     private func row(_ item: DeckEntryItem) -> some View {
         HStack(spacing: Theme.Spacing.snug) {
+            FrameMarker(item.frame, shape: .dot)
             Text("\(item.quantity)×")
                 .font(Theme.Typography.cardSubtitle.monospacedDigit())
                 .foregroundStyle(Theme.Palette.secondaryText)
@@ -175,22 +176,52 @@ public struct DeckEditorView: View {
             // Everything the drag does, without a pointer.
             quantityStepper(item)
             moveMenu(item)
+            removeButton(item)
         }
         .accessibilityElement(children: .contain)
         .accessibilityLabel(item.accessibilityLabel)
+        .contextMenu {
+            Button("Rimuovi una copia") {
+                Task { await model.remove(artwork: item.id, from: item.section) }
+            }
+            Button("Rimuovi tutte le copie", role: .destructive) {
+                Task { await model.setQuantity(0, of: item.id, in: item.section) }
+            }
+        }
+    }
+
+    /// Taking a card out was reachable only by stepping its count down to
+    /// zero, which is not something an interface should expect to be guessed.
+    private func removeButton(_ item: DeckEntryItem) -> some View {
+        Button {
+            Task { await model.remove(artwork: item.id, from: item.section) }
+        } label: {
+            Image(systemName: item.quantity > 1 ? "minus.circle" : "trash")
+        }
+        .buttonStyle(.borderless)
+        .foregroundStyle(Theme.Palette.forbidden)
+        .help(item.quantity > 1
+              ? "Rimuovi una copia di \(item.title)"
+              : "Togli \(item.title) dal mazzo")
+        .accessibilityLabel(item.quantity > 1
+                            ? "Rimuovi una copia di \(item.title)"
+                            : "Togli \(item.title) dal mazzo")
     }
 
     /// Split out of `row`: the whole row in one expression was more than the
     /// type checker would take.
     private func quantityStepper(_ item: DeckEntryItem) -> some View {
         Stepper {
-            EmptyView()
+            // A hidden label leaves the control unexplained; the count beside
+            // it is what the buttons are changing.
+            Text("\(item.quantity)")
+                .font(Theme.Typography.cardSubtitle.monospacedDigit())
+                .frame(minWidth: 16)
         } onIncrement: {
             Task { await model.setQuantity(item.quantity + 1, of: item.id, in: item.section) }
         } onDecrement: {
             Task { await model.setQuantity(item.quantity - 1, of: item.id, in: item.section) }
         }
-        .labelsHidden()
         .accessibilityLabel("Copie di \(item.title)")
     }
 

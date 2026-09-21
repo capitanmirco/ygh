@@ -177,7 +177,8 @@ public final class BrowserViewModel {
                 subtitle: card.humanReadableType,
                 isUntranslated: text.isFallbackToEnglish,
                 artwork: presentation,
-                banStatus: loadedBanStatuses[card.id] ?? .unlimited)
+                banStatus: loadedBanStatuses[card.id] ?? .unlimited,
+                frame: card.frame)
         }
 
         state = .results(items)

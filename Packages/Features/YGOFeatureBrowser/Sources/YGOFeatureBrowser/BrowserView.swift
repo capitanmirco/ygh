@@ -168,6 +168,28 @@ struct CardTile: View {
     let isSelected: Bool
 
     var body: some View {
+        HStack(spacing: Theme.Spacing.tight) {
+            // The frame's colour, as a bar down the leading edge. Never behind
+            // the title, which would put text on a saturated colour.
+            FrameMarker(item.frame, shape: .bar)
+
+            tileBody
+        }
+        .padding(Theme.Spacing.tight)
+        .background(
+            RoundedRectangle(cornerRadius: Theme.Radius.card)
+                .fill(isSelected ? Theme.Palette.selection : Theme.Elevation.raised))
+        .overlay(
+            RoundedRectangle(cornerRadius: Theme.Radius.card)
+                .strokeBorder(isSelected ? Theme.Palette.accent : .clear, lineWidth: 2))
+        // One element per card, so the grid is read card by card rather than
+        // label by label.
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(item.accessibilityLabel)
+        .accessibilityAddTraits(isSelected ? [.isButton, .isSelected] : .isButton)
+    }
+
+    private var tileBody: some View {
         VStack(alignment: .leading, spacing: Theme.Spacing.tight) {
             artwork
                 .aspectRatio(Theme.Grid.cardAspectRatio, contentMode: .fit)
@@ -184,18 +206,6 @@ struct CardTile: View {
                 .foregroundStyle(Theme.Palette.secondaryText)
                 .lineLimit(1)
         }
-        .padding(Theme.Spacing.tight)
-        .background(
-            RoundedRectangle(cornerRadius: Theme.Radius.card)
-                .fill(isSelected ? Theme.Palette.accent.opacity(0.18) : .clear))
-        .overlay(
-            RoundedRectangle(cornerRadius: Theme.Radius.card)
-                .strokeBorder(isSelected ? Theme.Palette.accent : .clear, lineWidth: 2))
-        // One element per card, so the grid is read card by card rather than
-        // label by label.
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel(item.accessibilityLabel)
-        .accessibilityAddTraits(isSelected ? [.isButton, .isSelected] : .isButton)
     }
 
     @ViewBuilder
@@ -230,8 +240,10 @@ struct CardTile: View {
     private var restrictionBadge: some View {
         if item.banStatus != .unlimited {
             Text(badgeText)
-                .font(.system(size: 10, weight: .bold))
-                .foregroundStyle(.white)
+                .font(Theme.Typography.badge)
+                // Not always white: on the semi-limited yellow, white text
+                // measures 2.64:1.
+                .foregroundStyle(Theme.Palette.textOn(item.banStatus))
                 .padding(.horizontal, Theme.Spacing.tight)
                 .padding(.vertical, Theme.Spacing.hair)
                 .background(Capsule().fill(badgeColour))

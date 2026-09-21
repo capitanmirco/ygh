@@ -74,6 +74,7 @@ let package = Package(
 
         .target(
             name: "YGODesignSystem",
+            dependencies: ["YGOCore"],
             path: "Packages/YGODesignSystem/Sources/YGODesignSystem",
             swiftSettings: strictConcurrency),
 
@@ -226,6 +227,12 @@ let package = Package(
                            "YGOFeatureBrowser", "YGOPersistence",
                            .product(name: "GRDB", package: "GRDB.swift")],
             path: "Tests/YGOFeatureCardDetailTests",
+            swiftSettings: strictConcurrency),
+
+        .testTarget(
+            name: "YGODesignSystemTests",
+            dependencies: ["YGODesignSystem", "YGOCore"],
+            path: "Tests/YGODesignSystemTests",
             swiftSettings: strictConcurrency),
 
         .testTarget(
