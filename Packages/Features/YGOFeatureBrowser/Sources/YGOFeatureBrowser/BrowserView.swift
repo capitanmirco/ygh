@@ -8,19 +8,32 @@ import YGODesignSystem
 /// and selection all live in the model, so what is drawn here is already
 /// decided and can be asserted without rendering.
 public struct BrowserView: View {
+    /// The panel is not there by default: the catalog opens as it always has,
+    /// and ten filters arrive when asked for.
+    @State private var showsFilters = false
+    private let filterPanel: FilterPanelModel?
+
     @State private var model: BrowserViewModel
     @FocusState private var focus: BrowserFocusRegion?
 
-    public init(model: BrowserViewModel) {
+    public init(model: BrowserViewModel, filters: FilterPanelModel? = nil) {
         _model = State(wrappedValue: model)
+        self.filterPanel = filters
     }
 
     public var body: some View {
-        VStack(spacing: 0) {
-            searchBar
-            resultSummary
-            Divider()
-            content
+        HStack(spacing: 0) {
+            if showsFilters, let filterPanel {
+                FilterPanel(panel: filterPanel, browser: model)
+                Divider()
+            }
+
+            VStack(spacing: 0) {
+                searchBar
+                resultSummary
+                Divider()
+                content
+            }
         }
         .background(Theme.Palette.surface)
         // The catalog opens showing cards. Waiting for a query would withhold
@@ -71,6 +84,19 @@ public struct BrowserView: View {
                 .focused($focus, equals: .searchField)
                 .accessibilityLabel("Campo di ricerca carte")
                 .onSubmit { Task { await model.search() } }
+
+            if filterPanel != nil {
+                Button {
+                    showsFilters.toggle()
+                } label: {
+                    Image(systemName: showsFilters
+                          ? "line.3.horizontal.decrease.circle.fill"
+                          : "line.3.horizontal.decrease.circle")
+                }
+                .buttonStyle(.borderless)
+                .help(showsFilters ? "Nascondi i filtri" : "Mostra i filtri")
+                .accessibilityLabel(showsFilters ? "Nascondi i filtri" : "Mostra i filtri")
+            }
 
             languagePicker
         }

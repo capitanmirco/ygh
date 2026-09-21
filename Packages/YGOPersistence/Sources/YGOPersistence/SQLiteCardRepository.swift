@@ -150,3 +150,25 @@ extension SQLiteCardRepository: CardSearchCounting {
         }
     }
 }
+
+extension SQLiteCardRepository: CardVocabularyReading {
+    public func monsterTypes() async throws -> [String] {
+        try await database.read { db in
+            try String.fetchAll(db, sql: """
+                SELECT DISTINCT race FROM card
+                WHERE race IS NOT NULL AND race <> ''
+                ORDER BY race COLLATE NOCASE
+                """)
+        }
+    }
+
+    public func archetypes() async throws -> [String] {
+        try await database.read { db in
+            try String.fetchAll(db, sql: """
+                SELECT DISTINCT archetype FROM card
+                WHERE archetype IS NOT NULL AND archetype <> ''
+                ORDER BY archetype COLLATE NOCASE
+                """)
+        }
+    }
+}

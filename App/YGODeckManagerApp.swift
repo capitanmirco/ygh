@@ -193,6 +193,8 @@ private struct CatalogSection: View {
 
     @State private var browser: BrowserViewModel
     @State private var panel: CardDetailViewModel
+    @State private var filters: FilterPanelModel
+    @State private var banlists: BanlistSyncCoordinator
 
     init(environment: CatalogEnvironment) {
         self.environment = environment
@@ -200,7 +202,8 @@ private struct CatalogSection: View {
             repository: environment.repository,
             counter: environment.repository,
             artwork: environment.artworkStore,
-            banStatusProvider: environment.repository))
+            banStatusProvider: environment.repository,
+            publishedLists: environment.banlistHistory))
         _panel = State(wrappedValue: CardDetailViewModel(
             loader: CardDetailLoader(
                 catalog: environment.repository,
@@ -210,11 +213,13 @@ private struct CatalogSection: View {
                 history: environment.banlistHistory,
                 provenance: environment.banlistHistory),
             artwork: environment.artworkStore))
+        _filters = State(wrappedValue: FilterPanelModel(vocabulary: environment.repository))
+        _banlists = State(wrappedValue: BanlistSyncCoordinator(environment: environment))
     }
 
     var body: some View {
         HSplitView {
-            BrowserView(model: browser)
+            BrowserView(model: browser, filters: filters)
                 .frame(minWidth: 420)
             CardDetailView(model: panel)
                 .frame(minWidth: 300, idealWidth: 360)
@@ -222,6 +227,18 @@ private struct CatalogSection: View {
         .onChange(of: browser.selectedCard) { _, card in
             guard let card else { return }
             Task { await panel.select(card, language: browser.language) }
+        }
+        .toolbar {
+            ToolbarItem {
+                Button {
+                    Task { await banlists.synchronize() }
+                } label: {
+                    Label(banlists.isRunning ? "Scaricamento…" : "Scarica banlist",
+                          systemImage: "arrow.down.circle")
+                }
+                .disabled(banlists.isRunning)
+                .help(banlists.summary)
+            }
         }
     }
 }

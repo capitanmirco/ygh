@@ -33,6 +33,11 @@ public struct CatalogEnvironment: Sendable {
     public let cardDetails: SQLiteCardDetailReader
     public let cardUsage: SQLiteCardUsageReader
     public let banlistHistory: SQLiteBanlistHistory
+    /// The one outbound seam, shared so everything passes the same limiter.
+    ///
+    /// Absent in a graph built for a test, which substitutes its own upstream
+    /// rather than going through a transport at all.
+    public let transport: (any CatalogTransport)?
 
     /// Where the application keeps its data on a real machine.
     public static func defaultContainerURL() throws -> URL {
@@ -60,7 +65,8 @@ public struct CatalogEnvironment: Sendable {
             client: YGOProDeckCatalogClient(transport: transport),
             artworkFetcher: URLSessionArtworkFetcher(transport: transport),
             observeSync: observeSync,
-            observePrefetch: observePrefetch)
+            observePrefetch: observePrefetch,
+            transport: transport)
     }
 
     /// The same graph with the two upstream seams substituted, which is what
@@ -71,7 +77,8 @@ public struct CatalogEnvironment: Sendable {
         artworkFetcher: any ArtworkFetching,
         now: @escaping @Sendable () -> Date = Date.init,
         observeSync: @escaping @Sendable (CatalogSyncProgress) -> Void = { _ in },
-        observePrefetch: @escaping @Sendable (ArtworkPrefetcher.Progress) -> Void = { _ in }
+        observePrefetch: @escaping @Sendable (ArtworkPrefetcher.Progress) -> Void = { _ in },
+        transport: (any CatalogTransport)? = nil
     ) throws -> CatalogEnvironment {
         let database = try DatabaseBootstrapper(
             configuration: .init(containerURL: containerURL)).open()
@@ -104,7 +111,8 @@ public struct CatalogEnvironment: Sendable {
             prices: SQLitePriceRepository(database: database),
             cardDetails: SQLiteCardDetailReader(database: database),
             cardUsage: SQLiteCardUsageReader(database: database),
-            banlistHistory: SQLiteBanlistHistory(database: database))
+            banlistHistory: SQLiteBanlistHistory(database: database),
+            transport: transport)
     }
 
     /// Runs the startup flow: bring the catalog up to date if upstream allows,

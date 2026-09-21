@@ -63,3 +63,12 @@ public enum ArtworkVariant: String, Hashable, Sendable, Codable, CaseIterable {
 public protocol CardSearchCounting: Sendable {
     func matchCount(for query: CardQuery) async throws -> Int
 }
+
+/// The values a filter can offer, read from the catalog rather than hard-coded.
+///
+/// 87 monster types and 662 archetypes: too many for a menu, and both grow
+/// whenever the catalog does.
+public protocol CardVocabularyReading: Sendable {
+    func monsterTypes() async throws -> [String]
+    func archetypes() async throws -> [String]
+}

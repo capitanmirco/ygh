@@ -152,7 +152,15 @@ struct CardQueryBuilder {
 
         // MARK: Conditions
 
-        appendSetCondition(filters.frames.map(\.rawValue), column: "card.frame_type",
+        // Card type expands to the frames it covers, so it reuses the frame
+        // condition rather than adding a second way of asking.
+        let typeFrames = filters.cardTypes.flatMap(\.frames).map(\.rawValue)
+        let explicitFrames = filters.frames.map(\.rawValue)
+        let frameValues = explicitFrames.isEmpty
+            ? typeFrames
+            : (typeFrames.isEmpty ? explicitFrames
+               : Array(Set(explicitFrames).intersection(typeFrames)))
+        appendSetCondition(frameValues, column: "card.frame_type",
                            to: &conditions, arguments: &conditionArguments)
         appendSetCondition(filters.attributes.map(\.rawValue), column: "card.attribute",
                            to: &conditions, arguments: &conditionArguments)
@@ -171,6 +179,43 @@ struct CardQueryBuilder {
                              to: &conditions, arguments: &conditionArguments)
         appendRangeCondition(filters.pendulumScales, column: "card.pendulum_scale",
                              to: &conditions, arguments: &conditionArguments)
+
+        // A published list narrows to the cards it named, joining on the
+        // identifier the source publishes. 203 cards carry no konami_id and
+        // are therefore outside every list, which is correct rather than a
+        // limitation to work around.
+        if let list = filters.publishedList {
+            joins.append("""
+                JOIN banlist_revision ON banlist_revision.format_code = ?
+                    AND banlist_revision.effective_date = ?
+                JOIN banlist_entry ON banlist_entry.revision_id = banlist_revision.id
+                    AND banlist_entry.konami_id = card.konami_id
+                """)
+            joinArguments += [list.format.rawValue, list.effectiveDate]
+        }
+
+        // Only cards the collection holds. An inner join rather than an
+        // existence test, because the index on card_id makes it the same
+        // question asked faster.
+        if filters.ownedOnly {
+            joins.append("""
+                JOIN (SELECT DISTINCT card_id FROM collection_entry) owned
+                    ON owned.card_id = card.id
+                """)
+        }
+
+        // Release years, as ISO string comparisons against an indexed column.
+        // No new column and no date parsing; the 523 cards with no date are
+        // excluded by the null comparison, which R2.AC2 requires be counted.
+        if let years = filters.releaseYears {
+            conditions.append("card.tcg_date IS NOT NULL AND card.tcg_date BETWEEN ? AND ?")
+            conditionArguments += ["\(years.lowerBound)-01-01", "\(years.upperBound)-12-31"]
+        }
+
+        // "?" is its own question: which cards have an unknowable value.
+        if filters.unknownStatsOnly {
+            conditions.append("(card.atk = -1 OR card.def = -1)")
+        }
 
         if filters.format != nil, !filters.banStatuses.isEmpty {
             appendBanCondition(filters.banStatuses,
@@ -208,7 +253,12 @@ struct CardQueryBuilder {
         guard let range else { return }
         // A card with no value for the column is excluded rather than treated
         // as zero: two thirds of the pool has no ATK at all.
-        conditions.append("\(column) IS NOT NULL AND \(column) BETWEEN ? AND ?")
+        //
+        // And `-1` is excluded too, because that is what the catalog stores
+        // where the card prints "?". A range from 0 that admitted it would
+        // answer "weak monsters" with monsters nobody can measure.
+        conditions.append(
+            "\(column) IS NOT NULL AND \(column) >= 0 AND \(column) BETWEEN ? AND ?")
         arguments += [range.lowerBound, range.upperBound]
     }
 

@@ -22,6 +22,33 @@ public final class BrowserViewModel {
     /// How many cards the current query matches, which is not how many are
     /// shown: the grid holds a batch at a time.
     public private(set) var matchCount: Int = 0
+    /// How many cards a release-year range hid because the catalog holds no
+    /// date for them. 523 cards are in that position, and hiding them without
+    /// saying so would make a year range look like a smaller catalog.
+    public private(set) var excludedUndated: Int = 0
+    /// How many entries on the chosen list name a card the catalog cannot
+    /// match. Reported rather than shown as a shorter list.
+    public private(set) var unmatchedOnList: Int = 0
+
+    /// What is narrowing the results right now, in sentences.
+    public var appliedFilters: [String] { filters.descriptions }
+
+    /// Whether anything is narrowing the results at all.
+    public var hasFilters: Bool { !filters.isEmpty }
+
+    /// Puts the catalog back the way it opened.
+    public func clearFilters() async {
+        guard hasFilters else { return }
+        filters = CardFilters()
+        await reload()
+    }
+
+    /// The lists available for a format, oldest first. Empty when none has
+    /// been downloaded, which the interface states rather than showing an
+    /// empty chooser.
+    public func availableLists(for format: BanlistFormat) -> [BanlistRevision] {
+        (try? publishedLists?.revisions(for: format)) ?? []
+    }
     public private(set) var state: State = .idle
     public private(set) var language: CardLanguage
     public private(set) var focusedRegion: BrowserFocusRegion = .searchField
@@ -40,6 +67,9 @@ public final class BrowserViewModel {
     private let counter: any CardSearchCounting
     private let artwork: any ArtworkProviding
     private let banStatusProvider: any CardRepository
+    /// Reads the stored Forbidden & Limited Lists. Absent means the browser
+    /// can show today's statuses but cannot offer a historical list.
+    private let publishedLists: (any BanlistHistoryReading)?
     /// Bumped by every load. A result carrying an older number was asked for
     /// by text the user has since moved past, so it is discarded rather than
     /// shown.
@@ -55,12 +85,14 @@ public final class BrowserViewModel {
         counter: any CardSearchCounting,
         artwork: any ArtworkProviding,
         banStatusProvider: any CardRepository,
+        publishedLists: (any BanlistHistoryReading)? = nil,
         language: CardLanguage = .italian
     ) {
         self.repository = repository
         self.counter = counter
         self.artwork = artwork
         self.banStatusProvider = banStatusProvider
+        self.publishedLists = publishedLists
         self.language = language
     }
 
@@ -107,6 +139,7 @@ public final class BrowserViewModel {
 
             loadedCards = outcome.cards
             matchCount = count
+            excludedUndated = try await undatedCount(for: query)
             await loadPresentationData(for: loadedCards)
             guard mine == generation else { return }
             rebuildItems()
@@ -117,6 +150,7 @@ public final class BrowserViewModel {
             guard mine == generation else { return }
             loadedCards = []
             matchCount = 0
+            excludedUndated = 0
             state = .noMatches
         }
     }
@@ -126,12 +160,32 @@ public final class BrowserViewModel {
         loadedBanStatuses = [:]
         let format = filters.format ?? .tcg
 
+        // With a list chosen, the status shown is the one that list gave, not
+        // today's. The two sources never mix.
+        var historical: [CardIdentifier: BanStatus] = [:]
+        if let selection = filters.publishedList, let publishedLists {
+            let entries = (try? publishedLists.list(
+                selection.format, effectiveDate: selection.effectiveDate)) ?? []
+            for entry in entries {
+                if let cardID = entry.cardID {
+                    historical[CardIdentifier(cardID)] = entry.status.banStatus
+                }
+            }
+            unmatchedOnList = entries.filter { $0.cardID == nil }.count
+        } else {
+            unmatchedOnList = 0
+        }
+
         for card in cards {
             if let first = card.artworks.first {
                 loadedArtwork[card.id] = await artworkPresentation(for: first, card: card)
             }
-            loadedBanStatuses[card.id] =
-                (try? await banStatusProvider.banStatus(for: card.id, in: format)) ?? .unlimited
+            if let onList = historical[card.id] {
+                loadedBanStatuses[card.id] = onList
+            } else {
+                loadedBanStatuses[card.id] =
+                    (try? await banStatusProvider.banStatus(for: card.id, in: format)) ?? .unlimited
+            }
         }
     }
 
@@ -184,6 +238,16 @@ public final class BrowserViewModel {
         state = .results(items)
         if selectedIndex == nil { selectedIndex = 0 }
         selectedIndex = selectedIndex.map { min($0, items.count - 1) }
+    }
+
+    /// The difference a year range made, counted rather than estimated: the
+    /// same query with the year clause dropped.
+    private func undatedCount(for query: CardQuery) async throws -> Int {
+        guard query.filters.releaseYears != nil else { return 0 }
+        var withoutYears = query
+        withoutYears.filters.releaseYears = nil
+        let all = try await counter.matchCount(for: withoutYears)
+        return max(0, all - matchCount)
     }
 
     // MARK: - Paging
