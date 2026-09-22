@@ -7,7 +7,7 @@ import YGOCore
 /// A whole snapshot lands in one transaction, so an interruption anywhere
 /// leaves either the previous catalog or, on a first run, an empty one. There
 /// is no observable in-between state.
-public struct SQLiteCatalogStore: CatalogStore {
+public struct SQLiteCatalogStore: CatalogStore, CatalogStatusReading {
     private let database: any DatabaseWriter
     private let writer = CatalogWriter()
 
@@ -30,6 +30,33 @@ public struct SQLiteCatalogStore: CatalogStore {
             return CatalogVersion(
                 databaseVersion: version,
                 lastUpdate: row["upstream_updated_at"] ?? "")
+        }
+    }
+
+    /// What the stored catalog is, for the settings panel.
+    ///
+    /// One read rather than three: the row and the count come out of the same
+    /// snapshot, so the panel cannot report a version from before a
+    /// synchronisation beside a count from after it.
+    ///
+    /// `Row` is not `Sendable`, so nothing but plain values leaves the closure.
+    public func catalogStatus() async throws -> CatalogStatus? {
+        try await database.read { db -> CatalogStatus? in
+            guard let row = try Row.fetchOne(db, sql: """
+                SELECT catalog_version, upstream_updated_at, last_sync_at
+                FROM sync_state WHERE id = 1
+                """),
+                let version: String = row["catalog_version"] else { return nil }
+
+            let upstream: String? = row["upstream_updated_at"]
+            let synced: String? = row["last_sync_at"]
+            let count = try Int.fetchOne(db, sql: "SELECT count(*) FROM card") ?? 0
+
+            return CatalogStatus(
+                version: version,
+                upstreamUpdatedAt: StoredTimestamp.date(from: upstream),
+                lastSyncAt: StoredTimestamp.date(from: synced),
+                cardCount: count)
         }
     }
 

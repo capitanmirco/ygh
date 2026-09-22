@@ -10,6 +10,8 @@ import YGOFeatureAnalytics
 import YGOFeatureCollection
 import YGOFeatureDeckBuilder
 import YGOFeaturePricing
+import YGOFeatureSettings
+import YGOPersistence
 import YGOPricing
 
 /// The application entry point. It builds the object graph once and hands each
@@ -22,7 +24,10 @@ struct YGODeckManagerApp: SwiftUI.App {
         WindowGroup("YGO Deck Manager") {
             Group {
                 if let environment = launch.environment {
-                    RootView(environment: environment, progress: launch.progress)
+                    RootView(
+                        environment: environment,
+                        progress: launch.progress,
+                        preferences: launch.preferences)
                 } else if let failure = launch.failure {
                     LaunchFailureView(message: failure)
                 } else {
@@ -32,6 +37,17 @@ struct YGODeckManagerApp: SwiftUI.App {
             .task { await launch.start() }
         }
         .defaultSize(width: 1180, height: 800)
+
+        // The platform's own settings window: it is what ⌘, opens, and asking
+        // for it twice brings the open one forward rather than making a second.
+        Settings {
+            if let model = launch.settings {
+                SettingsView(model: model)
+            } else {
+                LaunchProgressView(progress: launch.progress)
+                    .frame(width: 520, height: 380)
+            }
+        }
     }
 }
 
@@ -43,38 +59,24 @@ struct YGODeckManagerApp: SwiftUI.App {
 struct RootView: View {
     let environment: CatalogEnvironment
     let progress: String?
+    let preferences: Preferences
 
-    init(environment: CatalogEnvironment, progress: String?) {
+    init(environment: CatalogEnvironment, progress: String?, preferences: Preferences) {
         self.environment = environment
         self.progress = progress
+        self.preferences = preferences
+        _section = State(wrappedValue: preferences.startingSection)
         _library = State(wrappedValue: DeckLibraryViewModel(
             repository: environment.deckRepository,
             listing: environment.deckRepository,
             library: environment.deckRepository))
     }
 
-    enum Section: String, CaseIterable, Identifiable {
-        case catalog = "Catalogo"
-        case decks = "Mazzi"
-        case collection = "Collezione"
-        case analytics = "Statistiche"
-        case banlist = "Banlist"
-        case value = "Valore"
-        var id: String { rawValue }
+    /// The sections live in `YGOCore` so that a preference can name one.
+    /// Their titles and symbols come with `YGOFeatureSettings`.
+    typealias Section = AppSection
 
-        var symbol: String {
-            switch self {
-            case .catalog: "square.grid.2x2"
-            case .decks: "rectangle.stack"
-            case .collection: "tray.full"
-            case .analytics: "chart.bar"
-            case .banlist: "hand.raised"
-            case .value: "eurosign.circle"
-            }
-        }
-    }
-
-    @State private var section: Section = .catalog
+    @State private var section: Section
     @State private var selectedDeck: Int64?
     @State private var importing = false
     @State private var library: DeckLibraryViewModel
@@ -85,7 +87,9 @@ struct RootView: View {
             Sidebar(section: $section, selectedDeck: $selectedDeck,
                     importing: $importing, progress: progress, library: library)
         } detail: {
-            Detail(section: section, environment: environment, selectedDeck: selectedDeck)
+            Detail(
+                section: section, environment: environment, selectedDeck: selectedDeck,
+                language: preferences.cardLanguage)
         }
         .task(id: section) { await reloadDecks() }
         .fileImporter(isPresented: $importing,
@@ -195,8 +199,8 @@ private struct Sidebar: View {
 
     var body: some View {
         List(selection: $section) {
-            ForEach(RootView.Section.allCases) { item in
-                Label(item.rawValue, systemImage: item.symbol).tag(item)
+            ForEach(RootView.Section.allCases, id: \.self) { item in
+                Label(item.title, systemImage: item.symbol).tag(item)
             }
 
             if section == .decks {
@@ -383,14 +387,15 @@ private struct CatalogSection: View {
     @State private var filters: FilterPanelModel
     @State private var banlists: BanlistSyncCoordinator
 
-    init(environment: CatalogEnvironment) {
+    init(environment: CatalogEnvironment, language: CardLanguage) {
         self.environment = environment
         _browser = State(wrappedValue: BrowserViewModel(
             repository: environment.repository,
             counter: environment.repository,
             artwork: environment.artworkStore,
             banStatusProvider: environment.repository,
-            publishedLists: environment.banlistHistory))
+            publishedLists: environment.banlistHistory,
+            language: language))
         _panel = State(wrappedValue: CardDetailViewModel(
             loader: CardDetailLoader(
                 catalog: environment.repository,
@@ -440,11 +445,12 @@ private struct Detail: View {
     let section: RootView.Section
     let environment: CatalogEnvironment
     let selectedDeck: Int64?
+    let language: CardLanguage
 
     var body: some View {
         switch section {
         case .catalog:
-            CatalogSection(environment: environment)
+            CatalogSection(environment: environment, language: language)
         case .collection:
             CollectionView(model: CollectionViewModel(
                 reader: environment.collection,
@@ -496,6 +502,14 @@ final class LaunchState {
     private(set) var environment: CatalogEnvironment?
     private(set) var failure: String?
     private(set) var progress: String?
+    /// Read before the window is built: the starting section and the card
+    /// language are both needed at the first draw.
+    private(set) var preferences = UserDefaultsPreferences().load()
+    private(set) var settings: SettingsViewModel?
+
+    /// One activity for the launch and for the settings panel, so both report
+    /// the same synchronisation rather than each keeping its own idea of one.
+    private let activity = CatalogSyncActivity()
 
     func start() async {
         guard environment == nil, failure == nil else { return }
@@ -508,14 +522,11 @@ final class LaunchState {
 
         do {
             let environment = try CatalogEnvironment.live(
-                observeSync: { sync in
-                    switch sync.stage {
-                    case .checkingVersion: report("Controllo aggiornamenti…")
-                    case .downloading: report("Scarico il catalogo…")
-                    case .storing:
-                        report("Salvo le carte: \(sync.completed) di \(sync.total)")
-                    case .finished: report(nil)
-                    }
+                observeSync: { [activity] sync in
+                    // One mapping of a stage to a sentence, shared with the
+                    // settings panel rather than written twice.
+                    report(CatalogSyncActivity.line(for: sync))
+                    activity.observe(sync)
                 },
                 observePrefetch: { artwork in
                     report("Immagini: \(artwork.stored) di \(artwork.total)")
@@ -525,11 +536,54 @@ final class LaunchState {
             // downloads about 41 MB of card data and then fills in thumbnails
             // behind the interface.
             self.environment = environment
+            self.settings = Self.makeSettings(
+                environment: environment, activity: activity,
+                onPreferencesChange: { [weak self] in self?.preferences = $0 })
             await environment.start()
             progress = nil
         } catch {
             failure = String(describing: error)
         }
+    }
+
+    /// Binds the four settings seams to the concrete types that satisfy them.
+    /// This is the only place that knows which is which.
+    private static func makeSettings(
+        environment: CatalogEnvironment,
+        activity: CatalogSyncActivity,
+        onPreferencesChange: @escaping @MainActor (Preferences) -> Void
+    ) -> SettingsViewModel {
+        let container = (try? CatalogEnvironment.defaultContainerURL())
+            ?? URL(filePath: NSTemporaryDirectory())
+        return SettingsViewModel(
+            status: environment.catalogStore,
+            refresher: environment,
+            inventory: FileStorageInventory(
+                configuration: .init(containerURL: container),
+                artwork: environment.artworkStore),
+            preferences: ObservingPreferences(
+                wrapped: UserDefaultsPreferences(),
+                onChange: { preferences in
+                    // The main window's copy is refreshed from the stored one,
+                    // which remains the single source of truth.
+                    Task { @MainActor in onPreferencesChange(preferences) }
+                }),
+            activity: activity)
+    }
+}
+
+/// Reports a saved preference back to the launch state, so a choice made in
+/// the settings window is visible to the main window without a relaunch —
+/// while the stored value remains the single source of truth.
+private struct ObservingPreferences: PreferenceStoring {
+    let wrapped: UserDefaultsPreferences
+    let onChange: @Sendable (Preferences) -> Void
+
+    func load() -> Preferences { wrapped.load() }
+
+    func save(_ preferences: Preferences) {
+        wrapped.save(preferences)
+        onChange(preferences)
     }
 }
 

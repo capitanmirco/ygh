@@ -14,7 +14,7 @@ import YGOValidation
 /// Everything above it depends on protocols only, which is why the feature
 /// modules can be tested without SQLite or a network, and why this whole graph
 /// can be rebuilt against failing stubs to prove the application works offline.
-public struct CatalogEnvironment: Sendable {
+public struct CatalogEnvironment: Sendable, CatalogRefreshing {
     public let database: DatabasePool
     public let repository: SQLiteCardRepository
     public let catalogStore: SQLiteCatalogStore
@@ -120,6 +120,10 @@ public struct CatalogEnvironment: Sendable {
     ///
     /// Neither step is allowed to stop the application from opening. An
     /// unreachable upstream costs freshness, never usability.
+    /// `CatalogRefreshing`: a manual check is the launch's own flow, not a
+    /// second one that can drift from it.
+    public func refresh() async -> CatalogSyncOutcome { await start() }
+
     @discardableResult
     public func start() async -> CatalogSyncOutcome {
         let outcome: CatalogSyncOutcome

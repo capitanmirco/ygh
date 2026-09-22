@@ -22,6 +22,7 @@ let package = Package(
         .library(name: "YGOFeatureCollection", targets: ["YGOFeatureCollection"]),
         .library(name: "YGOFeatureAnalytics", targets: ["YGOFeatureAnalytics"]),
         .library(name: "YGOFeaturePricing", targets: ["YGOFeaturePricing"]),
+        .library(name: "YGOFeatureSettings", targets: ["YGOFeatureSettings"]),
         .library(name: "YGOValidation", targets: ["YGOValidation"]),
         .library(name: "YGODeckIO", targets: ["YGODeckIO"]),
         .library(name: "YGOAnalytics", targets: ["YGOAnalytics"]),
@@ -172,6 +173,14 @@ let package = Package(
             path: "Packages/Features/YGOFeatureCollection/Sources/YGOFeatureCollection",
             swiftSettings: strictConcurrency),
 
+        // The settings window. Depends on YGOCore alone: every seam it uses is
+        // a protocol, bound in the composition root.
+        .target(
+            name: "YGOFeatureSettings",
+            dependencies: ["YGOCore", "YGODesignSystem"],
+            path: "Packages/Features/YGOFeatureSettings/Sources/YGOFeatureSettings",
+            swiftSettings: strictConcurrency),
+
         .target(
             name: "YGOFeatureAnalytics",
             dependencies: ["YGOCore", "YGOAnalytics", "YGODesignSystem"],
@@ -200,7 +209,8 @@ let package = Package(
             dependencies: ["YGOComposition", "YGOCore", "YGODesignSystem",
                            "YGOFeatureBrowser", "YGOFeatureCardDetail", "YGOFeatureBanlist",
                            "YGOFeatureDeckBuilder", "YGOFeatureCollection",
-                           "YGOFeatureAnalytics", "YGOFeaturePricing", "YGOPricing"],
+                           "YGOFeatureAnalytics", "YGOFeaturePricing", "YGOFeatureSettings",
+                           "YGOPersistence", "YGOPricing"],
             path: "App",
             swiftSettings: strictConcurrency),
 
@@ -265,8 +275,14 @@ let package = Package(
 
         .testTarget(
             name: "YGOPersistenceTests",
-            dependencies: ["YGOPersistence", "YGOCore", "YGONetworking", .product(name: "GRDB", package: "GRDB.swift")],
+            dependencies: ["YGOPersistence", "YGOCore", "YGONetworking", "YGOImageStore", .product(name: "GRDB", package: "GRDB.swift")],
             path: "Tests/YGOPersistenceTests",
+            swiftSettings: strictConcurrency),
+
+        .testTarget(
+            name: "YGOFeatureSettingsTests",
+            dependencies: ["YGOFeatureSettings", "YGOCore"],
+            path: "Tests/YGOFeatureSettingsTests",
             swiftSettings: strictConcurrency),
 
         .testTarget(

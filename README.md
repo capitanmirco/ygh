@@ -5,11 +5,11 @@ portfolio. Single local user, offline-first, no accounts and no server.
 
 ## Status
 
-Fourteen specifications are complete and certified: `card-catalog`,
+Fifteen specifications are complete and certified: `card-catalog`,
 `deck-builder`, `collection-tracker`, `deck-analytics`, `pricing`,
 `banlist-history`, `card-detail`, `deck-editing`, `visual-language`,
 `catalog-filters`, `italian-vocabulary`, `deck-card-preview`,
-`deck-authoring` and `banlist-browser`. The application acquires the full card pool, keeps it current,
+`deck-authoring`, `banlist-browser` and `app-preferences`. The application acquires the full card pool, keeps it current,
 stores artwork locally, and browses, builds, tracks, analyses and prices
 entirely offline.
 
@@ -44,6 +44,17 @@ Colour carries meaning rather than decorating. A card's frame — monster, spell
 trap, fusion, synchro, Xyz, link — is marked in its own colour wherever the card
 appears, so a grid or a deck list can be read without reading every label.
 
+A settings window reports what the application is holding and lets the
+replaceable parts of it go. It shows the stored catalog's version, upstream's
+own date, when the catalog was last downloaded and when it was last checked,
+and it runs the launch's own synchronisation on request rather than a second
+one. It reports the cached artwork as a count and a size, the database file,
+and a pre-migration backup when one is still sitting beside it — the one
+figure a user can act on that nothing had ever shown. Both reclaimable parts
+are deleted only after a confirmation, and neither reaches deck or collection
+data. The window the application opens on and the language cards read in are
+remembered between launches.
+
 ## Requirements
 
 - macOS 27 or later, Apple silicon
@@ -55,7 +66,7 @@ appears, so a grid or a deck list can be read without reading every label.
 
 ```bash
 swift build          # builds every module and the app executable
-swift test           # 94 tests across 8 targets
+swift test           # 586 tests across 16 targets
 swift run YGODeckManager
 ```
 

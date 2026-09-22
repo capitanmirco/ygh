@@ -10,7 +10,7 @@ import YGOCore
 /// Files sit outside the database. Three hundred and fifty megabytes of
 /// thumbnails inside it would breach the database size budget and make the
 /// pre-migration backup enormous for data that can simply be fetched again.
-public actor ArtworkStore: ArtworkProviding {
+public actor ArtworkStore: ArtworkProviding, ArtworkMaintaining {
     private let rootURL: URL
     private let presence: any ArtworkPresenceTracking
     private let now: @Sendable () -> Date
@@ -94,14 +94,34 @@ public actor ArtworkStore: ArtworkProviding {
     }
 
     /// Bytes currently held, for the storage budget.
-    public func storedByteSize() -> Int {
+    public func storedByteSize() -> Int { storedFootprint().bytes }
+
+    /// What the store occupies, counted from the disk rather than from the
+    /// presence table.
+    ///
+    /// The table is this application's belief about the files; the disk is the
+    /// files. They can disagree — `storedArtworkPath` repairs a record whose
+    /// file was removed from outside — and a panel asking the user to reclaim
+    /// hundreds of megabytes has to report the thing being reclaimed.
+    ///
+    /// One walk yields both figures, so the count and the byte total can never
+    /// describe two different moments.
+    public func storedFootprint() -> ArtworkFootprint {
         guard let enumerator = FileManager.default.enumerator(
-            at: rootURL, includingPropertiesForKeys: [.fileSizeKey]) else { return 0 }
-        return enumerator.reduce(into: 0) { total, entry in
+            at: rootURL, includingPropertiesForKeys: [.fileSizeKey, .isRegularFileKey])
+        else { return ArtworkFootprint(files: 0, bytes: 0) }
+
+        var files = 0
+        var bytes = 0
+        for entry in enumerator {
             guard let url = entry as? URL,
-                  let size = try? url.resourceValues(forKeys: [.fileSizeKey]).fileSize
-            else { return }
-            total += size
+                  let values = try? url.resourceValues(
+                      forKeys: [.fileSizeKey, .isRegularFileKey]),
+                  values.isRegularFile == true
+            else { continue }
+            files += 1
+            bytes += values.fileSize ?? 0
         }
+        return ArtworkFootprint(files: files, bytes: bytes)
     }
 }
