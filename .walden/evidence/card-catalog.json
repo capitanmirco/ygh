@@ -10,13 +10,13 @@
         "policy": "verify-purity/v1",
         "assertion_result": "passed",
         "integrity": "pure",
-        "before_code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746",
-        "after_code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746"
+        "before_code_identity": "sha256:bf6aab00b9b31eebd81e4d646f1bdc3631f3bba8873b8fba4762fcb9e896720e",
+        "after_code_identity": "sha256:bf6aab00b9b31eebd81e4d646f1bdc3631f3bba8873b8fba4762fcb9e896720e"
       },
       "requirements_fingerprint": "sha256:22b95dd0c20c807a8e0ca98575d5e47b179fd4aa45b93c5b44cab5af0300f54c",
       "design_fingerprint": "sha256:3c24832766ac1b1caf5482255872c86cde9c060f39d2ff48633687eda5dd5128",
       "tasks_fingerprint": "sha256:67925deb9e872ffe9352decd1c2a0707817cf0ffc5814f96f450d699ce0e8513",
-      "code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746",
+      "code_identity": "sha256:bf6aab00b9b31eebd81e4d646f1bdc3631f3bba8873b8fba4762fcb9e896720e",
       "profile": {
         "platform": "darwin/arm64",
         "sqlite": "3.45.3 2024-04-15 13:34:05 8653b758870e6ef0c98d46b3ace27849054af85da891eb121e9aaa537f1e8355 (64-bit)",
@@ -32,7 +32,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:70f8441721e8f009b40b7662a552ead7fd348cf0de5c493c385e5cdaf7c705b6"
+          "output_digest": "sha256:ba9aa0dd90831fe3c6d832bd921cd42837cb97ceea95cd18b0b640e626185039"
         },
         {
           "command": [
@@ -43,7 +43,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:afa564f2381982f29d5b41a761fc630d1162c8164b0196a217dc777beac92b67"
+          "output_digest": "sha256:cc80f7b53d205db5b05a8e42b56ac5f578552b57ffdd3de64fa18255379753df"
         },
         {
           "command": [
@@ -57,7 +57,7 @@
         }
       ],
       "result": "passed",
-      "verified_at": "2026-09-22T12:53:31Z"
+      "verified_at": "2026-09-22T13:48:13Z"
     },
     "10": {
       "task_fingerprint": "sha256:2e207d73254a13a984270bc0f94665a3d2b0132b0cc5a70fd55b5066fc03666f",
@@ -67,13 +67,13 @@
         "policy": "verify-purity/v1",
         "assertion_result": "passed",
         "integrity": "pure",
-        "before_code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746",
-        "after_code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746"
+        "before_code_identity": "sha256:bf6aab00b9b31eebd81e4d646f1bdc3631f3bba8873b8fba4762fcb9e896720e",
+        "after_code_identity": "sha256:bf6aab00b9b31eebd81e4d646f1bdc3631f3bba8873b8fba4762fcb9e896720e"
       },
       "requirements_fingerprint": "sha256:22b95dd0c20c807a8e0ca98575d5e47b179fd4aa45b93c5b44cab5af0300f54c",
       "design_fingerprint": "sha256:3c24832766ac1b1caf5482255872c86cde9c060f39d2ff48633687eda5dd5128",
       "tasks_fingerprint": "sha256:67925deb9e872ffe9352decd1c2a0707817cf0ffc5814f96f450d699ce0e8513",
-      "code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746",
+      "code_identity": "sha256:bf6aab00b9b31eebd81e4d646f1bdc3631f3bba8873b8fba4762fcb9e896720e",
       "profile": {
         "platform": "darwin/arm64",
         "sqlite": "3.45.3 2024-04-15 13:34:05 8653b758870e6ef0c98d46b3ace27849054af85da891eb121e9aaa537f1e8355 (64-bit)",
@@ -91,7 +91,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:368b6dc7e2c1b5de889cba30e63ac27537d165198ffee7244641367d82877925"
+          "output_digest": "sha256:29d9c8c5b9837812166d8a8032691b65110caf2d275b2ebe7c01c802603a9343"
         },
         {
           "command": [
@@ -102,7 +102,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:2439f2c7f1e158d5c4e67500f6276c1aa933ba24eb2ac9f25eb3d7c4da517157"
+          "output_digest": "sha256:7de6965a3222cddaba93d7e7f3fca8b50947c90a5d685313aacd30e5992ff383"
         },
         {
           "command": [
@@ -113,7 +113,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:b47da8eaf07a9f5ebf7cecd62fa93fa02068a79ef6e0a34299665aadb8bb324e"
+          "output_digest": "sha256:62dc0178aa361f769996602d053b2c4a03a7466f6c6277dce4d3731523521517"
         },
         {
           "command": [
@@ -124,11 +124,11 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:a9080f4b3d040aeb7f5d64b118b7dba1cb2a68c3b551c024ce740ade16971ed9"
+          "output_digest": "sha256:ce5987c6c9fc04e5179e87b2a3adae22daa37dfb641655bc92e6587081d95364"
         }
       ],
       "result": "passed",
-      "verified_at": "2026-09-22T12:53:31Z"
+      "verified_at": "2026-09-22T13:48:13Z"
     },
     "11": {
       "task_fingerprint": "sha256:1364034b0f605a71ad82426735c74f2d2321e988a600d423ab63203ea0411637",
@@ -138,13 +138,13 @@
         "policy": "verify-purity/v1",
         "assertion_result": "passed",
         "integrity": "pure",
-        "before_code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746",
-        "after_code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746"
+        "before_code_identity": "sha256:bf6aab00b9b31eebd81e4d646f1bdc3631f3bba8873b8fba4762fcb9e896720e",
+        "after_code_identity": "sha256:bf6aab00b9b31eebd81e4d646f1bdc3631f3bba8873b8fba4762fcb9e896720e"
       },
       "requirements_fingerprint": "sha256:22b95dd0c20c807a8e0ca98575d5e47b179fd4aa45b93c5b44cab5af0300f54c",
       "design_fingerprint": "sha256:3c24832766ac1b1caf5482255872c86cde9c060f39d2ff48633687eda5dd5128",
       "tasks_fingerprint": "sha256:67925deb9e872ffe9352decd1c2a0707817cf0ffc5814f96f450d699ce0e8513",
-      "code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746",
+      "code_identity": "sha256:bf6aab00b9b31eebd81e4d646f1bdc3631f3bba8873b8fba4762fcb9e896720e",
       "profile": {
         "platform": "darwin/arm64",
         "sqlite": "3.45.3 2024-04-15 13:34:05 8653b758870e6ef0c98d46b3ace27849054af85da891eb121e9aaa537f1e8355 (64-bit)",
@@ -162,7 +162,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:3bc35164017d392f8cba5e9d1387dd40fd6e87b775a68ccdf4ff99da9403c82a"
+          "output_digest": "sha256:b28c4db5fd31aaaac843ed997ea5bfb97cae2a859fcfbff85a23bc0fe88cd228"
         },
         {
           "command": [
@@ -173,11 +173,11 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:a1c2923d4eed5bb68dad9e90a469de019de28bf09045ed0ec875a58b000a59e3"
+          "output_digest": "sha256:4add431b3e759a4b2c1b7470b80cd8e9b3aeff1bf4cb2175b745a8dc8b99a80a"
         }
       ],
       "result": "passed",
-      "verified_at": "2026-09-22T12:53:31Z"
+      "verified_at": "2026-09-22T13:48:13Z"
     },
     "12": {
       "task_fingerprint": "sha256:a174c5e4d2306cc005db4a524acd4c5e415fd503547fa2c73dd067e867e07b87",
@@ -187,13 +187,13 @@
         "policy": "verify-purity/v1",
         "assertion_result": "passed",
         "integrity": "pure",
-        "before_code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746",
-        "after_code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746"
+        "before_code_identity": "sha256:bf6aab00b9b31eebd81e4d646f1bdc3631f3bba8873b8fba4762fcb9e896720e",
+        "after_code_identity": "sha256:bf6aab00b9b31eebd81e4d646f1bdc3631f3bba8873b8fba4762fcb9e896720e"
       },
       "requirements_fingerprint": "sha256:22b95dd0c20c807a8e0ca98575d5e47b179fd4aa45b93c5b44cab5af0300f54c",
       "design_fingerprint": "sha256:3c24832766ac1b1caf5482255872c86cde9c060f39d2ff48633687eda5dd5128",
       "tasks_fingerprint": "sha256:67925deb9e872ffe9352decd1c2a0707817cf0ffc5814f96f450d699ce0e8513",
-      "code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746",
+      "code_identity": "sha256:bf6aab00b9b31eebd81e4d646f1bdc3631f3bba8873b8fba4762fcb9e896720e",
       "profile": {
         "platform": "darwin/arm64",
         "sqlite": "3.45.3 2024-04-15 13:34:05 8653b758870e6ef0c98d46b3ace27849054af85da891eb121e9aaa537f1e8355 (64-bit)",
@@ -211,7 +211,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:42edbade72708703177d8d151d88bf4ffe94c75abfa5330b4d829bdb5d5f1eb6"
+          "output_digest": "sha256:e65f1676ba79d0b219c21325ad65d82025125e44a52ee168401846e606d4702c"
         },
         {
           "command": [
@@ -222,7 +222,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:2662431456d3dc10b324f637aa128b7d815dae5a8e9d186d661f0c814928fd42"
+          "output_digest": "sha256:51eefb95cb3e6ee24f9d78b6e3be09084327822346b8156f3bf972f17c30029a"
         },
         {
           "command": [
@@ -233,11 +233,11 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:c6c5af04be73fc252ed0548887de9679991574899eb00c18e87ba8589b4561db"
+          "output_digest": "sha256:dc5052b176d43f920b32406e4b32e969ee2285e320b6da60946fc29af54d5992"
         }
       ],
       "result": "passed",
-      "verified_at": "2026-09-22T12:53:31Z"
+      "verified_at": "2026-09-22T13:48:13Z"
     },
     "13": {
       "task_fingerprint": "sha256:2315e84a441f9712440f6583d63f0767a6b6075b251594280b71a514c02b638a",
@@ -247,13 +247,13 @@
         "policy": "verify-purity/v1",
         "assertion_result": "passed",
         "integrity": "pure",
-        "before_code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746",
-        "after_code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746"
+        "before_code_identity": "sha256:bf6aab00b9b31eebd81e4d646f1bdc3631f3bba8873b8fba4762fcb9e896720e",
+        "after_code_identity": "sha256:bf6aab00b9b31eebd81e4d646f1bdc3631f3bba8873b8fba4762fcb9e896720e"
       },
       "requirements_fingerprint": "sha256:22b95dd0c20c807a8e0ca98575d5e47b179fd4aa45b93c5b44cab5af0300f54c",
       "design_fingerprint": "sha256:3c24832766ac1b1caf5482255872c86cde9c060f39d2ff48633687eda5dd5128",
       "tasks_fingerprint": "sha256:67925deb9e872ffe9352decd1c2a0707817cf0ffc5814f96f450d699ce0e8513",
-      "code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746",
+      "code_identity": "sha256:bf6aab00b9b31eebd81e4d646f1bdc3631f3bba8873b8fba4762fcb9e896720e",
       "profile": {
         "platform": "darwin/arm64",
         "sqlite": "3.45.3 2024-04-15 13:34:05 8653b758870e6ef0c98d46b3ace27849054af85da891eb121e9aaa537f1e8355 (64-bit)",
@@ -271,7 +271,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:740679319837b1a2b4706ed5a4e96844935383cf0213dc03670276c5fa285fec"
+          "output_digest": "sha256:7a2d77406bd3acadd8b4bb9a9c348230fc597aaf810ae704e74344adb7755509"
         },
         {
           "command": [
@@ -282,11 +282,11 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:6a96cfb2be7910980836ad064664a30241dbb208564661754d608e6bec589e81"
+          "output_digest": "sha256:01e9d71d5f41d0f332332e66c618bacf469e06a26831315950d20876f0ad49b6"
         }
       ],
       "result": "passed",
-      "verified_at": "2026-09-22T12:53:31Z"
+      "verified_at": "2026-09-22T13:48:13Z"
     },
     "14": {
       "task_fingerprint": "sha256:74b93cb9d085408152c43f92944f033263c559c4c69d7c9f2b43e067b01fe807",
@@ -296,13 +296,13 @@
         "policy": "verify-purity/v1",
         "assertion_result": "passed",
         "integrity": "pure",
-        "before_code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746",
-        "after_code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746"
+        "before_code_identity": "sha256:bf6aab00b9b31eebd81e4d646f1bdc3631f3bba8873b8fba4762fcb9e896720e",
+        "after_code_identity": "sha256:bf6aab00b9b31eebd81e4d646f1bdc3631f3bba8873b8fba4762fcb9e896720e"
       },
       "requirements_fingerprint": "sha256:22b95dd0c20c807a8e0ca98575d5e47b179fd4aa45b93c5b44cab5af0300f54c",
       "design_fingerprint": "sha256:3c24832766ac1b1caf5482255872c86cde9c060f39d2ff48633687eda5dd5128",
       "tasks_fingerprint": "sha256:67925deb9e872ffe9352decd1c2a0707817cf0ffc5814f96f450d699ce0e8513",
-      "code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746",
+      "code_identity": "sha256:bf6aab00b9b31eebd81e4d646f1bdc3631f3bba8873b8fba4762fcb9e896720e",
       "profile": {
         "platform": "darwin/arm64",
         "sqlite": "3.45.3 2024-04-15 13:34:05 8653b758870e6ef0c98d46b3ace27849054af85da891eb121e9aaa537f1e8355 (64-bit)",
@@ -320,7 +320,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:89139827280514d9901fe1e91bee8bd06514a6b4e9575111ca38c9a2b5901cdb"
+          "output_digest": "sha256:39c3583224f74d044b56c471453eb61641a5422e51356c16301d0e82239f3f25"
         },
         {
           "command": [
@@ -331,7 +331,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:b21a253b63628c9abe18b6d04e49a40729066139cacc94dfe8841772d8820ca2"
+          "output_digest": "sha256:7e91155f50e21187ce6c5ed6f0e6739366598715faf6328de6a43f878f116eda"
         },
         {
           "command": [
@@ -342,7 +342,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:2b07d1ad770d37a7fb6a942d4151bc3f4f5be6019b3ed00bc9b6a165324f00e3"
+          "output_digest": "sha256:738217974597e8b6de9ccc9c1277fc33c8b7c292af513a1e639e5e7aeb5a1498"
         },
         {
           "command": [
@@ -353,7 +353,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:09044815fe1f2b44da4dc660e632a75f379a53cbefdeb8c2865a90a7c61fca3f"
+          "output_digest": "sha256:de6c462c58c085c36e26350e1d939bf4698ced5eee5ef0ab79d21f3be503aee9"
         },
         {
           "command": [
@@ -364,7 +364,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:353ddd876f37fbf4c62d98a9c0c40c7db95c616f70b5a8b30a08b2694f8d4713"
+          "output_digest": "sha256:b4a663ce041839a084856731bfd342a8a6e487ef42bf4b0e6b98c871f6ddc193"
         },
         {
           "command": [
@@ -375,11 +375,11 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:848613cf51038fe49a0e3d5e44f6a7a360f8b5e1ef02036f14143573ea868e26"
+          "output_digest": "sha256:f290aea7590327b2fe0298465512a4f9c77792a92010e2d76f3ae2852600b113"
         }
       ],
       "result": "passed",
-      "verified_at": "2026-09-22T12:53:31Z"
+      "verified_at": "2026-09-22T13:48:13Z"
     },
     "15": {
       "task_fingerprint": "sha256:9fbb0ee1dcd3c770bd6563740147136329e39c9225ff7cd0faceb66f4f6ce289",
@@ -389,13 +389,13 @@
         "policy": "verify-purity/v1",
         "assertion_result": "passed",
         "integrity": "pure",
-        "before_code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746",
-        "after_code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746"
+        "before_code_identity": "sha256:bf6aab00b9b31eebd81e4d646f1bdc3631f3bba8873b8fba4762fcb9e896720e",
+        "after_code_identity": "sha256:bf6aab00b9b31eebd81e4d646f1bdc3631f3bba8873b8fba4762fcb9e896720e"
       },
       "requirements_fingerprint": "sha256:22b95dd0c20c807a8e0ca98575d5e47b179fd4aa45b93c5b44cab5af0300f54c",
       "design_fingerprint": "sha256:3c24832766ac1b1caf5482255872c86cde9c060f39d2ff48633687eda5dd5128",
       "tasks_fingerprint": "sha256:67925deb9e872ffe9352decd1c2a0707817cf0ffc5814f96f450d699ce0e8513",
-      "code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746",
+      "code_identity": "sha256:bf6aab00b9b31eebd81e4d646f1bdc3631f3bba8873b8fba4762fcb9e896720e",
       "profile": {
         "platform": "darwin/arm64",
         "sqlite": "3.45.3 2024-04-15 13:34:05 8653b758870e6ef0c98d46b3ace27849054af85da891eb121e9aaa537f1e8355 (64-bit)",
@@ -413,7 +413,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:157148cc05fc2a72f91752ed6732b9df0fdf712574d066db719384ed2002f082"
+          "output_digest": "sha256:a0fc49aeec601d27a4363c0ad3fadb752f0b3f470f0d7014b2b2c330eb0156db"
         },
         {
           "command": [
@@ -424,7 +424,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:54f60f33817187b286c8bc919d1730e679330e4c5836c02af315ae3dce389b09"
+          "output_digest": "sha256:d17b6f2e43f4ff4a7dd2ced6e4700214f735ad3e269214989dbc1f8096669972"
         },
         {
           "command": [
@@ -435,11 +435,11 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:eaf6dc25ccf1cf9b40c0c030a12ea8766e8216c8193e3cc69cbefe13587ca5f1"
+          "output_digest": "sha256:911510cb547662ba531afbe47a8cce35286d16e42583411f8532830540e6ff16"
         }
       ],
       "result": "passed",
-      "verified_at": "2026-09-22T12:53:31Z"
+      "verified_at": "2026-09-22T13:48:13Z"
     },
     "16": {
       "task_fingerprint": "sha256:7521d3b646957da7762e34c99167565c21fb0bdd04dda2d413b284f4f69d830f",
@@ -449,13 +449,13 @@
         "policy": "verify-purity/v1",
         "assertion_result": "passed",
         "integrity": "pure",
-        "before_code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746",
-        "after_code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746"
+        "before_code_identity": "sha256:bf6aab00b9b31eebd81e4d646f1bdc3631f3bba8873b8fba4762fcb9e896720e",
+        "after_code_identity": "sha256:bf6aab00b9b31eebd81e4d646f1bdc3631f3bba8873b8fba4762fcb9e896720e"
       },
       "requirements_fingerprint": "sha256:22b95dd0c20c807a8e0ca98575d5e47b179fd4aa45b93c5b44cab5af0300f54c",
       "design_fingerprint": "sha256:3c24832766ac1b1caf5482255872c86cde9c060f39d2ff48633687eda5dd5128",
       "tasks_fingerprint": "sha256:67925deb9e872ffe9352decd1c2a0707817cf0ffc5814f96f450d699ce0e8513",
-      "code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746",
+      "code_identity": "sha256:bf6aab00b9b31eebd81e4d646f1bdc3631f3bba8873b8fba4762fcb9e896720e",
       "profile": {
         "platform": "darwin/arm64",
         "sqlite": "3.45.3 2024-04-15 13:34:05 8653b758870e6ef0c98d46b3ace27849054af85da891eb121e9aaa537f1e8355 (64-bit)",
@@ -473,7 +473,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:a88530befb38a2994b710e4d709e4e79efb7e836804c182bf342f29d47c96c00"
+          "output_digest": "sha256:a4dae7bcd674f162aff049b2fb9b9ea63b1b5c3f1f4fd8c4cc85b16c90b2a3ab"
         },
         {
           "command": [
@@ -484,7 +484,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:7826b9d4b6a6f9edfe224516c1e56591226643310537df7c1f2f4a238020917f"
+          "output_digest": "sha256:3a7decde17ff939c0a0584354930f5a784b54c99bd866ab325108deffaaa6def"
         },
         {
           "command": [
@@ -495,7 +495,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:3645071f6863a4d6e4b250b4d718176f88e0a227bd66ce01e411b0d586026db9"
+          "output_digest": "sha256:489cf6bfd229fb818d2873074a1c9de140c204652d1177d361bce7c2449f0de3"
         },
         {
           "command": [
@@ -506,11 +506,11 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:fdd3ed820a9ba428ba9e9a88d562725adc152b4ca229d3c07a02c4adce2c6817"
+          "output_digest": "sha256:0f860218f9dd0b11186f95b6c83e419c0d901ac521068ae3da75b088aadf683c"
         }
       ],
       "result": "passed",
-      "verified_at": "2026-09-22T12:53:31Z"
+      "verified_at": "2026-09-22T13:48:13Z"
     },
     "17": {
       "task_fingerprint": "sha256:9dcb91fc95211305cc04752ee1fde994cf2301445876b7c0c366350cc9338605",
@@ -520,13 +520,13 @@
         "policy": "verify-purity/v1",
         "assertion_result": "passed",
         "integrity": "pure",
-        "before_code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746",
-        "after_code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746"
+        "before_code_identity": "sha256:bf6aab00b9b31eebd81e4d646f1bdc3631f3bba8873b8fba4762fcb9e896720e",
+        "after_code_identity": "sha256:bf6aab00b9b31eebd81e4d646f1bdc3631f3bba8873b8fba4762fcb9e896720e"
       },
       "requirements_fingerprint": "sha256:22b95dd0c20c807a8e0ca98575d5e47b179fd4aa45b93c5b44cab5af0300f54c",
       "design_fingerprint": "sha256:3c24832766ac1b1caf5482255872c86cde9c060f39d2ff48633687eda5dd5128",
       "tasks_fingerprint": "sha256:67925deb9e872ffe9352decd1c2a0707817cf0ffc5814f96f450d699ce0e8513",
-      "code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746",
+      "code_identity": "sha256:bf6aab00b9b31eebd81e4d646f1bdc3631f3bba8873b8fba4762fcb9e896720e",
       "profile": {
         "platform": "darwin/arm64",
         "sqlite": "3.45.3 2024-04-15 13:34:05 8653b758870e6ef0c98d46b3ace27849054af85da891eb121e9aaa537f1e8355 (64-bit)",
@@ -544,7 +544,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:0acb2c82331ac0ef28bf64a0c9383772bb9a816b155a618274882c318f5abf8c"
+          "output_digest": "sha256:e0c6eb68a8c69dc422dba543a1cd1174bc0b2e9416f6066712365653862c9bd0"
         },
         {
           "command": [
@@ -555,7 +555,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:f28e63e951fbe1978a8a52c5d2410d8756184ea20264015994d203cbf6837716"
+          "output_digest": "sha256:330abce6085e2035d9bf4719abcccb64e5f512bf2e03d5746b11a6282e9ba3e8"
         },
         {
           "command": [
@@ -566,11 +566,11 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:60ae646d0305bcee9531cc7f429edcec7dbda264e7ab73b452d87696ac2141ea"
+          "output_digest": "sha256:c82281bf9f0c7561c53b2e206d913d5f2528f03dbafe220bc932a1837223e04b"
         }
       ],
       "result": "passed",
-      "verified_at": "2026-09-22T12:53:31Z"
+      "verified_at": "2026-09-22T13:48:13Z"
     },
     "18": {
       "task_fingerprint": "sha256:6e405a8b832d7b4e06028f9e5f42d298f68c744f4d3a6ccb02d341ae88aaeab0",
@@ -580,13 +580,13 @@
         "policy": "verify-purity/v1",
         "assertion_result": "passed",
         "integrity": "pure",
-        "before_code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746",
-        "after_code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746"
+        "before_code_identity": "sha256:bf6aab00b9b31eebd81e4d646f1bdc3631f3bba8873b8fba4762fcb9e896720e",
+        "after_code_identity": "sha256:bf6aab00b9b31eebd81e4d646f1bdc3631f3bba8873b8fba4762fcb9e896720e"
       },
       "requirements_fingerprint": "sha256:22b95dd0c20c807a8e0ca98575d5e47b179fd4aa45b93c5b44cab5af0300f54c",
       "design_fingerprint": "sha256:3c24832766ac1b1caf5482255872c86cde9c060f39d2ff48633687eda5dd5128",
       "tasks_fingerprint": "sha256:67925deb9e872ffe9352decd1c2a0707817cf0ffc5814f96f450d699ce0e8513",
-      "code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746",
+      "code_identity": "sha256:bf6aab00b9b31eebd81e4d646f1bdc3631f3bba8873b8fba4762fcb9e896720e",
       "profile": {
         "platform": "darwin/arm64",
         "sqlite": "3.45.3 2024-04-15 13:34:05 8653b758870e6ef0c98d46b3ace27849054af85da891eb121e9aaa537f1e8355 (64-bit)",
@@ -613,11 +613,11 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:2c4605205a58b497679b7676a12f24ddfc2acdb29c6bb066d0c3df6769516e40"
+          "output_digest": "sha256:1a5c2addbbdd7276d4708c8c4bcca961f60e027776de760ec5e4cc24781f4b5b"
         }
       ],
       "result": "passed",
-      "verified_at": "2026-09-22T12:53:31Z"
+      "verified_at": "2026-09-22T13:48:13Z"
     },
     "19": {
       "task_fingerprint": "sha256:11efa1141488767929c010780a193dc60baa2cb98c2d136ef9f02f1839eac22b",
@@ -627,13 +627,13 @@
         "policy": "verify-purity/v1",
         "assertion_result": "passed",
         "integrity": "pure",
-        "before_code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746",
-        "after_code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746"
+        "before_code_identity": "sha256:bf6aab00b9b31eebd81e4d646f1bdc3631f3bba8873b8fba4762fcb9e896720e",
+        "after_code_identity": "sha256:bf6aab00b9b31eebd81e4d646f1bdc3631f3bba8873b8fba4762fcb9e896720e"
       },
       "requirements_fingerprint": "sha256:22b95dd0c20c807a8e0ca98575d5e47b179fd4aa45b93c5b44cab5af0300f54c",
       "design_fingerprint": "sha256:3c24832766ac1b1caf5482255872c86cde9c060f39d2ff48633687eda5dd5128",
       "tasks_fingerprint": "sha256:67925deb9e872ffe9352decd1c2a0707817cf0ffc5814f96f450d699ce0e8513",
-      "code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746",
+      "code_identity": "sha256:bf6aab00b9b31eebd81e4d646f1bdc3631f3bba8873b8fba4762fcb9e896720e",
       "profile": {
         "platform": "darwin/arm64",
         "sqlite": "3.45.3 2024-04-15 13:34:05 8653b758870e6ef0c98d46b3ace27849054af85da891eb121e9aaa537f1e8355 (64-bit)",
@@ -651,7 +651,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:43f935c809e53fab99cc0924917ff2dacdde4fe0e13266fbfe388cce75e06e89"
+          "output_digest": "sha256:08f1317af1220edb918382bf012efe3dff44b0e046420d7dfe8cd82eb9951a20"
         },
         {
           "command": [
@@ -662,7 +662,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:acc7c1dd15799eb3f5e3fb1f459d281e09470cc6597986f6915f5586dc0a8aa3"
+          "output_digest": "sha256:1e37f410b3c3ee8d2059b7d1425d0ed6dbde029ff6426f0d842d32b2e388c99a"
         },
         {
           "command": [
@@ -673,11 +673,11 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:595906e08da64e5c2acd9d6f6e394100ebc4e8fda768ec28d1b18fb0de64ecbd"
+          "output_digest": "sha256:7876d31c555b287e2b0e3e451e921a14bb738e01d962241fc2115de37c0fb6c5"
         }
       ],
       "result": "passed",
-      "verified_at": "2026-09-22T12:53:31Z"
+      "verified_at": "2026-09-22T13:48:13Z"
     },
     "2": {
       "task_fingerprint": "sha256:aa09032fa974848f0581cdc728d4622a2e1c85ebe43a56ef9113148987783bec",
@@ -687,13 +687,13 @@
         "policy": "verify-purity/v1",
         "assertion_result": "passed",
         "integrity": "pure",
-        "before_code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746",
-        "after_code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746"
+        "before_code_identity": "sha256:bf6aab00b9b31eebd81e4d646f1bdc3631f3bba8873b8fba4762fcb9e896720e",
+        "after_code_identity": "sha256:bf6aab00b9b31eebd81e4d646f1bdc3631f3bba8873b8fba4762fcb9e896720e"
       },
       "requirements_fingerprint": "sha256:22b95dd0c20c807a8e0ca98575d5e47b179fd4aa45b93c5b44cab5af0300f54c",
       "design_fingerprint": "sha256:3c24832766ac1b1caf5482255872c86cde9c060f39d2ff48633687eda5dd5128",
       "tasks_fingerprint": "sha256:67925deb9e872ffe9352decd1c2a0707817cf0ffc5814f96f450d699ce0e8513",
-      "code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746",
+      "code_identity": "sha256:bf6aab00b9b31eebd81e4d646f1bdc3631f3bba8873b8fba4762fcb9e896720e",
       "profile": {
         "platform": "darwin/arm64",
         "sqlite": "3.45.3 2024-04-15 13:34:05 8653b758870e6ef0c98d46b3ace27849054af85da891eb121e9aaa537f1e8355 (64-bit)",
@@ -711,11 +711,11 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:21082dec747d34081d7f09e95f6a0ab033b54084220b1300258f519d84e38cca"
+          "output_digest": "sha256:afa6852a3368adcbd2e2792b90bdf1dbfff3fe947a0b472df766656d73acf0bb"
         }
       ],
       "result": "passed",
-      "verified_at": "2026-09-22T12:53:31Z"
+      "verified_at": "2026-09-22T13:48:13Z"
     },
     "3": {
       "task_fingerprint": "sha256:2b7b259200e7f20d882654b1109196b90ea028e8ae10b1e370f55762e8398c1b",
@@ -725,13 +725,13 @@
         "policy": "verify-purity/v1",
         "assertion_result": "passed",
         "integrity": "pure",
-        "before_code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746",
-        "after_code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746"
+        "before_code_identity": "sha256:bf6aab00b9b31eebd81e4d646f1bdc3631f3bba8873b8fba4762fcb9e896720e",
+        "after_code_identity": "sha256:bf6aab00b9b31eebd81e4d646f1bdc3631f3bba8873b8fba4762fcb9e896720e"
       },
       "requirements_fingerprint": "sha256:22b95dd0c20c807a8e0ca98575d5e47b179fd4aa45b93c5b44cab5af0300f54c",
       "design_fingerprint": "sha256:3c24832766ac1b1caf5482255872c86cde9c060f39d2ff48633687eda5dd5128",
       "tasks_fingerprint": "sha256:67925deb9e872ffe9352decd1c2a0707817cf0ffc5814f96f450d699ce0e8513",
-      "code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746",
+      "code_identity": "sha256:bf6aab00b9b31eebd81e4d646f1bdc3631f3bba8873b8fba4762fcb9e896720e",
       "profile": {
         "platform": "darwin/arm64",
         "sqlite": "3.45.3 2024-04-15 13:34:05 8653b758870e6ef0c98d46b3ace27849054af85da891eb121e9aaa537f1e8355 (64-bit)",
@@ -749,7 +749,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:f020cfbcabc9e5f25364ab9f705671d24c51c1548b0c17d4b2c5f6acbdf1a9db"
+          "output_digest": "sha256:84a4d655d187198b74effed63278b5d4332266926d773fa7456e374a6ae0c4a2"
         },
         {
           "command": [
@@ -760,11 +760,11 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:024f505e13c08f9a7e22968e2905cd226fa7589a6c999aa3dacdcaaa0fc4e9f5"
+          "output_digest": "sha256:2cf4aa251b504456d8ef29c9051b2382a24f076c3cb60ef5c42accbe90f472b7"
         }
       ],
       "result": "passed",
-      "verified_at": "2026-09-22T12:53:31Z"
+      "verified_at": "2026-09-22T13:48:13Z"
     },
     "4": {
       "task_fingerprint": "sha256:01e9ac47a76bf1dcd6288da119c889afb42c633012715435f7700ef786789693",
@@ -774,13 +774,13 @@
         "policy": "verify-purity/v1",
         "assertion_result": "passed",
         "integrity": "pure",
-        "before_code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746",
-        "after_code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746"
+        "before_code_identity": "sha256:bf6aab00b9b31eebd81e4d646f1bdc3631f3bba8873b8fba4762fcb9e896720e",
+        "after_code_identity": "sha256:bf6aab00b9b31eebd81e4d646f1bdc3631f3bba8873b8fba4762fcb9e896720e"
       },
       "requirements_fingerprint": "sha256:22b95dd0c20c807a8e0ca98575d5e47b179fd4aa45b93c5b44cab5af0300f54c",
       "design_fingerprint": "sha256:3c24832766ac1b1caf5482255872c86cde9c060f39d2ff48633687eda5dd5128",
       "tasks_fingerprint": "sha256:67925deb9e872ffe9352decd1c2a0707817cf0ffc5814f96f450d699ce0e8513",
-      "code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746",
+      "code_identity": "sha256:bf6aab00b9b31eebd81e4d646f1bdc3631f3bba8873b8fba4762fcb9e896720e",
       "profile": {
         "platform": "darwin/arm64",
         "sqlite": "3.45.3 2024-04-15 13:34:05 8653b758870e6ef0c98d46b3ace27849054af85da891eb121e9aaa537f1e8355 (64-bit)",
@@ -798,7 +798,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:cb085b1f3048352166f3c62e55d70b54ddb1e06f84153daa64a8b2c94dd873b2"
+          "output_digest": "sha256:77e5de7547e859d0c3342c87bb4e868a3d79354b3c7652dce3d7f09ede133048"
         },
         {
           "command": [
@@ -809,11 +809,11 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:88bc8efca919a7d25ea290e59b686e3c2bc43a4c87fdb0c7bd76dd2f935f845c"
+          "output_digest": "sha256:edfb53acf64adfe12a010a5860111c5074862f3529f01f668dff634cb6029c55"
         }
       ],
       "result": "passed",
-      "verified_at": "2026-09-22T12:53:31Z"
+      "verified_at": "2026-09-22T13:48:13Z"
     },
     "5": {
       "task_fingerprint": "sha256:a7babd4b6f221dffef5d99f8f4739154f843298fdf08811b26d1af09804eaa29",
@@ -823,13 +823,13 @@
         "policy": "verify-purity/v1",
         "assertion_result": "passed",
         "integrity": "pure",
-        "before_code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746",
-        "after_code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746"
+        "before_code_identity": "sha256:bf6aab00b9b31eebd81e4d646f1bdc3631f3bba8873b8fba4762fcb9e896720e",
+        "after_code_identity": "sha256:bf6aab00b9b31eebd81e4d646f1bdc3631f3bba8873b8fba4762fcb9e896720e"
       },
       "requirements_fingerprint": "sha256:22b95dd0c20c807a8e0ca98575d5e47b179fd4aa45b93c5b44cab5af0300f54c",
       "design_fingerprint": "sha256:3c24832766ac1b1caf5482255872c86cde9c060f39d2ff48633687eda5dd5128",
       "tasks_fingerprint": "sha256:67925deb9e872ffe9352decd1c2a0707817cf0ffc5814f96f450d699ce0e8513",
-      "code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746",
+      "code_identity": "sha256:bf6aab00b9b31eebd81e4d646f1bdc3631f3bba8873b8fba4762fcb9e896720e",
       "profile": {
         "platform": "darwin/arm64",
         "sqlite": "3.45.3 2024-04-15 13:34:05 8653b758870e6ef0c98d46b3ace27849054af85da891eb121e9aaa537f1e8355 (64-bit)",
@@ -847,7 +847,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:0d4f1602bc5584724379768c5bbd1ea272f3fcb3a270775066c2f9a5cf698747"
+          "output_digest": "sha256:42630298eb94121d54d042c653b1201fffcb8561af48fceeb8c3dc25d95deae4"
         },
         {
           "command": [
@@ -858,11 +858,11 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:4740d48cbe21e6d2dec46aba7182547faec2c3f3f4f0f62a7b80554076db527d"
+          "output_digest": "sha256:8e9dbdea03a7b32ab8c5e3ccddb4446fbdc2acc621293d72dc33544193092f14"
         }
       ],
       "result": "passed",
-      "verified_at": "2026-09-22T12:53:31Z"
+      "verified_at": "2026-09-22T13:48:13Z"
     },
     "6": {
       "task_fingerprint": "sha256:3e068716a1bc54a42b68d90bb20b3cd8a414745c1c3151565664a14919b948c6",
@@ -872,13 +872,13 @@
         "policy": "verify-purity/v1",
         "assertion_result": "passed",
         "integrity": "pure",
-        "before_code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746",
-        "after_code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746"
+        "before_code_identity": "sha256:bf6aab00b9b31eebd81e4d646f1bdc3631f3bba8873b8fba4762fcb9e896720e",
+        "after_code_identity": "sha256:bf6aab00b9b31eebd81e4d646f1bdc3631f3bba8873b8fba4762fcb9e896720e"
       },
       "requirements_fingerprint": "sha256:22b95dd0c20c807a8e0ca98575d5e47b179fd4aa45b93c5b44cab5af0300f54c",
       "design_fingerprint": "sha256:3c24832766ac1b1caf5482255872c86cde9c060f39d2ff48633687eda5dd5128",
       "tasks_fingerprint": "sha256:67925deb9e872ffe9352decd1c2a0707817cf0ffc5814f96f450d699ce0e8513",
-      "code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746",
+      "code_identity": "sha256:bf6aab00b9b31eebd81e4d646f1bdc3631f3bba8873b8fba4762fcb9e896720e",
       "profile": {
         "platform": "darwin/arm64",
         "sqlite": "3.45.3 2024-04-15 13:34:05 8653b758870e6ef0c98d46b3ace27849054af85da891eb121e9aaa537f1e8355 (64-bit)",
@@ -896,7 +896,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:3c1ea331532df65bda5ee36bcfddd63944a3f9a98cf6e4342efdc3d14e3dbc39"
+          "output_digest": "sha256:120aaf391fa3257af20a6673367eb7a1987d4ef274f834589ec9e25677db67de"
         },
         {
           "command": [
@@ -907,11 +907,11 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:14e7ad82ef9f31e0396707bc39fda06dbe71ab0af7501073c6941706036d6ed9"
+          "output_digest": "sha256:7e11a6ddfde8ef39c7192c25f50cec64f585a518392df8dfce8d877e09ea7cc1"
         }
       ],
       "result": "passed",
-      "verified_at": "2026-09-22T12:53:31Z"
+      "verified_at": "2026-09-22T13:48:13Z"
     },
     "7": {
       "task_fingerprint": "sha256:3261519b617e53d11abfb3248cb0f67da0e4ac55550bec9064c1c3c4c54b9ed4",
@@ -921,13 +921,13 @@
         "policy": "verify-purity/v1",
         "assertion_result": "passed",
         "integrity": "pure",
-        "before_code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746",
-        "after_code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746"
+        "before_code_identity": "sha256:bf6aab00b9b31eebd81e4d646f1bdc3631f3bba8873b8fba4762fcb9e896720e",
+        "after_code_identity": "sha256:bf6aab00b9b31eebd81e4d646f1bdc3631f3bba8873b8fba4762fcb9e896720e"
       },
       "requirements_fingerprint": "sha256:22b95dd0c20c807a8e0ca98575d5e47b179fd4aa45b93c5b44cab5af0300f54c",
       "design_fingerprint": "sha256:3c24832766ac1b1caf5482255872c86cde9c060f39d2ff48633687eda5dd5128",
       "tasks_fingerprint": "sha256:67925deb9e872ffe9352decd1c2a0707817cf0ffc5814f96f450d699ce0e8513",
-      "code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746",
+      "code_identity": "sha256:bf6aab00b9b31eebd81e4d646f1bdc3631f3bba8873b8fba4762fcb9e896720e",
       "profile": {
         "platform": "darwin/arm64",
         "sqlite": "3.45.3 2024-04-15 13:34:05 8653b758870e6ef0c98d46b3ace27849054af85da891eb121e9aaa537f1e8355 (64-bit)",
@@ -945,7 +945,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:ce7650258bc09e297540907eb791edeea532ff75a7cd1b23593cdcb1ed8c3bb4"
+          "output_digest": "sha256:87786af7d9c2472aea5d643ffdf41e44a97a84f512d792f1aa00b93935f81d32"
         },
         {
           "command": [
@@ -956,7 +956,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:87911705546833cda8c5d3a9e7b5c21eea7d6758734702fa36f47bd32e4f50f5"
+          "output_digest": "sha256:e72d2259e373b759cbf53720764a483928e58fcde92b62ad66da6036b174a36d"
         },
         {
           "command": [
@@ -967,7 +967,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:8d524eb40cad56bf5c88215dbab7aea5c343329043445c3cc3ae96df6432aa86"
+          "output_digest": "sha256:75a68e27af910d577d7db86e3ac3986a8b61982c7631ecd0b1571ec3f74a11f0"
         },
         {
           "command": [
@@ -978,7 +978,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:82ca15eaa5a2388a9f155ef0ac12cfa78ee554c4dc9cfedfd91bced436c3dbed"
+          "output_digest": "sha256:79567905746eeb0e3b9dd20ef92431ec742a1f7118f13f690477d915a6b1d338"
         },
         {
           "command": [
@@ -989,11 +989,11 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:5d74a16f6f5f6db4bc04dff71dd2ffa0cd8493b44033b8935e4f7effd2726913"
+          "output_digest": "sha256:8c2631c02977be3a37abfdb51f39178bd66790894972cb240c712a1b78beee12"
         }
       ],
       "result": "passed",
-      "verified_at": "2026-09-22T12:53:31Z"
+      "verified_at": "2026-09-22T13:48:13Z"
     },
     "8": {
       "task_fingerprint": "sha256:8616b87f511db39e930682460714c3ba7e48ad24985c748578d873598ef322ac",
@@ -1003,13 +1003,13 @@
         "policy": "verify-purity/v1",
         "assertion_result": "passed",
         "integrity": "pure",
-        "before_code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746",
-        "after_code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746"
+        "before_code_identity": "sha256:bf6aab00b9b31eebd81e4d646f1bdc3631f3bba8873b8fba4762fcb9e896720e",
+        "after_code_identity": "sha256:bf6aab00b9b31eebd81e4d646f1bdc3631f3bba8873b8fba4762fcb9e896720e"
       },
       "requirements_fingerprint": "sha256:22b95dd0c20c807a8e0ca98575d5e47b179fd4aa45b93c5b44cab5af0300f54c",
       "design_fingerprint": "sha256:3c24832766ac1b1caf5482255872c86cde9c060f39d2ff48633687eda5dd5128",
       "tasks_fingerprint": "sha256:67925deb9e872ffe9352decd1c2a0707817cf0ffc5814f96f450d699ce0e8513",
-      "code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746",
+      "code_identity": "sha256:bf6aab00b9b31eebd81e4d646f1bdc3631f3bba8873b8fba4762fcb9e896720e",
       "profile": {
         "platform": "darwin/arm64",
         "sqlite": "3.45.3 2024-04-15 13:34:05 8653b758870e6ef0c98d46b3ace27849054af85da891eb121e9aaa537f1e8355 (64-bit)",
@@ -1027,7 +1027,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:d1ad0c0f82c542063299ad7b7a2641b24055fb81dacca1e1d7c68591bcf104d4"
+          "output_digest": "sha256:f8eca5668f157b1d814c3d87401a4be111c794f3c473ae75b9e2014e1bacbac0"
         },
         {
           "command": [
@@ -1038,7 +1038,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:a3171f119e5deb0588b699774bcb9f870bfa0836ace88419fea5438798b7909a"
+          "output_digest": "sha256:2db226ce0a5a8a33c67ec6802a33205d42a8b3ca3232c7e4c8eb68722d705386"
         },
         {
           "command": [
@@ -1049,11 +1049,11 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:7ee8161e38252f0a52f83b294805d7623d7a98622ed533c7af4c03d37d981525"
+          "output_digest": "sha256:df09e23f440760e92f819a15f865e413a7ba69e8aa4ced715b456057701ac514"
         }
       ],
       "result": "passed",
-      "verified_at": "2026-09-22T12:53:31Z"
+      "verified_at": "2026-09-22T13:48:13Z"
     },
     "9": {
       "task_fingerprint": "sha256:8e7503427b497426f936a01416d283892988f3447831201c4adf03b67781d01e",
@@ -1063,13 +1063,13 @@
         "policy": "verify-purity/v1",
         "assertion_result": "passed",
         "integrity": "pure",
-        "before_code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746",
-        "after_code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746"
+        "before_code_identity": "sha256:bf6aab00b9b31eebd81e4d646f1bdc3631f3bba8873b8fba4762fcb9e896720e",
+        "after_code_identity": "sha256:bf6aab00b9b31eebd81e4d646f1bdc3631f3bba8873b8fba4762fcb9e896720e"
       },
       "requirements_fingerprint": "sha256:22b95dd0c20c807a8e0ca98575d5e47b179fd4aa45b93c5b44cab5af0300f54c",
       "design_fingerprint": "sha256:3c24832766ac1b1caf5482255872c86cde9c060f39d2ff48633687eda5dd5128",
       "tasks_fingerprint": "sha256:67925deb9e872ffe9352decd1c2a0707817cf0ffc5814f96f450d699ce0e8513",
-      "code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746",
+      "code_identity": "sha256:bf6aab00b9b31eebd81e4d646f1bdc3631f3bba8873b8fba4762fcb9e896720e",
       "profile": {
         "platform": "darwin/arm64",
         "sqlite": "3.45.3 2024-04-15 13:34:05 8653b758870e6ef0c98d46b3ace27849054af85da891eb121e9aaa537f1e8355 (64-bit)",
@@ -1087,7 +1087,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:70737eae154740629c3c85ffcfc17bffd94a6f8e728e8c46ef4b9e2244bd4906"
+          "output_digest": "sha256:b60777e94c7560ec50f84a37231835b3b5df21234eedb5545e6434a7b2f27905"
         },
         {
           "command": [
@@ -1098,7 +1098,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:2a97a02593a36d3961774d8295b0db11b9b8f3964588b8d66c0cc513bb3ef4b1"
+          "output_digest": "sha256:f4a074e4a39ceff7a45cf1f00b2d50801a8d425d07f7d92dfcf75084bce60951"
         },
         {
           "command": [
@@ -1109,7 +1109,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:52c1756fec59dab0caacce99a484a839dd47e79cef6bbc75e809a0b994559c6e"
+          "output_digest": "sha256:9c2c1cde1f9bbce35bb640083cae904035680ce6ffcc04ce4d9bfe53dec01d1f"
         },
         {
           "command": [
@@ -1120,7 +1120,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:0462def62586bfd013d4a297d46921f0b47e32679c437c5795e9adf3bd8ab0ab"
+          "output_digest": "sha256:7f84cb5a2d0ec7c26ab80234b181acb9df4b61c0df832e079e0bd1855e127b03"
         },
         {
           "command": [
@@ -1131,7 +1131,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:ef7e44813c37e8ee5c6034f45e014ad38c3ef4ca2b959c98f809e2feb4437296"
+          "output_digest": "sha256:b84073e0b411c90f7f7c21010491019f623dd28a2c58b0d447c998f936dfb1fd"
         },
         {
           "command": [
@@ -1142,11 +1142,11 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:3487bda2adabda3ace4e05cf6b3c373798515eabe3867cf19ccc52630c83b3f1"
+          "output_digest": "sha256:ed7b1148ad4704d4b6ef866d392d30f51b77c3c8429d1fe223d6917d7188020c"
         }
       ],
       "result": "passed",
-      "verified_at": "2026-09-22T12:53:31Z"
+      "verified_at": "2026-09-22T13:48:13Z"
     }
   }
 }

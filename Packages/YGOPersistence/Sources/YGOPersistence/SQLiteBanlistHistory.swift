@@ -267,3 +267,52 @@ extension SQLiteBanlistHistory: BanlistProvenanceReporting {
         }
     }
 }
+
+extension SQLiteBanlistHistory: DeckListJudging {
+    /// Every distinct card of a deck, judged against one stored list.
+    ///
+    /// One statement: the deck's slots joined to the catalog and left-joined
+    /// to the list's entries, with copies summed per card. A deck holds at
+    /// most ninety distinct cards, so this is small by construction and needs
+    /// no lookup per card.
+    ///
+    /// The join is a `LEFT JOIN` on purpose. A card the list does not name has
+    /// to come back — as unrestricted — rather than fall out of the result and
+    /// leave the deck looking smaller than it is.
+    public func judge(
+        _ deckID: Int64, against format: BanlistFormat, effectiveDate: String
+    ) async throws -> [ListedDeckCard] {
+        try await database.read { db -> [ListedDeckCard] in
+            guard let revisionID = try Int64.fetchOne(db, sql: """
+                SELECT id FROM banlist_revision
+                WHERE format_code = ? AND effective_date = ?
+                """, arguments: [format.rawValue, effectiveDate])
+            else { return [] }
+
+            return try Row.fetchAll(db, sql: """
+                SELECT card.id AS card_id,
+                       COALESCE(card.name_it, card.name_en) AS name,
+                       card.konami_id AS konami_id,
+                       SUM(deck_slot.quantity) AS held,
+                       banlist_entry.status AS status
+                FROM deck_slot
+                JOIN card ON card.id = deck_slot.card_id
+                LEFT JOIN banlist_entry
+                       ON banlist_entry.konami_id = card.konami_id
+                      AND banlist_entry.revision_id = ?
+                WHERE deck_slot.deck_id = ?
+                GROUP BY card.id
+                ORDER BY name COLLATE NOCASE
+                """, arguments: [revisionID, deckID]).map { row in
+                let konamiID: Int? = row["konami_id"]
+                let stored: String? = row["status"]
+                return ListedDeckCard(
+                    card: CardIdentifier(row["card_id"]),
+                    name: row["name"] ?? "",
+                    held: row["held"] ?? 0,
+                    status: stored.flatMap(BanlistStatus.init(storedValue:)),
+                    isMatched: konamiID != nil)
+            }
+        }
+    }
+}

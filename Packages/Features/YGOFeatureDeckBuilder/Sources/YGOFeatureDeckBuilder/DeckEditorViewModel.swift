@@ -94,6 +94,12 @@ public final class DeckEditorViewModel {
     /// but cannot change them, the same shape as `editing` and `history`.
     private let labelling: (any DeckLabelling)?
 
+    /// Judges the deck against a published list. Absent means the editor can
+    /// show a deck but not ask what a list makes of it.
+    private let judging: (any DeckListJudging)?
+    /// The stored lists, for choosing among them.
+    private let lists: (any BanlistHistoryReading)?
+
     public init(
         repository: any DeckBuilding,
         validator: any DeckValidating,
@@ -102,6 +108,8 @@ public final class DeckEditorViewModel {
         reader: (any CardRepository)? = nil,
         history: (any DeckHistorying)? = nil,
         labels: (any DeckLabelling)? = nil,
+        judging: (any DeckListJudging)? = nil,
+        lists: (any BanlistHistoryReading)? = nil,
         language: CardLanguage = .italian
     ) {
         self.repository = repository
@@ -111,6 +119,8 @@ public final class DeckEditorViewModel {
         self.reader = reader
         self.versioning = history
         self.labelling = labels
+        self.judging = judging
+        self.lists = lists
         self.language = language
     }
 
@@ -386,6 +396,105 @@ public final class DeckEditorViewModel {
     public func changeSelectedQuantity(by delta: Int) async {
         guard let item = selectedItem else { return }
         await setQuantity(item.quantity + delta, of: item.id, in: item.section)
+    }
+
+    // MARK: - Judged against a published list
+
+    /// Every stored list, newest first within its format.
+    public private(set) var availableLists: [BanlistRevision] = []
+    /// The list the deck is being judged against.
+    public private(set) var chosenList: BanlistRevision?
+    /// What that list makes of the deck.
+    public private(set) var verdict: DeckListVerdict?
+    public private(set) var isLegalityVisible = false
+    public private(set) var selectedJudgedCard: CardIdentifier?
+    /// True when the deck's format is played under no published list. An
+    /// answer, not a gap: judging it against the current TCG list would look
+    /// authoritative and be wrong.
+    public private(set) var formatHasNoList = false
+
+    public var canJudge: Bool { judging != nil && lists != nil && deck != nil }
+
+    /// Reads the stored lists, newest first inside each format.
+    public func loadLists() async {
+        guard let lists else { return }
+        let stored = BanlistFormat.allCases.flatMap { format in
+            (try? lists.revisions(for: format)) ?? []
+        }
+        availableLists = stored.sorted { left, right in
+            left.format == right.format
+                ? left.effectiveDate > right.effectiveDate
+                : left.format.rawValue < right.format.rawValue
+        }
+    }
+
+    /// The list a deck's format implies, resolved against what is stored.
+    ///
+    /// A format naming no date means the newest list that format has.
+    public func impliedList(for format: CardFormat) -> BanlistRevision? {
+        guard let implied = format.impliedList else { return nil }
+        let ofFormat = availableLists.filter { $0.format == implied.format }
+        guard let date = implied.effectiveDate else { return ofFormat.first }
+        return ofFormat.first { $0.effectiveDate == date } ?? ofFormat.first
+    }
+
+    /// Judges the open deck against a list, leaving the deck untouched.
+    public func judge(against list: BanlistRevision) async {
+        guard let judging, let deck else { return }
+        chosenList = list
+        formatHasNoList = false
+        do {
+            let cards = try await judging.judge(
+                deck.id, against: list.format, effectiveDate: list.effectiveDate)
+            verdict = DeckListVerdict(list: list, cards: cards)
+            if let selectedJudgedCard,
+               !cards.contains(where: { $0.card == selectedJudgedCard }) {
+                self.selectedJudgedCard = nil
+            }
+        } catch {
+            verdict = nil
+            lastFailure = "Lista non applicata: \(error)"
+        }
+    }
+
+    /// Judges against whatever the deck's own format implies, or reports that
+    /// nothing does.
+    public func judgeAgainstImpliedList() async {
+        guard canJudge, let deck else { return }
+        if availableLists.isEmpty { await loadLists() }
+
+        guard let list = impliedList(for: deck.format) else {
+            chosenList = nil
+            verdict = nil
+            formatHasNoList = true
+            return
+        }
+        await judge(against: list)
+    }
+
+    public func showLegality() async {
+        guard canJudge else { return }
+        await loadLists()
+        if verdict == nil && !formatHasNoList { await judgeAgainstImpliedList() }
+        isLegalityVisible = true
+        if selectedJudgedCard == nil { selectedJudgedCard = verdict?.cards.first?.card }
+    }
+
+    public func hideLegality() {
+        isLegalityVisible = false
+    }
+
+    /// Steps through the judged cards, stopping at the ends rather than
+    /// wrapping, as every other list in this editor does.
+    public func moveJudgedSelection(by offset: Int) {
+        guard let cards = verdict?.cards, !cards.isEmpty else { return }
+        let identifiers = cards.map(\.card)
+        guard let current = selectedJudgedCard,
+              let index = identifiers.firstIndex(of: current) else {
+            selectedJudgedCard = identifiers.first
+            return
+        }
+        selectedJudgedCard = identifiers[min(max(index + offset, 0), identifiers.count - 1)]
     }
 
     // MARK: - Labels

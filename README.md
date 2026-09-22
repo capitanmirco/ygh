@@ -5,11 +5,11 @@ portfolio. Single local user, offline-first, no accounts and no server.
 
 ## Status
 
-Seventeen specifications are complete and certified: `card-catalog`,
+Eighteen specifications are complete and certified: `card-catalog`,
 `deck-builder`, `collection-tracker`, `deck-analytics`, `pricing`,
 `banlist-history`, `card-detail`, `deck-editing`, `visual-language`,
 `catalog-filters`, `italian-vocabulary`, `deck-card-preview`,
-`deck-authoring`, `banlist-browser`, `app-preferences`, `deck-history` and `deck-labels`. The application acquires the full card pool, keeps it current,
+`deck-authoring`, `banlist-browser`, `app-preferences`, `deck-history`, `deck-labels` and `deck-legality`. The application acquires the full card pool, keeps it current,
 stores artwork locally, and browses, builds, tracks, analyses and prices
 entirely offline.
 
@@ -70,6 +70,17 @@ once without removing a card. Tags are free words the user puts on a deck,
 shown beside the format, removable one deck at a time, and usable to narrow the
 list. Spelling and spaces make one tag, and the first spelling is kept.
 
+A deck can be judged against any published Forbidden & Limited List the
+application holds, not only against its own format's current restrictions. A
+GOAT deck opens judged by the TCG list of March 2005 and an Edison deck by the
+one of March 2010, because those are the lists those formats are named for;
+either can be swapped for any of the 177 stored lists, and the verdict names
+the list and the date it came from. Each card reads its status, the copies held
+and the copies permitted. A card the list does not name is unrestricted; a card
+carrying no identifier the lists use is reported as unmatched rather than as
+unrestricted, because the second reads exactly like a correct answer. Asking is
+not editing: nothing in that panel can change a deck.
+
 ## Requirements
 
 - macOS 27 or later, Apple silicon
@@ -81,7 +92,7 @@ list. Spelling and spaces make one tag, and the first spelling is kept.
 
 ```bash
 swift build          # builds every module and the app executable
-swift test           # 635 tests across 16 targets
+swift test           # 655 tests across 16 targets
 swift run YGODeckManager
 ```
 

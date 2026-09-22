@@ -839,7 +839,9 @@ private struct DeckEditorLoader: View {
                 // written and certified with `deck-builder`, and this is the
                 // first thing to call it.
                 history: environment.deckRepository,
-                labels: environment.deckRepository)
+                labels: environment.deckRepository,
+                judging: environment.banlistHistory,
+                lists: environment.banlistHistory)
             self.panel = CardDetailViewModel(
                 loader: CardDetailLoader(
                     catalog: environment.repository,

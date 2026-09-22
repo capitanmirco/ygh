@@ -42,7 +42,12 @@ public struct DeckEditorView: View {
                     // sheet would be a second presentation competing with the
                     // deletion dialog, which is how this project has already
                     // lost a rename and a deletion.
-                    if model.isHistoryVisible {
+                    if model.isLegalityVisible {
+                        Divider()
+                        DeckLegalityPanel(model: model)
+                            .frame(width: Theme.Inspector.width(
+                                forWindowWidth: geometry.size.width))
+                    } else if model.isHistoryVisible {
                         Divider()
                         DeckHistoryPanel(model: model) { versionID in
                             model.askRestore(versionID)
@@ -136,6 +141,23 @@ public struct DeckEditorView: View {
                 .accessibilityLabel(model.isPreviewVisible
                                     ? "Nascondi il dettaglio carta"
                                     : "Mostra il dettaglio carta")
+            }
+
+            if model.canJudge {
+                Button {
+                    if model.isLegalityVisible {
+                        model.hideLegality()
+                    } else {
+                        Task { await model.showLegality() }
+                    }
+                } label: {
+                    Image(systemName: "hand.raised")
+                }
+                .buttonStyle(.borderless)
+                .keyboardShortcut("l", modifiers: [.command, .shift])
+                .help(model.isLegalityVisible ? "Nascondi la legalità" : "Mostra la legalità")
+                .accessibilityLabel(
+                    model.isLegalityVisible ? "Nascondi la legalità" : "Mostra la legalità")
             }
 
             if model.canUseHistory {
