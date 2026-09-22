@@ -38,7 +38,18 @@ public struct DeckEditorView: View {
                     }
                     .frame(maxWidth: .infinity)
 
-                    if let preview, model.isPreviewVisible {
+                    // One panel beside the deck, two things it can show. A
+                    // sheet would be a second presentation competing with the
+                    // deletion dialog, which is how this project has already
+                    // lost a rename and a deletion.
+                    if model.isHistoryVisible {
+                        Divider()
+                        DeckHistoryPanel(model: model) { versionID in
+                            model.askRestore(versionID)
+                        }
+                        .frame(width: Theme.Inspector.width(
+                            forWindowWidth: geometry.size.width))
+                    } else if let preview, model.isPreviewVisible {
                         Divider()
                         preview
                             .frame(width: Theme.Inspector.width(
@@ -56,6 +67,28 @@ public struct DeckEditorView: View {
         .onChange(of: model.focusedRegion) { _, region in focus = region }
         .onChange(of: focus) { _, region in
             if let region, region != model.focusedRegion { model.focusRegion(region) }
+        }
+        // On its own level, not stacked with the deletion dialog below:
+        // presentations on one view compete and SwiftUI shows the first.
+        .background {
+            Color.clear
+                // The version is captured while the alert is built. Tapping a
+                // button dismisses it first, and the dismissal runs this
+                // binding's setter, so the action would find nothing armed.
+                .alert("Ripristinare questa versione?", isPresented: Binding(
+                    get: { model.pendingRestore != nil },
+                    set: { if !$0 { model.cancelRestore() } })
+                ) {
+                    let pending = model.pendingRestore
+                    Button("Annulla", role: .cancel) { model.cancelRestore() }
+                    Button("Ripristina", role: .destructive) {
+                        guard let pending else { return }
+                        Task { await model.confirmRestore(pending) }
+                    }
+                } message: {
+                    Text("Le carte attuali del mazzo vengono sostituite. "
+                        + "Lo stato che sostituisci resta recuperabile come versione.")
+                }
         }
         // The deck is captured while the dialog is built rather than read
         // inside the button's action. Tapping a dialog button dismisses it
@@ -103,6 +136,23 @@ public struct DeckEditorView: View {
                 .accessibilityLabel(model.isPreviewVisible
                                     ? "Nascondi il dettaglio carta"
                                     : "Mostra il dettaglio carta")
+            }
+
+            if model.canUseHistory {
+                Button {
+                    if model.isHistoryVisible {
+                        model.hideHistory()
+                    } else {
+                        Task { await model.showHistory() }
+                    }
+                } label: {
+                    Image(systemName: "clock.arrow.circlepath")
+                }
+                .buttonStyle(.borderless)
+                .keyboardShortcut("h", modifiers: [.command, .shift])
+                .help(model.isHistoryVisible ? "Nascondi la cronologia" : "Mostra la cronologia")
+                .accessibilityLabel(
+                    model.isHistoryVisible ? "Nascondi la cronologia" : "Mostra la cronologia")
             }
 
             VStack(alignment: .leading, spacing: Theme.Spacing.hair) {

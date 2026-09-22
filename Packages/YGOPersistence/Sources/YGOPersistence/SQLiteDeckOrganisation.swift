@@ -2,25 +2,11 @@ import Foundation
 import GRDB
 import YGOCore
 
-/// A saved state of a deck, recoverable later.
-public struct DeckVersion: Hashable, Sendable, Identifiable {
-    public let id: Int64
-    public let deckID: Int64
-    public let label: String?
-    public let createdAt: Date
-    public let slots: [DeckSlot]
-
-    public init(id: Int64, deckID: Int64, label: String?, createdAt: Date, slots: [DeckSlot]) {
-        self.id = id
-        self.deckID = deckID
-        self.label = label
-        self.createdAt = createdAt
-        self.slots = slots
-    }
-}
-
 /// Folders, tags and version history.
-extension SQLiteDeckRepository {
+///
+/// `DeckVersion` and `DeckHistorying` live in `YGOCore`: a feature module has
+/// to name them, and a feature module must not import this one.
+extension SQLiteDeckRepository: DeckHistorying {
     // MARK: - Folders
 
     public func createFolder(named name: String, inside parent: Int64? = nil) async throws -> Int64 {
@@ -130,15 +116,42 @@ extension SQLiteDeckRepository {
                 SELECT id, deck_id, label, created_at, snapshot FROM deck_version
                 WHERE deck_id = ? ORDER BY created_at, id
                 """, arguments: [deckID]).map { row in
-                DeckVersion(
+                // A snapshot that cannot be decoded is reported as such, not
+                // flattened into a version of an empty deck. Throwing instead
+                // would hide every version of this deck behind one bad row.
+                let decoded = try? Self.decodeSnapshot(row["snapshot"])
+                return DeckVersion(
                     id: row["id"],
                     deckID: row["deck_id"],
                     label: row["label"],
                     createdAt: ISO8601DateFormatter().date(from: row["created_at"] ?? "")
                         ?? .distantPast,
-                    slots: (try? Self.decodeSnapshot(row["snapshot"])) ?? [])
+                    slots: decoded ?? [],
+                    isReadable: decoded != nil)
             }
         }
+    }
+
+    /// Restores a version into the deck it belongs to, and refuses otherwise.
+    ///
+    /// `restore(versionID:)` reads the version's own `deck_id` and restores
+    /// into it, so a foreign identifier rewrites a deck nobody was looking at.
+    /// The check happens before anything is deleted; the restore itself is the
+    /// same single transaction rather than a second implementation of it.
+    public func restoreVersion(_ versionID: Int64, of deckID: Int64) async throws {
+        let owner = try await writer.read { db in
+            try Int64.fetchOne(
+                db, sql: "SELECT deck_id FROM deck_version WHERE id = ?",
+                arguments: [versionID])
+        }
+
+        guard let owner else { throw DeckHistoryError.versionNotFound(versionID) }
+        guard owner == deckID else {
+            throw DeckHistoryError.versionBelongsToAnotherDeck(
+                versionID: versionID, deckID: owner)
+        }
+
+        try await restore(versionID: versionID)
     }
 
     /// Puts a deck back to a stored version.

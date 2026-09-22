@@ -389,3 +389,67 @@ struct SettingsViewModelTests {
         #expect(storage["total"] != nil)
     }
 }
+
+@Suite("Settings confirmation sequencing")
+@MainActor
+struct SettingsConfirmationSequencingTests {
+    private func makeModel(_ inventory: InventoryStub) -> SettingsViewModel {
+        SettingsViewModel(
+            status: StatusStub(nil), refresher: RefresherStub(.alreadyCurrent),
+            inventory: inventory, preferences: PreferenceStub())
+    }
+
+    /// The alert's dismissal clears the armed request before the button's
+    /// action runs, so a confirmed purge quietly did nothing.
+    ///
+    /// The window's remedy is to capture the request while the alert is built
+    /// and hand it to `confirm(_:)`. This is that sequence: cleared first, as
+    /// a dismissal clears it, and the deletion still has to happen.
+    @Test func confirmingACapturedRequestClearedByTheDismissalStillPerformsIt() async throws {
+        let inventory = try InventoryStub()
+        defer { inventory.tearDown() }
+        let model = makeModel(inventory)
+        await model.load()
+
+        model.ask(.purgeArtwork)
+        let captured = try #require(model.pending)
+
+        // What the dismissal does before the action runs.
+        model.cancel()
+        #expect(model.pending == nil)
+
+        // Reading the model here is what deleted nothing.
+        await model.confirm()
+        #expect(inventory.purges == 0)
+        #expect(inventory.artworkExists)
+
+        // Handing over what the user confirmed performs it.
+        await model.confirm(captured)
+        #expect(inventory.purges == 1)
+        #expect(!inventory.artworkExists)
+        #expect(model.footprint?.artworkFiles == 0)
+    }
+
+    /// The same for the backup, and it must be the captured request that runs
+    /// rather than whatever happens to be armed at the time.
+    @Test func confirmingACapturedRequestPerformsThatRequestAndNoOther() async throws {
+        let inventory = try InventoryStub()
+        defer { inventory.tearDown() }
+        let model = makeModel(inventory)
+        await model.load()
+
+        model.ask(.deleteBackup)
+        let captured = try #require(model.pending)
+        model.cancel()
+
+        // Something else gets armed in the meantime.
+        model.ask(.purgeArtwork)
+
+        await model.confirm(captured)
+        #expect(inventory.backupDeletions == 1)
+        #expect(!inventory.backupExists)
+        #expect(inventory.purges == 0, "esegue ciò che è stato confermato, non ciò che è armato")
+        #expect(inventory.artworkExists)
+        #expect(model.pending == nil, "e disarma comunque")
+    }
+}

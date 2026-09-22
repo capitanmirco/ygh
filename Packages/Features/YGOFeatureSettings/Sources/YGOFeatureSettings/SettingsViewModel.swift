@@ -125,10 +125,13 @@ public final class SettingsViewModel {
         pending = nil
     }
 
-    /// Performs exactly the armed request, then re-measures rather than
-    /// trusting the figures reported a moment ago.
-    public func confirm() async {
-        guard let request = pending else { return }
+    /// Performs exactly the request the user confirmed, then re-measures
+    /// rather than trusting the figures reported a moment ago.
+    ///
+    /// It takes the request rather than reading `pending`, because the alert's
+    /// dismissal clears `pending` before the button's action runs. Reading it
+    /// here is how a confirmed deletion quietly did nothing.
+    public func confirm(_ request: MaintenanceRequest) async {
         pending = nil
 
         switch request {
@@ -137,6 +140,12 @@ public final class SettingsViewModel {
         }
 
         footprint = await inventory.footprint()
+    }
+
+    /// Performs whatever is armed. For callers that are not an alert.
+    public func confirm() async {
+        guard let request = pending else { return }
+        await confirm(request)
     }
 
     // MARK: - Preferences

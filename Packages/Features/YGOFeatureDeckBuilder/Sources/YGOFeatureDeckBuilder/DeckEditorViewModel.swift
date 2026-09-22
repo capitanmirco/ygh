@@ -82,12 +82,21 @@ public final class DeckEditorViewModel {
     /// belongs to a card the user is no longer looking at.
     private var previewGeneration = 0
 
+    /// Saved states of this deck. Absent means the editor cannot offer a
+    /// history, the same way `editing` absent means it cannot rearrange.
+    ///
+    /// Stored under a different name from the undo stack above, which is also
+    /// called history and is a different thing: that one lasts as long as the
+    /// editor is open, this one outlives the application.
+    private let versioning: (any DeckHistorying)?
+
     public init(
         repository: any DeckBuilding,
         validator: any DeckValidating,
         catalogue: (any CardSearching)? = nil,
         editing: (any DeckEditing)? = nil,
         reader: (any CardRepository)? = nil,
+        history: (any DeckHistorying)? = nil,
         language: CardLanguage = .italian
     ) {
         self.repository = repository
@@ -95,6 +104,7 @@ public final class DeckEditorViewModel {
         self.catalogue = catalogue
         self.editing = editing
         self.reader = reader
+        self.versioning = history
         self.language = language
     }
 
@@ -370,6 +380,140 @@ public final class DeckEditorViewModel {
     public func changeSelectedQuantity(by delta: Int) async {
         guard let item = selectedItem else { return }
         await setQuantity(item.quantity + delta, of: item.id, in: item.section)
+    }
+
+    // MARK: - Version history
+
+    /// This deck's saved states, newest first.
+    public private(set) var versions: [DeckVersion] = []
+    /// Whether the panel beside the deck is showing the history.
+    public private(set) var isHistoryVisible = false
+    /// Which version the keyboard is on.
+    public private(set) var selectedVersion: Int64?
+
+    /// Offering a history the editor cannot serve is worse than not offering
+    /// one, so the affordance follows the port and the open deck.
+    public var canUseHistory: Bool { versioning != nil && deck != nil }
+
+    /// Whether this deck has never been marked. Distinct from a history that
+    /// has not been read yet, which is why the panel loads before it opens.
+    public private(set) var hasLoadedVersions = false
+
+    public var versionRows: [DeckVersionRow] { versions.map(DeckVersionRow.init) }
+
+    /// Reads every version of the open deck in one call.
+    ///
+    /// Storage returns them oldest first; the panel wants the newest at the
+    /// top, so the order is reversed here rather than by changing a query
+    /// `deck-builder` certified. Ties inside one second break on identifier,
+    /// so a save immediately after a restore reads in the order it happened.
+    public func loadVersions() async {
+        guard let versioning, let deck else { return }
+        do {
+            let stored = try await versioning.versions(of: deck.id)
+            versions = stored.sorted { left, right in
+                left.createdAt == right.createdAt
+                    ? left.id > right.id
+                    : left.createdAt > right.createdAt
+            }
+            hasLoadedVersions = true
+            if let selectedVersion, !versions.contains(where: { $0.id == selectedVersion }) {
+                self.selectedVersion = nil
+            }
+        } catch {
+            lastFailure = "Cronologia non leggibile: \(error)"
+        }
+    }
+
+    /// Marks where the deck is now.
+    ///
+    /// The label may be absent: an unnamed version reads as the moment it was
+    /// taken, which is what `DeckVersionRow` does with it.
+    public func saveVersion(named label: String? = nil) async {
+        guard let versioning, let deck else { return }
+        let trimmed = label?.trimmingCharacters(in: .whitespacesAndNewlines)
+        do {
+            try await versioning.saveVersion(
+                of: deck.id, label: (trimmed?.isEmpty ?? true) ? nil : trimmed)
+            lastFailure = nil
+            await loadVersions()
+        } catch {
+            lastFailure = "Versione non salvata: \(error)"
+        }
+    }
+
+    /// Opens the panel on the history, reading it first so it never appears
+    /// empty and then fills.
+    public func showHistory() async {
+        guard canUseHistory else { return }
+        await loadVersions()
+        isHistoryVisible = true
+        if selectedVersion == nil { selectedVersion = versions.first?.id }
+    }
+
+    public func hideHistory() {
+        isHistoryVisible = false
+    }
+
+    public func selectVersion(_ versionID: Int64) {
+        selectedVersion = versionID
+    }
+
+    /// Steps through the versions. Stops at the ends rather than wrapping, so
+    /// a held key does not cycle silently — the same rule the card detail's
+    /// focus stepping follows.
+    public func moveVersionSelection(by offset: Int) {
+        guard !versions.isEmpty else { return }
+        let identifiers = versions.map(\.id)
+        guard let current = selectedVersion,
+              let index = identifiers.firstIndex(of: current) else {
+            selectedVersion = identifiers.first
+            return
+        }
+        let next = min(max(index + offset, 0), identifiers.count - 1)
+        selectedVersion = identifiers[next]
+    }
+
+    /// The version a restore was asked for and not yet confirmed.
+    ///
+    /// A restore replaces every card in a deck, and a deck is the one thing
+    /// here that cannot be downloaded again, so the model asks rather than acts.
+    public private(set) var pendingRestore: Int64?
+
+    public func askRestore(_ versionID: Int64) {
+        pendingRestore = versionID
+    }
+
+    public func cancelRestore() {
+        pendingRestore = nil
+    }
+
+    /// Restores the version the user confirmed.
+    ///
+    /// It **takes** the identifier rather than reading `pendingRestore`: an
+    /// alert's dismissal clears the armed value before the button's action
+    /// runs, which is how a confirmed deletion quietly did nothing in the deck
+    /// library, the deck editor, the collection screen and the settings window.
+    public func confirmRestore(_ versionID: Int64) async {
+        guard let versioning, let deck else { return }
+        pendingRestore = nil
+
+        guard versions.first(where: { $0.id == versionID })?.isReadable ?? true else {
+            lastFailure = "Questa versione non è leggibile e non può essere ripristinata."
+            return
+        }
+
+        do {
+            try await versioning.restoreVersion(versionID, of: deck.id)
+            lastFailure = nil
+        } catch {
+            lastFailure = "Ripristino non riuscito: \(error)"
+        }
+
+        // Reloaded either way, through the same path every edit uses: what is
+        // shown must be what is stored, whichever of the two the user expected.
+        await load(deckID: deck.id)
+        await loadVersions()
     }
 
     // MARK: - Undo

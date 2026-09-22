@@ -89,7 +89,8 @@ struct RootView: View {
         } detail: {
             Detail(
                 section: section, environment: environment, selectedDeck: selectedDeck,
-                language: preferences.cardLanguage)
+                language: preferences.cardLanguage,
+                onDeckChanged: { await library.load() })
         }
         .task(id: section) { await reloadDecks() }
         .fileImporter(isPresented: $importing,
@@ -125,12 +126,17 @@ struct RootView: View {
         }
 
         var lines: [String] = []
+        // The deck to open is the one just imported, not the last row of the
+        // list: `allDecks()` orders by name, so `.last` is whichever deck
+        // happens to sort last alphabetically.
+        var lastImported: Int64?
         for url in urls {
             let scoped = url.startAccessingSecurityScopedResource()
             defer { if scoped { url.stopAccessingSecurityScopedResource() } }
 
             do {
                 let result = try await environment.deckImporter.importFile(at: url)
+                lastImported = result.deck.id
                 var line = "\(result.deck.name): \(result.deck.totalCount) carte, "
                     + "formato proposto \(result.proposedFormat.rawValue)"
                 if !result.isComplete {
@@ -143,7 +149,7 @@ struct RootView: View {
         }
 
         await reloadDecks()
-        selectedDeck = library.decks.last?.id
+        if let lastImported { selectedDeck = lastImported }
         importReport = lines.joined(separator: "\n")
     }
 }
@@ -297,7 +303,7 @@ private struct Sidebar: View {
                 Button { selectedDeck = deck.id } label: {
                     VStack(alignment: .leading, spacing: 1) {
                         Text(deck.name).font(Theme.Typography.body)
-                        Text("\(deck.format.rawValue) · \(deck.count(in: .main)) carte")
+                        Text("\(deck.format.rawValue) · \(deck.totalCount) carte")
                             .font(Theme.Typography.caption)
                             .foregroundStyle(Theme.Palette.secondaryText)
                     }
@@ -446,6 +452,9 @@ private struct Detail: View {
     let environment: CatalogEnvironment
     let selectedDeck: Int64?
     let language: CardLanguage
+    /// Called when an edit lands, so the library list is re-read rather than
+    /// left showing the counts from whenever the section last changed.
+    let onDeckChanged: () async -> Void
 
     var body: some View {
         switch section {
@@ -485,7 +494,9 @@ private struct Detail: View {
     @ViewBuilder
     private var deckDetail: some View {
         if let selectedDeck {
-            DeckEditorLoader(environment: environment, deckID: selectedDeck)
+            DeckEditorLoader(
+                environment: environment, deckID: selectedDeck,
+                onDeckChanged: onDeckChanged)
                 .id(selectedDeck)
         } else {
             ContentUnavailableView(
@@ -628,21 +639,36 @@ private struct AnalyticsLoader: View {
 
     @State private var model = AnalyticsViewModel()
     @State private var loaded = false
+    /// Why there is nothing to show. A failed read used to leave the spinner
+    /// turning for ever, which says "working" about something that has
+    /// already stopped.
+    @State private var failure: String?
 
     var body: some View {
         Group {
             if loaded {
                 AnalyticsView(model: model)
+            } else if let failure {
+                ContentUnavailableView(
+                    "Statistiche non disponibili",
+                    systemImage: "chart.bar",
+                    description: Text(failure))
             } else {
                 ProgressView()
             }
         }
         .task {
-            guard let deck = try? await environment.deckRepository.deck(with: deckID),
-                  let index = try? await environment.deckRepository.cardIndex(for: deck)
-            else { return }
-            model.load(deck: deck, index: index)
-            loaded = true
+            do {
+                guard let deck = try await environment.deckRepository.deck(with: deckID) else {
+                    failure = "Il mazzo non è più nell'archivio."
+                    return
+                }
+                let index = try await environment.deckRepository.cardIndex(for: deck)
+                model.load(deck: deck, index: index)
+                loaded = true
+            } catch {
+                failure = "Il mazzo non è stato letto: \(error)"
+            }
         }
     }
 }
@@ -727,6 +753,7 @@ private struct BanlistSection: View {
 private struct DeckEditorLoader: View {
     let environment: CatalogEnvironment
     let deckID: Int64
+    let onDeckChanged: () async -> Void
 
     @State private var model: DeckEditorViewModel?
     @State private var panel: CardDetailViewModel?
@@ -741,6 +768,13 @@ private struct DeckEditorLoader: View {
                         guard let card else { return }
                         Task { await panel.select(card, language: model.language) }
                     }
+                    // Every edit reloads the editor's own deck, and this is
+                    // what tells the library about it. Without it the list
+                    // kept the counts it had when the section last changed,
+                    // so a deck could be edited and still read 40 carte.
+                    .onChange(of: model.deck) { _, _ in
+                        Task { await onDeckChanged() }
+                    }
             } else {
                 ProgressView()
             }
@@ -751,7 +785,11 @@ private struct DeckEditorLoader: View {
                 validator: environment.deckValidator,
                 catalogue: environment.repository,
                 editing: environment.deckRepository,
-                reader: environment.repository)
+                reader: environment.repository,
+                // Versions live on the same repository: the storage was
+                // written and certified with `deck-builder`, and this is the
+                // first thing to call it.
+                history: environment.deckRepository)
             self.panel = CardDetailViewModel(
                 loader: CardDetailLoader(
                     catalog: environment.repository,

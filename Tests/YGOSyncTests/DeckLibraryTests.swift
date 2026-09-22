@@ -235,6 +235,30 @@ struct DeckLibraryTests {
 @MainActor
 @Suite("Deck library list freshness")
 struct DeckLibraryFreshnessTests {
+    /// The list is ordered by name, so the deck that arrived last is not the
+    /// last row. An importer that opened `decks.last` opened whichever deck
+    /// sorts last alphabetically instead of the one it had just read.
+    ///
+    /// This is why a caller has to keep the identifier it was handed rather
+    /// than looking for it at the end of the list.
+    @Test func theNewestDeckIsNotTheLastRowOfTheList() async throws {
+        let (_, decks) = try RealDeck.seededRepository()
+        let model = DeckLibraryViewModel(repository: decks, listing: decks, library: decks)
+        await model.load()
+
+        _ = try #require(await model.createDeck(named: "Zoodiac", format: .tcg))
+        let newest = try #require(await model.createDeck(named: "Aggro", format: .tcg))
+
+        #expect(model.decks.map(\.name) == ["Aggro", "Zoodiac"])
+        #expect(model.decks.last?.id != newest.id, "l'ultima riga è alfabetica, non la più recente")
+        #expect(model.decks.first?.id == newest.id)
+
+        // Case does not rescue it either: the ordering is case-insensitive.
+        let lower = try #require(await model.createDeck(named: "aaa burn", format: .tcg))
+        #expect(model.decks.map(\.name) == ["aaa burn", "Aggro", "Zoodiac"])
+        #expect(model.decks.last?.id != lower.id)
+    }
+
     /// The sidebar showed a copy of the list, refreshed when its *count*
     /// changed. A rename does not change how many decks there are, so the old
     /// name stayed on screen; a delete did change it, but the copy was one
@@ -272,6 +296,54 @@ struct DeckLibraryFreshnessTests {
         #expect(await model.confirmDeletion())
         #expect(model.decks.map(\.id) == [first.id])
         #expect(model.decks.map(\.name) == ["Rinominato"])
+    }
+
+    /// The same class of staleness, one step further out: the sidebar showed
+    /// the counts it had read when the section last changed, and an edit made
+    /// in the editor never reached it, so a deck could be filled and still
+    /// read the number it had before.
+    ///
+    /// The model's part of it is that a reload after an outside write reports
+    /// the new figures, and that the figure covers every section rather than
+    /// the main deck alone — an extra-deck card is an edit the user can see
+    /// happen and expects to count.
+    @Test func reloadingAfterAnEditReportsTheNewCountAcrossEverySection() async throws {
+        let (database, decks) = try RealDeck.seededRepository()
+        let model = DeckLibraryViewModel(repository: decks, listing: decks, library: decks)
+        await model.load()
+        let deck = try #require(await model.createDeck(named: "In modifica", format: .tcg))
+        #expect(model.decks.first?.totalCount == 0)
+
+        let editor = DeckEditorViewModel(
+            repository: decks, validator: DeckValidator(),
+            catalogue: SQLiteCardRepository(database: database), editing: decks)
+        await editor.load(deckID: deck.id)
+
+        let main = try #require(editor.candidates.first { !$0.frame.belongsInExtraDeck })
+        await editor.add(main, to: .main)
+
+        // Before the reload the list is still holding the old figures: that is
+        // the bug, and it is what the reload has to undo.
+        #expect(model.decks.first?.totalCount == 0)
+        await model.load()
+        #expect(model.decks.first?.totalCount == 1)
+        #expect(model.decks.first?.count(in: .main) == 1)
+
+        // An extra-deck card moves the figure too, which counting only the
+        // main deck would have hidden.
+        let extra = try #require(editor.candidates.first { $0.frame.belongsInExtraDeck })
+        await editor.add(extra, to: .extra)
+        await model.load()
+        #expect(model.decks.first?.totalCount == 2)
+        #expect(model.decks.first?.count(in: .main) == 1)
+        #expect(model.decks.first?.count(in: .extra) == 1)
+
+        // And a removal is visible the same way.
+        let artwork = try #require(main.artworks.first)
+        await editor.remove(artwork: artwork, from: .main)
+        await model.load()
+        #expect(model.decks.first?.totalCount == 1)
+        #expect(model.decks.first?.count(in: .main) == 0)
     }
 
     /// Deleting the deck that is open has to be possible, which is the case

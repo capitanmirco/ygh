@@ -5,11 +5,11 @@ portfolio. Single local user, offline-first, no accounts and no server.
 
 ## Status
 
-Fifteen specifications are complete and certified: `card-catalog`,
+Sixteen specifications are complete and certified: `card-catalog`,
 `deck-builder`, `collection-tracker`, `deck-analytics`, `pricing`,
 `banlist-history`, `card-detail`, `deck-editing`, `visual-language`,
 `catalog-filters`, `italian-vocabulary`, `deck-card-preview`,
-`deck-authoring`, `banlist-browser` and `app-preferences`. The application acquires the full card pool, keeps it current,
+`deck-authoring`, `banlist-browser`, `app-preferences` and `deck-history`. The application acquires the full card pool, keeps it current,
 stores artwork locally, and browses, builds, tracks, analyses and prices
 entirely offline.
 
@@ -55,6 +55,14 @@ are deleted only after a confirmation, and neither reaches deck or collection
 data. The window the application opens on and the language cards read in are
 remembered between launches.
 
+A deck's history is reachable at last. `deck-builder` certified the storage for
+saved versions and nothing ever called it: the editor now marks where a deck
+is, lists what was marked newest first, and puts a deck back to any of it after
+a confirmation — with the replaced state kept as a version of its own, so a
+recovery is not itself a one-way door. A version whose snapshot cannot be read
+is listed as unreadable rather than as a deck with no cards, and restoring a
+version belonging to another deck is refused before anything is deleted.
+
 ## Requirements
 
 - macOS 27 or later, Apple silicon
@@ -66,7 +74,7 @@ remembered between launches.
 
 ```bash
 swift build          # builds every module and the app executable
-swift test           # 586 tests across 16 targets
+swift test           # 615 tests across 16 targets
 swift run YGODeckManager
 ```
 

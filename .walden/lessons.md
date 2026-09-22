@@ -15,3 +15,8 @@ Review this file before non-trivial work when the current request matches past m
 - Lesson: A SQL builder that assembles clauses out of order must collect each clause's arguments separately and concatenate them in placeholder order. Positional binding fails silently: the statement still executes and returns a plausible-looking empty or wrong result rather than an error, so only a test asserting real result membership catches it.
 - Guardrail: In any query builder, keep one argument accumulator per clause and concatenate them in the exact order the clauses appear in the emitted SQL. Test every filter both alone and in combination with a filter that contributes a JOIN, asserting set membership rather than merely a non-zero count.
 
+### 2026-09-22T11:33:03Z | deck-history | execute
+- Trigger: Writing Tests/YGOSyncTests/DeckHistoryTests.swift with a shell heredoc silently overwrote a tracked file of the same name holding deck-editing's four certified undo and redo proofs. It surfaced only as 'verification failed for deck-editing: 5' in the final portfolio verify.
+- Lesson: A new test file's name can already be taken by another spec's certified proofs, and a heredoc write destroys them without a word. The suite name is also the proof's selector, so the collision breaks the other spec's verification rather than merely duplicating a name.
+- Guardrail: Before writing any test file, check that the path is untracked and the suite name is unused: git ls-files --error-unmatch <path> and grep -rn 'struct <SuiteName>' Tests/. Use an editing tool that refuses to clobber, and confirm the file's @Test count rose rather than reset.
+

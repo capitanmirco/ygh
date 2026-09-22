@@ -35,8 +35,16 @@ public struct SettingsView: View {
                 get: { model.pending != nil },
                 set: { if !$0 { model.cancel() } })
         ) {
+            // Captured while the alert is built, not read inside the action:
+            // tapping a button dismisses the alert first, and the dismissal
+            // runs this binding's setter, so `pending` is already nil by the
+            // time the action runs.
+            let pending = model.pending
             Button("Annulla", role: .cancel) { model.cancel() }
-            Button("Elimina", role: .destructive) { Task { await model.confirm() } }
+            Button("Elimina", role: .destructive) {
+                guard let pending else { return }
+                Task { await model.confirm(pending) }
+            }
         } message: {
             Text(alertMessage)
         }

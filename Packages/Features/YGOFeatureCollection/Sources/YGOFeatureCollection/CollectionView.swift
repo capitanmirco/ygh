@@ -35,14 +35,26 @@ public struct CollectionView: View {
         }
         .background(Theme.Palette.surface)
         .task { await model.reload() }
+        // The card is captured while the dialog is built rather than read
+        // inside the button's action. Tapping a dialog button dismisses it
+        // first, and the dismissal runs this binding's setter — so the action
+        // found nothing pending and `removeConfirmedCard()` returned without
+        // removing anything. The same trap the deck deletions already paid for.
         .confirmationDialog(
             "Rimuovere tutte le copie?",
             isPresented: Binding(
                 get: { model.pendingRemoval != nil },
                 set: { if !$0 { model.cancelRemoval() } })
         ) {
+            let pending = model.pendingRemoval
             Button("Rimuovi", role: .destructive) {
-                Task { await model.removeConfirmedCard() }
+                guard let pending else { return }
+                Task {
+                    // Re-assert what the user confirmed: the dismissal has
+                    // already cleared it.
+                    model.requestRemoval(of: pending)
+                    await model.removeConfirmedCard()
+                }
             }
             Button("Annulla", role: .cancel) { model.cancelRemoval() }
         } message: {

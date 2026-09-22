@@ -130,6 +130,43 @@ struct EditingAffordanceTests {
         #expect(model.pendingRemoval == nil)
     }
 
+    /// The dialog's dismissal clears the pending card before the button's
+    /// action runs, so the action found nothing to remove and removed nothing.
+    ///
+    /// The screen's remedy is to capture the card while the dialog is built
+    /// and re-assert it. This is that sequence: cleared first, as a dismissal
+    /// clears it, and the removal still has to happen.
+    @Test func reAssertingTheCapturedCardRemovesIt() async throws {
+        let rig = try CollectionFixture.seeded()
+        let model = CollectionViewModel(
+            reader: rig.collection, writer: rig.collection,
+            catalogue: SQLiteCardRepository(database: rig.database))
+
+        let card = CardIdentifier(try #require(rig.cards.first).id)
+        await model.recordCopy(of: card)
+        await model.recordCopy(of: card)
+        #expect(model.items.first?.copies == 2)
+
+        model.requestRemoval(of: card)
+        let captured = try #require(model.pendingRemoval)
+
+        // What the dismissal does before the action runs.
+        model.cancelRemoval()
+        #expect(model.pendingRemoval == nil)
+
+        // Reading the model here is what removed nothing.
+        await model.removeConfirmedCard()
+        await model.reload()
+        #expect(model.items.first?.copies == 2, "senza riaffermare non si cancella niente")
+
+        // Re-asserting what the user confirmed removes it.
+        model.requestRemoval(of: captured)
+        await model.removeConfirmedCard()
+        await model.reload()
+        #expect(model.items.isEmpty)
+        #expect(model.pendingRemoval == nil)
+    }
+
     /// A read-only collection screen cannot change anything, which is what the
     /// optional writer is for.
     @Test func aReadOnlyScreenCannotChangeTheCollection() async throws {
