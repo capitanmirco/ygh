@@ -34,8 +34,36 @@ public struct SQLiteDeckRepository: DeckRepository, DeckBuilding {
     public func allDecks() async throws -> [Deck] {
         try await database.read { db in
             let ids = try Int64.fetchAll(db, sql: "SELECT id FROM deck ORDER BY name COLLATE NOCASE")
-            return try ids.compactMap { try Self.loadDeck($0, from: db) }
+            // One read for the whole list's tags rather than one per deck:
+            // loading each deck already costs a query for its slots, and two
+            // words per deck must not double that.
+            let tags = try Self.tagsByDeck(in: db)
+            return try ids.compactMap { try Self.loadDeck($0, from: db, tags: tags[$0] ?? []) }
         }
+    }
+
+    /// Every deck's tags in one statement, grouped by deck.
+    static func tagsByDeck(in db: Database) throws -> [Int64: [String]] {
+        var grouped: [Int64: [String]] = [:]
+        for row in try Row.fetchAll(db, sql: """
+            SELECT deck_tag.deck_id AS deck_id, tag.name AS name FROM deck_tag
+            JOIN tag ON tag.id = deck_tag.tag_id
+            ORDER BY tag.name COLLATE NOCASE
+            """) {
+            let deckID: Int64 = row["deck_id"]
+            let name: String = row["name"]
+            grouped[deckID, default: []].append(name)
+        }
+        return grouped
+    }
+
+    /// One deck's tags, for the single-deck read.
+    static func tags(of deckID: Int64, in db: Database) throws -> [String] {
+        try String.fetchAll(db, sql: """
+            SELECT tag.name FROM deck_tag
+            JOIN tag ON tag.id = deck_tag.tag_id
+            WHERE deck_tag.deck_id = ? ORDER BY tag.name COLLATE NOCASE
+            """, arguments: [deckID])
     }
 
     /// Builds the rules' view of a deck's own cards in one query.
@@ -236,7 +264,9 @@ public struct SQLiteDeckRepository: DeckRepository, DeckBuilding {
         return parsed
     }
 
-    static func loadDeck(_ id: Int64, from db: Database) throws -> Deck? {
+    static func loadDeck(
+        _ id: Int64, from db: Database, tags preloaded: [String]? = nil
+    ) throws -> Deck? {
         guard let row = try Row.fetchOne(db, sql: "SELECT * FROM deck WHERE id = ?",
                                          arguments: [id]) else { return nil }
 
@@ -259,6 +289,7 @@ public struct SQLiteDeckRepository: DeckRepository, DeckBuilding {
             folderID: row["folder_id"],
             notes: row["notes"],
             slots: slots,
+            tags: try preloaded ?? Self.tags(of: id, in: db),
             createdAt: date(row["created_at"]),
             updatedAt: date(row["updated_at"]))
     }

@@ -30,15 +30,89 @@ public final class DeckLibraryViewModel {
     /// be the same object, and failed silently when they were not.
     private let listing: any DeckRepository
     private let library: (any DeckLibraryWriting)?
+    /// Formats and tags. Absent means the list can show labels but not change
+    /// them, the same way `library` absent means it cannot delete.
+    private let labels: (any DeckLabelling)?
+
+    /// The tag the list is narrowed to, or nil for the whole library.
+    public private(set) var tagFilter: String?
+    /// Every tag in use, for offering rather than retyping.
+    public private(set) var availableTags: [String] = []
 
     public init(
         repository: any DeckBuilding,
         listing: any DeckRepository,
-        library: (any DeckLibraryWriting)? = nil
+        library: (any DeckLibraryWriting)? = nil,
+        labels: (any DeckLabelling)? = nil
     ) {
         self.repository = repository
         self.listing = listing
         self.library = library
+        self.labels = labels
+    }
+
+    public var canLabel: Bool { labels != nil }
+
+    /// The formats a deck can be set to.
+    public var offeredFormats: [CardFormat] { CardFormat.allCases }
+
+    /// The list as it should be read right now.
+    ///
+    /// A predicate over `decks` rather than a second array kept in step: this
+    /// project has already been bitten by a stale copy of this list, which
+    /// missed a rename because renaming does not change how many decks there
+    /// are.
+    public var visibleDecks: [Deck] {
+        guard let tagFilter else { return decks }
+        return decks.filter { deck in
+            deck.tags.contains { $0.caseInsensitiveCompare(tagFilter) == .orderedSame }
+        }
+    }
+
+    /// True when a filter is hiding everything. Different from an empty
+    /// library, and the interface has to say so differently.
+    public var filterMatchesNothing: Bool {
+        tagFilter != nil && visibleDecks.isEmpty && !decks.isEmpty
+    }
+
+    public func filter(byTag tag: String?) {
+        tagFilter = tag
+    }
+
+    public func loadTags() async {
+        guard let labels else { return }
+        availableTags = (try? await labels.allTags()) ?? []
+    }
+
+    public func addTag(_ name: String, to deckID: Int64) async {
+        guard let labels else { return }
+        do {
+            try await labels.addTag(name, to: deckID)
+            lastFailure = nil
+        } catch {
+            lastFailure = "Etichetta non aggiunta: \(error)"
+        }
+        await reload()
+        await loadTags()
+    }
+
+    public func removeTag(_ name: String, from deckID: Int64) async {
+        guard let labels else { return }
+        do {
+            try await labels.removeTag(name, from: deckID)
+            lastFailure = nil
+        } catch {
+            lastFailure = "Etichetta non rimossa: \(error)"
+        }
+        await reload()
+        await loadTags()
+        // A filter on a tag nobody carries any more would hide everything for
+        // a reason the user cannot see.
+        if let tagFilter, !availableTags.contains(where: {
+            $0.caseInsensitiveCompare(tagFilter) == .orderedSame
+        }) {
+            self.tagFilter = nil
+        }
     }
 
     /// The list as stored. Clears a previous failure, because this is the
@@ -134,7 +208,11 @@ public final class DeckLibraryViewModel {
 
     public func changeFormat(_ deckID: Int64, to format: CardFormat) async {
         do {
-            try await repository.changeFormat(deckID, to: format)
+            if let labels {
+                try await labels.changeFormat(deckID, to: format)
+            } else {
+                try await repository.changeFormat(deckID, to: format)
+            }
             await reload()
             lastFailure = nil
         } catch {

@@ -90,6 +90,10 @@ public final class DeckEditorViewModel {
     /// editor is open, this one outlives the application.
     private let versioning: (any DeckHistorying)?
 
+    /// The deck's format and tags. Absent means the editor shows the labels
+    /// but cannot change them, the same shape as `editing` and `history`.
+    private let labelling: (any DeckLabelling)?
+
     public init(
         repository: any DeckBuilding,
         validator: any DeckValidating,
@@ -97,6 +101,7 @@ public final class DeckEditorViewModel {
         editing: (any DeckEditing)? = nil,
         reader: (any CardRepository)? = nil,
         history: (any DeckHistorying)? = nil,
+        labels: (any DeckLabelling)? = nil,
         language: CardLanguage = .italian
     ) {
         self.repository = repository
@@ -105,6 +110,7 @@ public final class DeckEditorViewModel {
         self.editing = editing
         self.reader = reader
         self.versioning = history
+        self.labelling = labels
         self.language = language
     }
 
@@ -380,6 +386,61 @@ public final class DeckEditorViewModel {
     public func changeSelectedQuantity(by delta: Int) async {
         guard let item = selectedItem else { return }
         await setQuantity(item.quantity + delta, of: item.id, in: item.section)
+    }
+
+    // MARK: - Labels
+
+    public var canLabel: Bool { labelling != nil && deck != nil }
+
+    /// The deck's tags, as stored with it.
+    public var tags: [String] { deck?.tags ?? [] }
+
+    /// Every tag in use anywhere, for offering rather than retyping.
+    public private(set) var availableTags: [String] = []
+
+    public func loadTags() async {
+        guard let labelling else { return }
+        availableTags = (try? await labelling.allTags()) ?? []
+    }
+
+    /// Sets the deck's format, and re-judges it against the new one.
+    ///
+    /// The reload is the same `load(deckID:)` every edit uses, which is what
+    /// makes the new verdict immediate rather than a second refresh path. A
+    /// deck can become illegal here; nothing is removed from it when it does.
+    public func changeFormat(to format: CardFormat) async {
+        guard let labelling, let deck else { return }
+        do {
+            try await labelling.changeFormat(deck.id, to: format)
+            lastFailure = nil
+        } catch {
+            lastFailure = "Formato non cambiato: \(error)"
+        }
+        await load(deckID: deck.id)
+    }
+
+    public func addTag(_ name: String) async {
+        guard let labelling, let deck else { return }
+        do {
+            try await labelling.addTag(name, to: deck.id)
+            lastFailure = nil
+        } catch {
+            lastFailure = "Etichetta non aggiunta: \(error)"
+        }
+        await load(deckID: deck.id)
+        await loadTags()
+    }
+
+    public func removeTag(_ name: String) async {
+        guard let labelling, let deck else { return }
+        do {
+            try await labelling.removeTag(name, from: deck.id)
+            lastFailure = nil
+        } catch {
+            lastFailure = "Etichetta non rimossa: \(error)"
+        }
+        await load(deckID: deck.id)
+        await loadTags()
     }
 
     // MARK: - Version history

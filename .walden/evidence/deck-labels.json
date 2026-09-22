@@ -1,9 +1,9 @@
 {
   "schema_version": "v1alpha2",
-  "feature": "deck-authoring",
+  "feature": "deck-labels",
   "tasks": {
     "1": {
-      "task_fingerprint": "sha256:a49d2ae9bb11cc7dccd9c5b1e23438a31a34f7ff2b42adfe822b9b5009a9d9a9",
+      "task_fingerprint": "sha256:2cf0ecefd61309a5e29963b1ba6f81d239c5518138e8d242f6619a64ebc0b2b1",
       "task_fingerprint_scheme": "walden/task-definition/v2",
       "execution": {
         "origin": "verify",
@@ -13,9 +13,9 @@
         "before_code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746",
         "after_code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746"
       },
-      "requirements_fingerprint": "sha256:1291899a09eac46d2fae4c19d2993f54d7be27e369f7633f0dd70f56fe88a3a8",
-      "design_fingerprint": "sha256:fa69d709d91d22a8e941b371884200a107346ca08e6d8dc3e48faa877bc03ea2",
-      "tasks_fingerprint": "sha256:b4c23aa5277abdd44725f6444685893c255f1f3a2af2af7d845acdc5fa7bf04f",
+      "requirements_fingerprint": "sha256:635ecd967b2b569596eff9edf4f2a9976618991dde28cb8d50485dc0793ac2b4",
+      "design_fingerprint": "sha256:e31a525d4bf020a0b2143cd0ff647fe5fbdb0ec4266339e91ce7a1dfd89ce294",
+      "tasks_fingerprint": "sha256:f8423b9b37268bbf0a9b1629ff21c86cb469438077d9a3a5470a24df7c6bf42d",
       "code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746",
       "profile": {
         "platform": "darwin/arm64",
@@ -30,62 +30,40 @@
             "swift",
             "test",
             "--filter",
-            "DeckLibraryTests"
+            "DeckTagStorageTests"
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:1bb9e3bd28de8b13cc7acc11548e84f726d8262ebdfcbbfd8d5a9526cd75e642"
+          "output_digest": "sha256:4a94d9a85fb561b7e062a98c98b1ed70f4504a21e03c383fe7d7ea5f6a8fb273"
         },
         {
           "command": [
             "swift",
             "test",
             "--filter",
-            "DeckLibraryTests"
+            "DeckTagStorageTests"
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:158cc2f3e754bdef458bcccfd7d24402931aa1e2e60f5d2d9d200fbca0741393"
+          "output_digest": "sha256:92cd948834b1f4b8f930ff2fc1a66737a38566dead4da7c73c496107ce92051e"
         },
         {
           "command": [
             "swift",
             "test",
             "--filter",
-            "DeckLibraryTests"
+            "DeckTagStorageTests"
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:a3ecdd6ae0d8942e955ad82c4f2ee737a1b2a34b5a9c656568c6191fbd7f5b4e"
-        },
-        {
-          "command": [
-            "swift",
-            "test",
-            "--filter",
-            "DeckLibraryTests"
-          ],
-          "expected_exit": 0,
-          "actual_exit": 0,
-          "output_digest": "sha256:6341c3a48bb1a7c520d5c3ff80e35c4bfb7ad834b54b67ff3b55fdf5038dfe50"
-        },
-        {
-          "command": [
-            "swift",
-            "test",
-            "--filter",
-            "DeckLibraryTests"
-          ],
-          "expected_exit": 0,
-          "actual_exit": 0,
-          "output_digest": "sha256:8686fd2914a34d213c82de7daa80fa2a4c03b6dd52bf20b9e4ce17b3b21ba27e"
+          "output_digest": "sha256:206c720957785aa3371f657914a57bd8f5a44e6f84f8a821514eb68bbfabb28d"
         }
       ],
       "result": "passed",
-      "verified_at": "2026-09-22T13:10:29Z"
+      "verified_at": "2026-09-22T13:21:44Z"
     },
     "2": {
-      "task_fingerprint": "sha256:e1e22f1e202accdc982732c192083e55ee528c5e97956770b67b2682d2a1eec5",
+      "task_fingerprint": "sha256:9391d78152cb83a449415505cb7f157818f003b3eb6b121460066a56a8a78bda",
       "task_fingerprint_scheme": "walden/task-definition/v2",
       "execution": {
         "origin": "verify",
@@ -95,9 +73,9 @@
         "before_code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746",
         "after_code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746"
       },
-      "requirements_fingerprint": "sha256:1291899a09eac46d2fae4c19d2993f54d7be27e369f7633f0dd70f56fe88a3a8",
-      "design_fingerprint": "sha256:fa69d709d91d22a8e941b371884200a107346ca08e6d8dc3e48faa877bc03ea2",
-      "tasks_fingerprint": "sha256:b4c23aa5277abdd44725f6444685893c255f1f3a2af2af7d845acdc5fa7bf04f",
+      "requirements_fingerprint": "sha256:635ecd967b2b569596eff9edf4f2a9976618991dde28cb8d50485dc0793ac2b4",
+      "design_fingerprint": "sha256:e31a525d4bf020a0b2143cd0ff647fe5fbdb0ec4266339e91ce7a1dfd89ce294",
+      "tasks_fingerprint": "sha256:f8423b9b37268bbf0a9b1629ff21c86cb469438077d9a3a5470a24df7c6bf42d",
       "code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746",
       "profile": {
         "platform": "darwin/arm64",
@@ -112,51 +90,51 @@
             "swift",
             "test",
             "--filter",
-            "DeckAuthoringExportTests"
+            "DeckTagStorageTests"
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:03a4ac41eb2b724859605aa8188111deb205638c9b7d1c76285e0bb5418b48f2"
+          "output_digest": "sha256:eabbd224059819e82b2fdac41cb11456e1837b1fb9db220d8e9cafff114daff7"
         },
         {
           "command": [
             "swift",
             "test",
             "--filter",
-            "DeckAuthoringExportTests"
+            "DeckTagStorageTests"
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:21bb7d6ecb53c90b0adc7bfbbcc228af22e97ce717f1c495b4fd88daf3861040"
+          "output_digest": "sha256:81064562d4c8d93722a450d11b6c8cee05367129830f274be12d8c11c22ad625"
         },
         {
           "command": [
             "swift",
             "test",
             "--filter",
-            "DeckAuthoringExportTests"
+            "DeckTagStorageTests"
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:3f9017428811e96d3da3434793121bd2c969e040132fe85698492d755cf10a9a"
+          "output_digest": "sha256:b7b4173981ad3e5fbecb71e2d2a0c0ce6bc7cbf34e34f6379364c32766b07017"
         },
         {
           "command": [
             "swift",
             "test",
             "--filter",
-            "DeckAuthoringExportTests"
+            "DeckTagStorageTests"
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:30dd05dde64f991948b535576f37dd42c7ee5e5ba6445374a340afb4fcdd9efc"
+          "output_digest": "sha256:11ce89691ac533f496feb753eb288bd17a85a4f579f6c76cce25d8af8def8c85"
         }
       ],
       "result": "passed",
-      "verified_at": "2026-09-22T13:10:29Z"
+      "verified_at": "2026-09-22T13:21:44Z"
     },
     "3": {
-      "task_fingerprint": "sha256:5c70f2eb15d8ad4b7e208b96dc60b9248ffa974f42af731bedeb83632e2b79bd",
+      "task_fingerprint": "sha256:740f507c5722c7cb3132c2b737ad89e2749767a9841081c70b33d39a5cdfbec8",
       "task_fingerprint_scheme": "walden/task-definition/v2",
       "execution": {
         "origin": "verify",
@@ -166,9 +144,9 @@
         "before_code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746",
         "after_code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746"
       },
-      "requirements_fingerprint": "sha256:1291899a09eac46d2fae4c19d2993f54d7be27e369f7633f0dd70f56fe88a3a8",
-      "design_fingerprint": "sha256:fa69d709d91d22a8e941b371884200a107346ca08e6d8dc3e48faa877bc03ea2",
-      "tasks_fingerprint": "sha256:b4c23aa5277abdd44725f6444685893c255f1f3a2af2af7d845acdc5fa7bf04f",
+      "requirements_fingerprint": "sha256:635ecd967b2b569596eff9edf4f2a9976618991dde28cb8d50485dc0793ac2b4",
+      "design_fingerprint": "sha256:e31a525d4bf020a0b2143cd0ff647fe5fbdb0ec4266339e91ce7a1dfd89ce294",
+      "tasks_fingerprint": "sha256:f8423b9b37268bbf0a9b1629ff21c86cb469438077d9a3a5470a24df7c6bf42d",
       "code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746",
       "profile": {
         "platform": "darwin/arm64",
@@ -183,29 +161,29 @@
             "swift",
             "test",
             "--filter",
-            "DeckAuthoringExportTests"
+            "DeckTagStorageTests"
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:4e9d452656283c685afeda20855f299516eb80816a632bb86a8f8872850df501"
+          "output_digest": "sha256:de309e05d66b6efd642992c8090554aebdd953901b263c464e7a9786a532b5a3"
         },
         {
           "command": [
             "swift",
             "test",
             "--filter",
-            "DeckAuthoringExportTests"
+            "DeckTagStorageTests"
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:3cc8e9e7761c8176846f40bca33d92daa0502acaf046bcfe06231210f0e505f0"
+          "output_digest": "sha256:a45f954aea0bbb1c9bcbbdaedf70e9f5b0eb61be6ea3fd8daac75b16c49938c1"
         }
       ],
       "result": "passed",
-      "verified_at": "2026-09-22T13:10:29Z"
+      "verified_at": "2026-09-22T13:21:44Z"
     },
     "4": {
-      "task_fingerprint": "sha256:f507a81d7c1525db9aeb285963b5b66d45b0be35d707941d8894344e40ee25ce",
+      "task_fingerprint": "sha256:f340864b05fe8e4f9d389906248a68bc7af9b37fe1fe6fbc64248806283fcd29",
       "task_fingerprint_scheme": "walden/task-definition/v2",
       "execution": {
         "origin": "verify",
@@ -215,9 +193,9 @@
         "before_code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746",
         "after_code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746"
       },
-      "requirements_fingerprint": "sha256:1291899a09eac46d2fae4c19d2993f54d7be27e369f7633f0dd70f56fe88a3a8",
-      "design_fingerprint": "sha256:fa69d709d91d22a8e941b371884200a107346ca08e6d8dc3e48faa877bc03ea2",
-      "tasks_fingerprint": "sha256:b4c23aa5277abdd44725f6444685893c255f1f3a2af2af7d845acdc5fa7bf04f",
+      "requirements_fingerprint": "sha256:635ecd967b2b569596eff9edf4f2a9976618991dde28cb8d50485dc0793ac2b4",
+      "design_fingerprint": "sha256:e31a525d4bf020a0b2143cd0ff647fe5fbdb0ec4266339e91ce7a1dfd89ce294",
+      "tasks_fingerprint": "sha256:f8423b9b37268bbf0a9b1629ff21c86cb469438077d9a3a5470a24df7c6bf42d",
       "code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746",
       "profile": {
         "platform": "darwin/arm64",
@@ -232,40 +210,73 @@
             "swift",
             "test",
             "--filter",
-            "DeckRoundTripTests"
+            "DeckLabelTests"
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:95d0fbe247894cdb0d2160822ff1896ddca81e3d9b42f43020eabaec299d28d7"
+          "output_digest": "sha256:67320f86c6cf2a180fe73eada1f0c1fc64d4f5536f23432dd1419081f204e785"
         },
         {
           "command": [
             "swift",
             "test",
             "--filter",
-            "DeckRoundTripTests"
+            "DeckLabelTests"
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:d010fb7d227df67c7e8eb871bce1fbbfe6e58b65da60305bb0bd05d5298a344e"
+          "output_digest": "sha256:6cb07803f031e40ab895c62c28de3396f8f8f272d7a5e834d7fd744b2a9a7d52"
         },
         {
           "command": [
             "swift",
             "test",
             "--filter",
-            "DeckRoundTripTests"
+            "DeckLabelTests"
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:a3f7a696099cc28f83ea14876202030dffff735d81dd142112c63a48c7501bb2"
+          "output_digest": "sha256:206c1515163f06c005cbffb65d3ca1056f46d40873d914b34a5f58a53d99fd2d"
+        },
+        {
+          "command": [
+            "swift",
+            "test",
+            "--filter",
+            "DeckLabelTests"
+          ],
+          "expected_exit": 0,
+          "actual_exit": 0,
+          "output_digest": "sha256:8996d46b30d2102d19dda3292b866234b56df257cffd73d2bb672560cb691574"
+        },
+        {
+          "command": [
+            "swift",
+            "test",
+            "--filter",
+            "DeckLabelTests"
+          ],
+          "expected_exit": 0,
+          "actual_exit": 0,
+          "output_digest": "sha256:93c9cafabfc98b5ecbcb1cf98dc23a33dbd3e4b724456b5e4dfb3e8564ea5e1c"
+        },
+        {
+          "command": [
+            "swift",
+            "test",
+            "--filter",
+            "DeckLabelTests"
+          ],
+          "expected_exit": 0,
+          "actual_exit": 0,
+          "output_digest": "sha256:48989ded5efad4a7840f200922881842df4accff3f57e18275aa3921c94b51ff"
         }
       ],
       "result": "passed",
-      "verified_at": "2026-09-22T13:10:29Z"
+      "verified_at": "2026-09-22T13:21:44Z"
     },
     "5": {
-      "task_fingerprint": "sha256:a2ef9ed9559ccad8959f4e2f3cbc088f8aab05aaf9bc806ab7c033e475787e45",
+      "task_fingerprint": "sha256:d5bf389f1f24c8d8ad3f0ed71f90e6246e08a8a476f2aa64b329802d80e3a4c7",
       "task_fingerprint_scheme": "walden/task-definition/v2",
       "execution": {
         "origin": "verify",
@@ -275,9 +286,9 @@
         "before_code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746",
         "after_code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746"
       },
-      "requirements_fingerprint": "sha256:1291899a09eac46d2fae4c19d2993f54d7be27e369f7633f0dd70f56fe88a3a8",
-      "design_fingerprint": "sha256:fa69d709d91d22a8e941b371884200a107346ca08e6d8dc3e48faa877bc03ea2",
-      "tasks_fingerprint": "sha256:b4c23aa5277abdd44725f6444685893c255f1f3a2af2af7d845acdc5fa7bf04f",
+      "requirements_fingerprint": "sha256:635ecd967b2b569596eff9edf4f2a9976618991dde28cb8d50485dc0793ac2b4",
+      "design_fingerprint": "sha256:e31a525d4bf020a0b2143cd0ff647fe5fbdb0ec4266339e91ce7a1dfd89ce294",
+      "tasks_fingerprint": "sha256:f8423b9b37268bbf0a9b1629ff21c86cb469438077d9a3a5470a24df7c6bf42d",
       "code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746",
       "profile": {
         "platform": "darwin/arm64",
@@ -292,51 +303,62 @@
             "swift",
             "test",
             "--filter",
-            "DeckLibraryTests"
+            "DeckLabelTests"
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:d0b27e1392b83bb1e7ec4b74e6243e9bc2c389c253424c83cd764ed3e94bd495"
+          "output_digest": "sha256:1d6ca399c81bb2a6f8b555d7bebdffad3cedd345f3d8be5cc61a8a449b4c8da2"
         },
         {
           "command": [
             "swift",
             "test",
             "--filter",
-            "DeckLibraryTests"
+            "DeckLabelTests"
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:3ac8bc432f4c03ade63c808b7f4b8cbb8be24a30cd3c93458fe187b8fd01fc56"
+          "output_digest": "sha256:c79c1c3b12f7eee56ee726db1a33726f93d6934d07b60da6beac7bcc4104f2ce"
         },
         {
           "command": [
             "swift",
             "test",
             "--filter",
-            "DeckLibraryTests"
+            "DeckLabelTests"
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:8e9020cbfdbd1ee2c579a1be52403d7a2f58a261dad730c969fdc981652b6abe"
+          "output_digest": "sha256:02074ac365fd74bd404226a4a89076c2b52de729e9d953127e195eadbf96c32c"
         },
         {
           "command": [
             "swift",
             "test",
             "--filter",
-            "DeckLibraryTests"
+            "DeckLabelTests"
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:2edfcb60034597289eea3b67dec121b0827bde1104158dacc8b1df22423e1aef"
+          "output_digest": "sha256:279cf5150d13b6ca51e902ad3b3c0c0467587ded2ac491f652825686470968f5"
+        },
+        {
+          "command": [
+            "swift",
+            "test",
+            "--filter",
+            "DeckLabelTests"
+          ],
+          "expected_exit": 0,
+          "actual_exit": 0,
+          "output_digest": "sha256:958c9377fa3c4ff54fe883959040ba78dff0ae04ea9f6f68a4c5717385e3fce2"
         }
       ],
       "result": "passed",
-      "verified_at": "2026-09-22T13:10:29Z"
+      "verified_at": "2026-09-22T13:21:44Z"
     },
     "6": {
-      "task_fingerprint": "sha256:e349462901efe7ead2ffd36a6f3f2caa88fbdd242e7f4e2ff32b53b78ff26bd1",
+      "task_fingerprint": "sha256:c25b2f3c535c349b2e7ac166112807e468bebdd79c570f26f6d5d3ed7c3e0645",
       "task_fingerprint_scheme": "walden/task-definition/v2",
       "execution": {
         "origin": "verify",
@@ -346,9 +368,9 @@
         "before_code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746",
         "after_code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746"
       },
-      "requirements_fingerprint": "sha256:1291899a09eac46d2fae4c19d2993f54d7be27e369f7633f0dd70f56fe88a3a8",
-      "design_fingerprint": "sha256:fa69d709d91d22a8e941b371884200a107346ca08e6d8dc3e48faa877bc03ea2",
-      "tasks_fingerprint": "sha256:b4c23aa5277abdd44725f6444685893c255f1f3a2af2af7d845acdc5fa7bf04f",
+      "requirements_fingerprint": "sha256:635ecd967b2b569596eff9edf4f2a9976618991dde28cb8d50485dc0793ac2b4",
+      "design_fingerprint": "sha256:e31a525d4bf020a0b2143cd0ff647fe5fbdb0ec4266339e91ce7a1dfd89ce294",
+      "tasks_fingerprint": "sha256:f8423b9b37268bbf0a9b1629ff21c86cb469438077d9a3a5470a24df7c6bf42d",
       "code_identity": "sha256:47735f8ef368c39f0f23d8499c79540632428579ccb03ba36a31acb454788746",
       "profile": {
         "platform": "darwin/arm64",
@@ -358,6 +380,36 @@
         "xcode": "Xcode 27.0\nBuild version 27A266a"
       },
       "steps": [
+        {
+          "command": [
+            "sh",
+            "-c",
+            "grep -q 'formatPicker' App/YGODeckManagerApp.swift \u0026\u0026 echo FORMAT_PICKER_PRESENT"
+          ],
+          "expected_exit": 0,
+          "actual_exit": 0,
+          "output_digest": "sha256:0d6e330137f02df2bacdc1783e741b524dcb1e90395c310469cedce7bfc37350"
+        },
+        {
+          "command": [
+            "sh",
+            "-c",
+            "grep -q 'DeckLabelControls' Packages/Features/YGOFeatureDeckBuilder/Sources/YGOFeatureDeckBuilder/DeckEditorView.swift \u0026\u0026 echo LABEL_CONTROLS_PRESENT"
+          ],
+          "expected_exit": 0,
+          "actual_exit": 0,
+          "output_digest": "sha256:dd839838b25be08e3f6794ae9ed217d45b7298f45bd8244a42978a2f8d9a5bcb"
+        },
+        {
+          "command": [
+            "sh",
+            "-c",
+            "grep -q 'labels:' App/YGODeckManagerApp.swift \u0026\u0026 echo LABELLING_PORT_BOUND"
+          ],
+          "expected_exit": 0,
+          "actual_exit": 0,
+          "output_digest": "sha256:b98cb2ea830ccac9e15d3eb0693c79affcf77749a83d144997f6f2ee7bfcd42c"
+        },
         {
           "command": [
             "swift",
@@ -365,66 +417,11 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:ba9aa0dd90831fe3c6d832bd921cd42837cb97ceea95cd18b0b640e626185039"
-        },
-        {
-          "command": [
-            "swift",
-            "test",
-            "--filter",
-            "DeckAuthoringBudgetTests"
-          ],
-          "expected_exit": 0,
-          "actual_exit": 0,
-          "output_digest": "sha256:61f96fddd249352eeb49bee2b7f34a9d0325eb0328d3c843e14fec0bdc4627eb"
-        },
-        {
-          "command": [
-            "swift",
-            "test",
-            "--filter",
-            "DeckAuthoringBudgetTests"
-          ],
-          "expected_exit": 0,
-          "actual_exit": 0,
-          "output_digest": "sha256:320510c17616c20dfd8a1e779a2846249a7b7afc7bc4b0c82d50ff690e6bd761"
-        },
-        {
-          "command": [
-            "swift",
-            "test",
-            "--filter",
-            "DeckAuthoringBudgetTests"
-          ],
-          "expected_exit": 0,
-          "actual_exit": 0,
-          "output_digest": "sha256:7f893e4d5dc03c1e4b5911b1bf3dd45a39fc5ccc45dc7c7e97d27e518ea95731"
-        },
-        {
-          "command": [
-            "swift",
-            "test",
-            "--filter",
-            "DeckAuthoringBudgetTests"
-          ],
-          "expected_exit": 0,
-          "actual_exit": 0,
-          "output_digest": "sha256:4ae5d067b3c71f534c2f70a8ce2d94a47905ee53162fa5878ddac2d9cbaa7609"
-        },
-        {
-          "command": [
-            "swift",
-            "test",
-            "--filter",
-            "DeckAuthoringBudgetTests"
-          ],
-          "expected_exit": 0,
-          "actual_exit": 0,
-          "output_digest": "sha256:79c9c616f18dd54dd47377853f762a6aa02d75f8df44d8eb1d61b2fc77f436e4"
+          "output_digest": "sha256:86f1a32da3fd8edd57fccb8d9d4bff4b1e87692e95aa20929bd79a5ae096d97e"
         }
       ],
       "result": "passed",
-      "verified_at": "2026-09-22T13:10:29Z"
+      "verified_at": "2026-09-22T13:21:44Z"
     }
   }
 }

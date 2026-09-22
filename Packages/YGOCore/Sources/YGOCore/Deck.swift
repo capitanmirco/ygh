@@ -61,6 +61,9 @@ public struct Deck: Hashable, Sendable, Identifiable {
     public var folderID: Int64?
     public var notes: String?
     public var slots: [DeckSlot]
+    /// What the user calls this deck, in their own words. Ordered by name and
+    /// holding no duplicates, however the user typed them.
+    public var tags: [String]
     public var createdAt: Date
     public var updatedAt: Date
 
@@ -71,6 +74,7 @@ public struct Deck: Hashable, Sendable, Identifiable {
         folderID: Int64? = nil,
         notes: String? = nil,
         slots: [DeckSlot] = [],
+        tags: [String] = [],
         createdAt: Date,
         updatedAt: Date
     ) {
@@ -80,6 +84,7 @@ public struct Deck: Hashable, Sendable, Identifiable {
         self.folderID = folderID
         self.notes = notes
         self.slots = slots
+        self.tags = tags
         self.createdAt = createdAt
         self.updatedAt = updatedAt
     }

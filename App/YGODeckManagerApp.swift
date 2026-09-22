@@ -69,7 +69,8 @@ struct RootView: View {
         _library = State(wrappedValue: DeckLibraryViewModel(
             repository: environment.deckRepository,
             listing: environment.deckRepository,
-            library: environment.deckRepository))
+            library: environment.deckRepository,
+            labels: environment.deckRepository))
     }
 
     /// The sections live in `YGOCore` so that a preference can name one.
@@ -115,6 +116,8 @@ struct RootView: View {
     /// there are.
     private func reloadDecks() async {
         await library.load()
+        // The filter menu offers what is in use, so it is read with the list.
+        await library.loadTags()
     }
 
     /// A .ydk carries no format, so the importer proposes the one the deck
@@ -299,16 +302,25 @@ private struct Sidebar: View {
             }
             .buttonStyle(.plain)
 
-            ForEach(library.decks) { deck in
+            tagFilterMenu
+
+            if library.filterMatchesNothing {
+                Text("Nessun mazzo porta questa etichetta.")
+                    .font(Theme.Typography.caption)
+                    .foregroundStyle(Theme.Palette.secondaryText)
+            }
+
+            ForEach(library.visibleDecks) { deck in
                 Button { selectedDeck = deck.id } label: {
                     VStack(alignment: .leading, spacing: 1) {
                         Text(deck.name).font(Theme.Typography.body)
-                        Text("\(deck.format.rawValue) · \(deck.totalCount) carte")
+                        Text(deckSubtitle(deck))
                             .font(Theme.Typography.caption)
                             .foregroundStyle(Theme.Palette.secondaryText)
                     }
                 }
                 .buttonStyle(.plain)
+                .accessibilityLabel("\(deck.name), \(deckSubtitle(deck))")
                 .contextMenu { deckMenu(deck) }
             }
         }
@@ -352,7 +364,44 @@ private struct Sidebar: View {
     /// Everything a deck can have done to it, in one place: the sidebar is
     /// where a deck is chosen, so it is where a deck is managed.
     @ViewBuilder
+    /// What a deck row says under its name: its format, its size, and the
+    /// words the user put on it.
+    private func deckSubtitle(_ deck: Deck) -> String {
+        let head = "\(deck.format.rawValue) · \(deck.totalCount) carte"
+        return deck.tags.isEmpty ? head : head + " · " + deck.tags.joined(separator: ", ")
+    }
+
+    @ViewBuilder
+    private var tagFilterMenu: some View {
+        if !library.availableTags.isEmpty {
+            Menu {
+                Button("Tutti i mazzi") { library.filter(byTag: nil) }
+                Divider()
+                ForEach(library.availableTags, id: \.self) { tag in
+                    Button(tag) { library.filter(byTag: tag) }
+                }
+            } label: {
+                Label(library.tagFilter ?? "Tutti i mazzi", systemImage: "line.3.horizontal.decrease")
+            }
+            .accessibilityLabel(library.tagFilter.map { "Filtro: \($0)" } ?? "Nessun filtro")
+        }
+    }
+
+    @ViewBuilder
+    private func formatPicker(_ deck: Deck) -> some View {
+        Picker("Formato", selection: Binding(
+            get: { deck.format },
+            set: { format in Task { await library.changeFormat(deck.id, to: format) } })
+        ) {
+            ForEach(CardFormat.allCases, id: \.self) { format in
+                Text(format.rawValue).tag(format)
+            }
+        }
+    }
+
+    @ViewBuilder
     private func deckMenu(_ deck: Deck) -> some View {
+        formatPicker(deck)
         Button("Rinomina…") {
             renameText = deck.name
             renamingDeck = deck.id
@@ -789,7 +838,8 @@ private struct DeckEditorLoader: View {
                 // Versions live on the same repository: the storage was
                 // written and certified with `deck-builder`, and this is the
                 // first thing to call it.
-                history: environment.deckRepository)
+                history: environment.deckRepository,
+                labels: environment.deckRepository)
             self.panel = CardDetailViewModel(
                 loader: CardDetailLoader(
                     catalog: environment.repository,

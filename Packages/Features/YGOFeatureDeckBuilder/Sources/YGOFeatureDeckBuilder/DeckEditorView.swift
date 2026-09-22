@@ -158,9 +158,9 @@ public struct DeckEditorView: View {
             VStack(alignment: .leading, spacing: Theme.Spacing.hair) {
                 Text(model.deck?.name ?? "Nessun mazzo")
                     .font(Theme.Typography.sectionTitle)
-                Text(model.deck?.format.rawValue ?? "—")
-                    .font(Theme.Typography.caption)
-                    .foregroundStyle(Theme.Palette.secondaryText)
+                // The format is no longer a label to read: it is the control
+                // that sets it, beside the deck's own words for itself.
+                DeckLabelControls(model: model)
             }
 
             Spacer()

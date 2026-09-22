@@ -6,7 +6,7 @@ import YGOCore
 ///
 /// `DeckVersion` and `DeckHistorying` live in `YGOCore`: a feature module has
 /// to name them, and a feature module must not import this one.
-extension SQLiteDeckRepository: DeckHistorying {
+extension SQLiteDeckRepository: DeckHistorying, DeckLabelling {
     // MARK: - Folders
 
     public func createFolder(named name: String, inside parent: Int64? = nil) async throws -> Int64 {
@@ -45,13 +45,67 @@ extension SQLiteDeckRepository: DeckHistorying {
 
     // MARK: - Tags
 
+    /// Puts a label on a deck.
+    ///
+    /// `tag.name` is `UNIQUE` and SQLite compares text case-sensitively, so
+    /// *Goat* and *goat* would be two rows. The rule lives in the lookup
+    /// rather than in the schema, because a column collation would be a
+    /// migration and this is a label, not a structure.
+    ///
+    /// The first spelling wins: a duelist who tagged a deck *Edison* should
+    /// not find *edison* on it afterwards because somebody else typed it that
+    /// way later.
     public func addTag(_ name: String, to deckID: Int64) async throws {
+        let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return }
+
         try await writer.write { db in
-            try db.execute(sql: "INSERT OR IGNORE INTO tag (name) VALUES (?)", arguments: [name])
-            let tagID = try Int64.fetchOne(db, sql: "SELECT id FROM tag WHERE name = ?",
-                                           arguments: [name])
+            let existing = try Int64.fetchOne(
+                db, sql: "SELECT id FROM tag WHERE name = ? COLLATE NOCASE",
+                arguments: [trimmed])
+
+            let tagID: Int64
+            if let existing {
+                tagID = existing
+            } else {
+                try db.execute(sql: "INSERT INTO tag (name) VALUES (?)", arguments: [trimmed])
+                tagID = db.lastInsertedRowID
+            }
+
             try db.execute(sql: "INSERT OR IGNORE INTO deck_tag (deck_id, tag_id) VALUES (?, ?)",
                            arguments: [deckID, tagID])
+        }
+    }
+
+    /// Takes a label off one deck.
+    ///
+    /// The tag itself stays: every other deck carrying it is untouched, and it
+    /// remains available to add again. That is also why this asks nothing —
+    /// a label costs two seconds to retype, and a confirmation on every
+    /// removal is how labelling becomes something nobody does.
+    public func removeTag(_ name: String, from deckID: Int64) async throws {
+        let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return }
+
+        try await writer.write { db in
+            try db.execute(sql: """
+                DELETE FROM deck_tag WHERE deck_id = ? AND tag_id IN (
+                    SELECT id FROM tag WHERE name = ? COLLATE NOCASE
+                )
+                """, arguments: [deckID, trimmed])
+        }
+    }
+
+    /// Every label in use, for offering rather than retyping.
+    ///
+    /// A tag no deck carries is not offered: it is a row nobody asked to keep.
+    public func allTags() async throws -> [String] {
+        try await writer.read { db in
+            try String.fetchAll(db, sql: """
+                SELECT DISTINCT tag.name FROM tag
+                JOIN deck_tag ON deck_tag.tag_id = tag.id
+                ORDER BY tag.name COLLATE NOCASE
+                """)
         }
     }
 

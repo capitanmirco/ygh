@@ -174,3 +174,16 @@ public protocol StorageInventorying: Sendable {
     func purgeArtwork() async throws
     func deleteBackup() async throws
 }
+
+/// The two labels a deck carries: the format it is played in, and whatever
+/// else the user calls it.
+///
+/// `changeFormat` was written and certified with `deck-builder` and only ever
+/// lacked a caller; it joins the protocol rather than being written again.
+public protocol DeckLabelling: Sendable {
+    func changeFormat(_ deckID: Int64, to format: CardFormat) async throws
+    func addTag(_ name: String, to deckID: Int64) async throws
+    func removeTag(_ name: String, from deckID: Int64) async throws
+    /// Every label in use, for offering rather than retyping.
+    func allTags() async throws -> [String]
+}

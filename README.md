@@ -5,11 +5,11 @@ portfolio. Single local user, offline-first, no accounts and no server.
 
 ## Status
 
-Sixteen specifications are complete and certified: `card-catalog`,
+Seventeen specifications are complete and certified: `card-catalog`,
 `deck-builder`, `collection-tracker`, `deck-analytics`, `pricing`,
 `banlist-history`, `card-detail`, `deck-editing`, `visual-language`,
 `catalog-filters`, `italian-vocabulary`, `deck-card-preview`,
-`deck-authoring`, `banlist-browser`, `app-preferences` and `deck-history`. The application acquires the full card pool, keeps it current,
+`deck-authoring`, `banlist-browser`, `app-preferences`, `deck-history` and `deck-labels`. The application acquires the full card pool, keeps it current,
 stores artwork locally, and browses, builds, tracks, analyses and prices
 entirely offline.
 
@@ -63,6 +63,13 @@ recovery is not itself a one-way door. A version whose snapshot cannot be read
 is listed as unreadable rather than as a deck with no cards, and restoring a
 version belonging to another deck is refused before anything is deleted.
 
+A deck's two labels are its own. The format decides every restriction reported
+against it and was fixed at import until now: it is a chooser in the deck's
+context menu and in the editor's header, and changing it re-judges the deck at
+once without removing a card. Tags are free words the user puts on a deck,
+shown beside the format, removable one deck at a time, and usable to narrow the
+list. Spelling and spaces make one tag, and the first spelling is kept.
+
 ## Requirements
 
 - macOS 27 or later, Apple silicon
@@ -74,7 +81,7 @@ version belonging to another deck is refused before anything is deleted.
 
 ```bash
 swift build          # builds every module and the app executable
-swift test           # 615 tests across 16 targets
+swift test           # 635 tests across 16 targets
 swift run YGODeckManager
 ```
 
