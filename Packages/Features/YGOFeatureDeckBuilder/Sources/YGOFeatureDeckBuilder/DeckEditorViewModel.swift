@@ -432,10 +432,7 @@ public final class DeckEditorViewModel {
     ///
     /// A format naming no date means the newest list that format has.
     public func impliedList(for format: CardFormat) -> BanlistRevision? {
-        guard let implied = format.impliedList else { return nil }
-        let ofFormat = availableLists.filter { $0.format == implied.format }
-        guard let date = implied.effectiveDate else { return ofFormat.first }
-        return ofFormat.first { $0.effectiveDate == date } ?? ofFormat.first
+        BanlistRevision.implied(for: format, in: availableLists)
     }
 
     /// Judges the open deck against a list, leaving the deck untouched.

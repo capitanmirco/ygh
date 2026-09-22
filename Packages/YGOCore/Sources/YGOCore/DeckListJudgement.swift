@@ -118,3 +118,21 @@ public extension CardFormat {
         }
     }
 }
+
+
+public extension BanlistRevision {
+    /// The list a format is played under, chosen from what is stored.
+    ///
+    /// The rule lives here rather than on a view model because two screens
+    /// ask it now: the editor's legality panel and the statistics.
+    static func implied(
+        for format: CardFormat, in stored: [BanlistRevision]
+    ) -> BanlistRevision? {
+        guard let implied = format.impliedList else { return nil }
+        let ofFormat = stored
+            .filter { $0.format == implied.format }
+            .sorted { $0.effectiveDate > $1.effectiveDate }
+        guard let date = implied.effectiveDate else { return ofFormat.first }
+        return ofFormat.first { $0.effectiveDate == date } ?? ofFormat.first
+    }
+}

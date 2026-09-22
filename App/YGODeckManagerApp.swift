@@ -527,17 +527,11 @@ private struct Detail: View {
 
     /// Analytics needs a deck. Without one there is nothing to be statistical
     /// about, and saying so beats an empty chart.
-    @ViewBuilder
+    /// The statistics choose their own subject, so they are reachable with
+    /// nothing selected: the window's selection is where they start, not what
+    /// they are stuck with.
     private var analyticsDetail: some View {
-        if let selectedDeck {
-            AnalyticsLoader(environment: environment, deckID: selectedDeck)
-                .id(selectedDeck)
-        } else {
-            ContentUnavailableView(
-                "Nessun mazzo scelto",
-                systemImage: "chart.bar",
-                description: Text("Scegli un mazzo dalla sezione Mazzi per vederne le statistiche."))
-        }
+        AnalyticsLoader(environment: environment, deckID: selectedDeck)
     }
 
     @ViewBuilder
@@ -684,9 +678,10 @@ struct LaunchFailureView: View {
 /// Loads a deck and its card snapshot, then hands both to the analytics view.
 private struct AnalyticsLoader: View {
     let environment: CatalogEnvironment
-    let deckID: Int64
+    /// Where to start. Nil is allowed: the screen offers every deck.
+    let deckID: Int64?
 
-    @State private var model = AnalyticsViewModel()
+    @State private var model: AnalyticsViewModel?
     @State private var loaded = false
     /// Why there is nothing to show. A failed read used to leave the spinner
     /// turning for ever, which says "working" about something that has
@@ -695,7 +690,7 @@ private struct AnalyticsLoader: View {
 
     var body: some View {
         Group {
-            if loaded {
+            if loaded, let model {
                 AnalyticsView(model: model)
             } else if let failure {
                 ContentUnavailableView(
@@ -707,17 +702,22 @@ private struct AnalyticsLoader: View {
             }
         }
         .task {
-            do {
-                guard let deck = try await environment.deckRepository.deck(with: deckID) else {
-                    failure = "Il mazzo non è più nell'archivio."
-                    return
-                }
-                let index = try await environment.deckRepository.cardIndex(for: deck)
-                model.load(deck: deck, index: index)
-                loaded = true
-            } catch {
-                failure = "Il mazzo non è stato letto: \(error)"
+            // The screen chooses its own subject now: the window's selection
+            // is where it starts, not what it is stuck with.
+            let model = AnalyticsViewModel(
+                library: environment.deckRepository,
+                judging: environment.banlistHistory,
+                lists: environment.banlistHistory)
+            await model.start(on: deckID)
+            await model.loadLists()
+            await model.measureAgainstImpliedList()
+
+            guard model.deck != nil || model.libraryIsEmpty else {
+                failure = "Il mazzo non è stato letto."
+                return
             }
+            self.model = model
+            loaded = true
         }
     }
 }

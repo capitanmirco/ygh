@@ -14,6 +14,10 @@ public struct AnalyticsView: View {
 
     public var body: some View {
         VStack(spacing: 0) {
+            AnalyticsControls(model: model)
+                .padding(.horizontal, Theme.Spacing.regular)
+                .padding(.vertical, Theme.Spacing.snug)
+            Divider()
             header
             Divider()
             HSplitView {

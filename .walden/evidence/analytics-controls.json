@@ -1,9 +1,9 @@
 {
   "schema_version": "v1alpha2",
-  "feature": "italian-vocabulary",
+  "feature": "analytics-controls",
   "tasks": {
     "1": {
-      "task_fingerprint": "sha256:354a337becd5faa7cd40fef460f3f20a785a06e94dbea55cb4f40216eabba228",
+      "task_fingerprint": "sha256:db1b315fa8457f3c18982597d32bf85c67a2f4a835fa17aa0c22b5dbb730494f",
       "task_fingerprint_scheme": "walden/task-definition/v2",
       "execution": {
         "origin": "verify",
@@ -13,9 +13,9 @@
         "before_code_identity": "sha256:9bc94b278f98673b02e2a62a49497a4e9e0cf8b07ccd6ab1ef74b3c38f535fbc",
         "after_code_identity": "sha256:9bc94b278f98673b02e2a62a49497a4e9e0cf8b07ccd6ab1ef74b3c38f535fbc"
       },
-      "requirements_fingerprint": "sha256:afd132cb84ad26ed6102499cf612fb09600acbb663b5da1935ce67f05249697f",
-      "design_fingerprint": "sha256:e5d0205e7358148d9b55de44699cb621620272aeac4dc569c48362f48089494a",
-      "tasks_fingerprint": "sha256:3f187a06ef7d443e85c284fe5beba1c74c2baa634d72c0cdf5654afb7056f58a",
+      "requirements_fingerprint": "sha256:d6672ecc8eaf465a1c5fe87c63a11d2a924bb68518778f96d6cfa3fbb3757fca",
+      "design_fingerprint": "sha256:5bcdf52a908fa6b030051370666cd9c58ff2b0fee4009098ecf163e82c652c9e",
+      "tasks_fingerprint": "sha256:207bd6094d26a00d5306d5140e0cc97108f3908eceb77a2f405d0753d1b7cb55",
       "code_identity": "sha256:9bc94b278f98673b02e2a62a49497a4e9e0cf8b07ccd6ab1ef74b3c38f535fbc",
       "profile": {
         "platform": "darwin/arm64",
@@ -30,62 +30,51 @@
             "swift",
             "test",
             "--filter",
-            "VocabularyTests"
+            "AnalyticsControlsTests"
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:d5dcb8ce0b3f9fb5e43f29ca08d5f88f76160e06638a0bccb1cf9084b58bb107"
+          "output_digest": "sha256:9b3d0864adb98141883a3a1efbc719ed88f5d39eb8e233ca209a16b03a485330"
         },
         {
           "command": [
             "swift",
             "test",
             "--filter",
-            "VocabularyTests"
+            "AnalyticsControlsTests"
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:86ad9d19fac86bbba00ef5df0a58bb7ab56ff97efbfe4db1e561437f053f82de"
+          "output_digest": "sha256:f47d1553c90199a8ee97d8b4388c1436081a16b6fd9a792cb267418a89d5680d"
         },
         {
           "command": [
             "swift",
             "test",
             "--filter",
-            "VocabularyTests"
+            "AnalyticsControlsTests"
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:6abf900e411e66057000f4ae421baec427fa10447063d83c86a0b06ba02e86e7"
+          "output_digest": "sha256:fa997ebc3d548d8405a00d59e7f62b2a18ff50c7d79694f54493ca901809409c"
         },
         {
           "command": [
             "swift",
             "test",
             "--filter",
-            "VocabularyTests"
+            "AnalyticsControlsTests"
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:321c833ce63c99245387fb5c8a8115ac5ea91d3d09767c53f14a259186bf3689"
-        },
-        {
-          "command": [
-            "swift",
-            "test",
-            "--filter",
-            "VocabularyTests"
-          ],
-          "expected_exit": 0,
-          "actual_exit": 0,
-          "output_digest": "sha256:f635c5781130dbb59aa46d67c2f6d72063ff90794427d3d745491e5dace4c092"
+          "output_digest": "sha256:150f4a77bd13855a1bb33d64c3b9f91cc61cd311dd1994d346a0c4e9c77e5228"
         }
       ],
       "result": "passed",
-      "verified_at": "2026-09-22T15:35:02Z"
+      "verified_at": "2026-09-22T14:55:07Z"
     },
     "2": {
-      "task_fingerprint": "sha256:8f0ea419a684afbd067e3cb2a50e24dd054ebf65b1b0e6370de68864b24fd3b0",
+      "task_fingerprint": "sha256:ec4f01a0bdc8c4cca86eb3d1e04d120ee810cc6c6dcc521c11441bd268f94200",
       "task_fingerprint_scheme": "walden/task-definition/v2",
       "execution": {
         "origin": "verify",
@@ -95,9 +84,9 @@
         "before_code_identity": "sha256:9bc94b278f98673b02e2a62a49497a4e9e0cf8b07ccd6ab1ef74b3c38f535fbc",
         "after_code_identity": "sha256:9bc94b278f98673b02e2a62a49497a4e9e0cf8b07ccd6ab1ef74b3c38f535fbc"
       },
-      "requirements_fingerprint": "sha256:afd132cb84ad26ed6102499cf612fb09600acbb663b5da1935ce67f05249697f",
-      "design_fingerprint": "sha256:e5d0205e7358148d9b55de44699cb621620272aeac4dc569c48362f48089494a",
-      "tasks_fingerprint": "sha256:3f187a06ef7d443e85c284fe5beba1c74c2baa634d72c0cdf5654afb7056f58a",
+      "requirements_fingerprint": "sha256:d6672ecc8eaf465a1c5fe87c63a11d2a924bb68518778f96d6cfa3fbb3757fca",
+      "design_fingerprint": "sha256:5bcdf52a908fa6b030051370666cd9c58ff2b0fee4009098ecf163e82c652c9e",
+      "tasks_fingerprint": "sha256:207bd6094d26a00d5306d5140e0cc97108f3908eceb77a2f405d0753d1b7cb55",
       "code_identity": "sha256:9bc94b278f98673b02e2a62a49497a4e9e0cf8b07ccd6ab1ef74b3c38f535fbc",
       "profile": {
         "platform": "darwin/arm64",
@@ -112,62 +101,62 @@
             "swift",
             "test",
             "--filter",
-            "VocabularyCoverageTests"
+            "AnalyticsControlsTests"
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:e8fa6abeef22cbec684e88376fc187f5cedf30b12673908adf293c7e9647dc8d"
+          "output_digest": "sha256:bd8f8da823317b95b6d45b05f3f8996fc148032b5b4a33e21d8375b52137c9b8"
         },
         {
           "command": [
             "swift",
             "test",
             "--filter",
-            "VocabularyCoverageTests"
+            "AnalyticsControlsTests"
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:11d04f984ac143804a04b7b50d730b7a31b6f78efcd9d6cb8e94de15fd6c9933"
+          "output_digest": "sha256:900fd3099c6ecea4db04820c6e9ab88bebf264358d7f6fabde3b40ea544e8992"
         },
         {
           "command": [
             "swift",
             "test",
             "--filter",
-            "VocabularyCoverageTests"
+            "AnalyticsControlsTests"
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:2e821d8c30fffa623a7cadc422c51edc1fbd1de68fec2a9ee10ad691c0eb5d00"
+          "output_digest": "sha256:452b507fbc0985207c8d9bf7a0b7bc4ebd13062c3464781c97a155457c9c34da"
         },
         {
           "command": [
             "swift",
             "test",
             "--filter",
-            "VocabularyCoverageTests"
+            "AnalyticsControlsTests"
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:e807ffde42c7dd8643f7cad15416e9e5f1a828a3474a2f71994e08bbd6283157"
+          "output_digest": "sha256:ef352fc7bb6baea174d8b2a2ac4d6309be6108efca771aeab4f0dc9118931135"
         },
         {
           "command": [
             "swift",
             "test",
             "--filter",
-            "VocabularyCoverageTests"
+            "AnalyticsControlsTests"
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:1262068e577bc7c2169c23e2c9a08721d69f1ae0956f0c44349e8742ad49c735"
+          "output_digest": "sha256:151c086cc5c253fd5ce953e0b85f495a314c38d2cfe0592408865e79f94263a6"
         }
       ],
       "result": "passed",
-      "verified_at": "2026-09-22T15:35:02Z"
+      "verified_at": "2026-09-22T14:55:07Z"
     },
     "3": {
-      "task_fingerprint": "sha256:bbb02c5d62891e412428c1aa87f00864842ee8303f193c457bf3f9f5bb55fedb",
+      "task_fingerprint": "sha256:95df97b6f58f5b29113cbf0295ac3c02a20625dfec4decc73c31ae99bf55ae70",
       "task_fingerprint_scheme": "walden/task-definition/v2",
       "execution": {
         "origin": "verify",
@@ -177,9 +166,9 @@
         "before_code_identity": "sha256:9bc94b278f98673b02e2a62a49497a4e9e0cf8b07ccd6ab1ef74b3c38f535fbc",
         "after_code_identity": "sha256:9bc94b278f98673b02e2a62a49497a4e9e0cf8b07ccd6ab1ef74b3c38f535fbc"
       },
-      "requirements_fingerprint": "sha256:afd132cb84ad26ed6102499cf612fb09600acbb663b5da1935ce67f05249697f",
-      "design_fingerprint": "sha256:e5d0205e7358148d9b55de44699cb621620272aeac4dc569c48362f48089494a",
-      "tasks_fingerprint": "sha256:3f187a06ef7d443e85c284fe5beba1c74c2baa634d72c0cdf5654afb7056f58a",
+      "requirements_fingerprint": "sha256:d6672ecc8eaf465a1c5fe87c63a11d2a924bb68518778f96d6cfa3fbb3757fca",
+      "design_fingerprint": "sha256:5bcdf52a908fa6b030051370666cd9c58ff2b0fee4009098ecf163e82c652c9e",
+      "tasks_fingerprint": "sha256:207bd6094d26a00d5306d5140e0cc97108f3908eceb77a2f405d0753d1b7cb55",
       "code_identity": "sha256:9bc94b278f98673b02e2a62a49497a4e9e0cf8b07ccd6ab1ef74b3c38f535fbc",
       "profile": {
         "platform": "darwin/arm64",
@@ -194,29 +183,62 @@
             "swift",
             "test",
             "--filter",
-            "VocabularyUsageTests"
+            "AnalyticsControlsTests"
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:c591396d9627fdd9535a81a7f7d995ad581b3ad9a84c1180ea3e85ab76655653"
+          "output_digest": "sha256:ca8fb4b02ec1118b0a9dc21d7136007d43e296d9c6fbf94115febb9f150a15f5"
         },
         {
           "command": [
             "swift",
             "test",
             "--filter",
-            "VocabularyUsageTests"
+            "AnalyticsControlsTests"
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:aed7bb67b259aec99084c9da4d9547e5c6052330fc32adb4b4e45ecb20d0be1d"
+          "output_digest": "sha256:86fc2d4573e6bc682f624bbed6911c8b3c98485c23aa7e2b08164b5cc77e3937"
+        },
+        {
+          "command": [
+            "swift",
+            "test",
+            "--filter",
+            "AnalyticsControlsTests"
+          ],
+          "expected_exit": 0,
+          "actual_exit": 0,
+          "output_digest": "sha256:2dc4a1b1298a35d417fcc1b19c5c000781098229caf8eaf5ec3b24cfd55adeb2"
+        },
+        {
+          "command": [
+            "swift",
+            "test",
+            "--filter",
+            "AnalyticsControlsTests"
+          ],
+          "expected_exit": 0,
+          "actual_exit": 0,
+          "output_digest": "sha256:52f0e27fe17a2e8fc3efb5a68192dfcff1d0807ed2fd46d4e122c096e5173616"
+        },
+        {
+          "command": [
+            "swift",
+            "test",
+            "--filter",
+            "AnalyticsControlsTests"
+          ],
+          "expected_exit": 0,
+          "actual_exit": 0,
+          "output_digest": "sha256:8c847e1ef183fae4f6a547d41b1a4ff480fb56c5d2fc4dfb35c270b4bff82e87"
         }
       ],
       "result": "passed",
-      "verified_at": "2026-09-22T15:35:02Z"
+      "verified_at": "2026-09-22T14:55:07Z"
     },
     "4": {
-      "task_fingerprint": "sha256:a455431cc070d86b8533121d4a020419e27117baf6e443d90027205ae3b5bae9",
+      "task_fingerprint": "sha256:f0d7e9e893fc4bc72ad2ff79eb773c553e623ac2ff1e087ca0a3c1f70e6f5789",
       "task_fingerprint_scheme": "walden/task-definition/v2",
       "execution": {
         "origin": "verify",
@@ -226,9 +248,9 @@
         "before_code_identity": "sha256:9bc94b278f98673b02e2a62a49497a4e9e0cf8b07ccd6ab1ef74b3c38f535fbc",
         "after_code_identity": "sha256:9bc94b278f98673b02e2a62a49497a4e9e0cf8b07ccd6ab1ef74b3c38f535fbc"
       },
-      "requirements_fingerprint": "sha256:afd132cb84ad26ed6102499cf612fb09600acbb663b5da1935ce67f05249697f",
-      "design_fingerprint": "sha256:e5d0205e7358148d9b55de44699cb621620272aeac4dc569c48362f48089494a",
-      "tasks_fingerprint": "sha256:3f187a06ef7d443e85c284fe5beba1c74c2baa634d72c0cdf5654afb7056f58a",
+      "requirements_fingerprint": "sha256:d6672ecc8eaf465a1c5fe87c63a11d2a924bb68518778f96d6cfa3fbb3757fca",
+      "design_fingerprint": "sha256:5bcdf52a908fa6b030051370666cd9c58ff2b0fee4009098ecf163e82c652c9e",
+      "tasks_fingerprint": "sha256:207bd6094d26a00d5306d5140e0cc97108f3908eceb77a2f405d0753d1b7cb55",
       "code_identity": "sha256:9bc94b278f98673b02e2a62a49497a4e9e0cf8b07ccd6ab1ef74b3c38f535fbc",
       "profile": {
         "platform": "darwin/arm64",
@@ -243,40 +265,51 @@
             "swift",
             "test",
             "--filter",
-            "VocabularyProperNameTests"
+            "AnalyticsControlsTests"
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:f2ce5e032e8a1dd51a21aed6f3abd2ac5bf77849bb570ae9035fc4bd2b552052"
+          "output_digest": "sha256:d48d0a3fde6c2ea8117b11df15904fb9f02ed06b50633c1375bb6d9cdec0ebd1"
         },
         {
           "command": [
             "swift",
             "test",
             "--filter",
-            "VocabularyProperNameTests"
+            "AnalyticsControlsTests"
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:530f5e8c3f7c12612f08ad83ec1bb8c9382b1083280e1893fff2f0bf460a28fe"
+          "output_digest": "sha256:721128ebc35b6529763848d49022d4e04c1aff7ef966bc1684921d6ccf522fa8"
         },
         {
           "command": [
             "swift",
             "test",
             "--filter",
-            "VocabularyProperNameTests"
+            "AnalyticsControlsTests"
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:f779689a0e65119808483a5aa066e73b315143ae63e8e963152a86da88869c49"
+          "output_digest": "sha256:cf31fb289803dd01b3e2fecac5d90bc170b492879c9e54dca603f3e567977cc2"
+        },
+        {
+          "command": [
+            "swift",
+            "test",
+            "--filter",
+            "AnalyticsControlsTests"
+          ],
+          "expected_exit": 0,
+          "actual_exit": 0,
+          "output_digest": "sha256:d7c0335b2f38685f0f2c5eb4e455d4b39675d7a77ca24ed0c773ead01789f448"
         }
       ],
       "result": "passed",
-      "verified_at": "2026-09-22T15:35:02Z"
+      "verified_at": "2026-09-22T14:55:07Z"
     },
     "5": {
-      "task_fingerprint": "sha256:e436ff7ab765a298ab3c227d6d50eab7c525f32c62b5a8f5e190c54ea1d6c920",
+      "task_fingerprint": "sha256:dc404a6dd51d960b6dc35dff691865ee2e65f6eb15edce19390f6fae7bc1b68a",
       "task_fingerprint_scheme": "walden/task-definition/v2",
       "execution": {
         "origin": "verify",
@@ -286,9 +319,9 @@
         "before_code_identity": "sha256:9bc94b278f98673b02e2a62a49497a4e9e0cf8b07ccd6ab1ef74b3c38f535fbc",
         "after_code_identity": "sha256:9bc94b278f98673b02e2a62a49497a4e9e0cf8b07ccd6ab1ef74b3c38f535fbc"
       },
-      "requirements_fingerprint": "sha256:afd132cb84ad26ed6102499cf612fb09600acbb663b5da1935ce67f05249697f",
-      "design_fingerprint": "sha256:e5d0205e7358148d9b55de44699cb621620272aeac4dc569c48362f48089494a",
-      "tasks_fingerprint": "sha256:3f187a06ef7d443e85c284fe5beba1c74c2baa634d72c0cdf5654afb7056f58a",
+      "requirements_fingerprint": "sha256:d6672ecc8eaf465a1c5fe87c63a11d2a924bb68518778f96d6cfa3fbb3757fca",
+      "design_fingerprint": "sha256:5bcdf52a908fa6b030051370666cd9c58ff2b0fee4009098ecf163e82c652c9e",
+      "tasks_fingerprint": "sha256:207bd6094d26a00d5306d5140e0cc97108f3908eceb77a2f405d0753d1b7cb55",
       "code_identity": "sha256:9bc94b278f98673b02e2a62a49497a4e9e0cf8b07ccd6ab1ef74b3c38f535fbc",
       "profile": {
         "platform": "darwin/arm64",
@@ -298,6 +331,26 @@
         "xcode": "Xcode 27.0\nBuild version 27A266a"
       },
       "steps": [
+        {
+          "command": [
+            "sh",
+            "-c",
+            "grep -q 'AnalyticsControls' Packages/Features/YGOFeatureAnalytics/Sources/YGOFeatureAnalytics/AnalyticsView.swift \u0026\u0026 echo ANALYTICS_CONTROLS_PRESENT"
+          ],
+          "expected_exit": 0,
+          "actual_exit": 0,
+          "output_digest": "sha256:15b7ef716fcf2dfe13f69445b595d4ea9fd68572f4fe22619568445d0978036f"
+        },
+        {
+          "command": [
+            "sh",
+            "-c",
+            "grep -q 'start(on: deckID)' App/YGODeckManagerApp.swift \u0026\u0026 echo ANALYTICS_PORTS_BOUND"
+          ],
+          "expected_exit": 0,
+          "actual_exit": 0,
+          "output_digest": "sha256:eee98b0bfb421981cf6ed6f1d79c203c10d3e23fc9860d60670abc4451b9a6a6"
+        },
         {
           "command": [
             "swift",
@@ -306,43 +359,10 @@
           "expected_exit": 0,
           "actual_exit": 0,
           "output_digest": "sha256:ba9aa0dd90831fe3c6d832bd921cd42837cb97ceea95cd18b0b640e626185039"
-        },
-        {
-          "command": [
-            "swift",
-            "test",
-            "--filter",
-            "VocabularyBudgetTests"
-          ],
-          "expected_exit": 0,
-          "actual_exit": 0,
-          "output_digest": "sha256:caf3637496761165fdb7be709a7f19668e7367ed026f4870ca3a9c90856638de"
-        },
-        {
-          "command": [
-            "swift",
-            "test",
-            "--filter",
-            "VocabularyBudgetTests"
-          ],
-          "expected_exit": 0,
-          "actual_exit": 0,
-          "output_digest": "sha256:78dc5507a0b29d9c66b9ec9a5f273efbaeb9781f684ead4ab12eb70dbb134a4f"
-        },
-        {
-          "command": [
-            "swift",
-            "test",
-            "--filter",
-            "VocabularyBudgetTests"
-          ],
-          "expected_exit": 0,
-          "actual_exit": 0,
-          "output_digest": "sha256:daec8a6f77dcff07eb8e851f2647bb748345dc93b6612162b7ef3708d76cd686"
         }
       ],
       "result": "passed",
-      "verified_at": "2026-09-22T15:35:02Z"
+      "verified_at": "2026-09-22T14:55:07Z"
     }
   }
 }

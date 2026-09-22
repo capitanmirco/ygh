@@ -5,11 +5,11 @@ portfolio. Single local user, offline-first, no accounts and no server.
 
 ## Status
 
-Eighteen specifications are complete and certified: `card-catalog`,
+Nineteen specifications are complete and certified: `card-catalog`,
 `deck-builder`, `collection-tracker`, `deck-analytics`, `pricing`,
 `banlist-history`, `card-detail`, `deck-editing`, `visual-language`,
 `catalog-filters`, `italian-vocabulary`, `deck-card-preview`,
-`deck-authoring`, `banlist-browser`, `app-preferences`, `deck-history`, `deck-labels` and `deck-legality`. The application acquires the full card pool, keeps it current,
+`deck-authoring`, `banlist-browser`, `app-preferences`, `deck-history`, `deck-labels`, `deck-legality` and `analytics-controls`. The application acquires the full card pool, keeps it current,
 stores artwork locally, and browses, builds, tracks, analyses and prices
 entirely offline.
 
@@ -81,6 +81,16 @@ carrying no identifier the lists use is reported as unmatched rather than as
 unrestricted, because the second reads exactly like a correct answer. Asking is
 not editing: nothing in that panel can change a deck.
 
+The statistics say what they are about. They took whichever deck the window
+had selected and offered no way to change it; now the screen chooses its own
+deck, and opens even with nothing selected. It also reads that deck in any
+format — a forty-card deck read as GOAT deals its first player six cards and
+five read as TCG, and every probability moves with the hand size — while
+leaving the deck's own format alone, and it carries one line of verdict
+against a chosen Forbidden & Limited List. Choosing a deck, a format or a
+list clears a hand dealt under the previous choice: a stale hand looks like
+evidence.
+
 ## Requirements
 
 - macOS 27 or later, Apple silicon
@@ -92,7 +102,7 @@ not editing: nothing in that panel can change a deck.
 
 ```bash
 swift build          # builds every module and the app executable
-swift test           # 655 tests across 16 targets
+swift test           # 673 tests across 16 targets
 swift run YGODeckManager
 ```
 
