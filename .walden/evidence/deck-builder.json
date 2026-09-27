@@ -10,18 +10,18 @@
         "policy": "verify-purity/v1",
         "assertion_result": "passed",
         "integrity": "pure",
-        "before_code_identity": "sha256:9bc94b278f98673b02e2a62a49497a4e9e0cf8b07ccd6ab1ef74b3c38f535fbc",
-        "after_code_identity": "sha256:9bc94b278f98673b02e2a62a49497a4e9e0cf8b07ccd6ab1ef74b3c38f535fbc"
+        "before_code_identity": "sha256:1dec32827102034182bd7022ed46207be6c053214f44dca43ae04a4d317b89a0",
+        "after_code_identity": "sha256:1dec32827102034182bd7022ed46207be6c053214f44dca43ae04a4d317b89a0"
       },
       "requirements_fingerprint": "sha256:801af3e91ff433fa491f1de8bd881dbea0ecd0e536bd4574d67890af90fe7bf7",
       "design_fingerprint": "sha256:055d45a896ab7f72ab67ac84d8b8b2c2eae42984496ab790a25b6921fc686f9c",
       "tasks_fingerprint": "sha256:416915d8331fadda440d49d96f0c568714094cd6b5eb9207862d1c046f6e399c",
-      "code_identity": "sha256:9bc94b278f98673b02e2a62a49497a4e9e0cf8b07ccd6ab1ef74b3c38f535fbc",
+      "code_identity": "sha256:1dec32827102034182bd7022ed46207be6c053214f44dca43ae04a4d317b89a0",
       "profile": {
         "platform": "darwin/arm64",
         "sqlite": "3.45.3 2024-04-15 13:34:05 8653b758870e6ef0c98d46b3ace27849054af85da891eb121e9aaa537f1e8355 (64-bit)",
         "swift": "Apple Swift version 6.4 (swiftlang-6.4.0.34.1 clang-2100.3.34.1)\nTarget: arm64-apple-macosx27.0.0\nswift-driver version: 1.168.6",
-        "walden": "v0.10.4",
+        "walden": "v0.11.0",
         "xcode": "Xcode 27.0\nBuild version 27A266a"
       },
       "steps": [
@@ -34,7 +34,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:cdfa8cd3a78decbed456eaecf4286bd246e33e488a5e63bf190aa4ffea340f6e"
+          "output_digest": "sha256:e9dac53d4fb6c8c800f0de7ff9021118dc42d8e48a72bea918d2844311788f73"
         },
         {
           "command": [
@@ -45,7 +45,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:a1f511d44bdcb1febe92fa8c3e6a1bf6212d345c83a517459c3560c8bdf29545"
+          "output_digest": "sha256:cdc63ca11a1ba4edead7d28ccdc03be601cc8112b70cff5070345b7ae928d137"
         },
         {
           "command": [
@@ -56,11 +56,11 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:798380c694d978ef0d286cb58c8ea13e6ce6da16d271b4fb9891fb98205429aa"
+          "output_digest": "sha256:96726d2f7926b7930ccdf20c3137b0368dc59be8e972bdf7841e441c4afe2197"
         }
       ],
       "result": "passed",
-      "verified_at": "2026-09-22T15:22:19Z"
+      "verified_at": "2026-09-27T08:06:24Z"
     },
     "10": {
       "task_fingerprint": "sha256:71a7f8f2ee1a25c5b24e4e1290146db2f4cbbad2e6a666421c279af5626167b3",
@@ -70,18 +70,18 @@
         "policy": "verify-purity/v1",
         "assertion_result": "passed",
         "integrity": "pure",
-        "before_code_identity": "sha256:9bc94b278f98673b02e2a62a49497a4e9e0cf8b07ccd6ab1ef74b3c38f535fbc",
-        "after_code_identity": "sha256:9bc94b278f98673b02e2a62a49497a4e9e0cf8b07ccd6ab1ef74b3c38f535fbc"
+        "before_code_identity": "sha256:1dec32827102034182bd7022ed46207be6c053214f44dca43ae04a4d317b89a0",
+        "after_code_identity": "sha256:1dec32827102034182bd7022ed46207be6c053214f44dca43ae04a4d317b89a0"
       },
       "requirements_fingerprint": "sha256:801af3e91ff433fa491f1de8bd881dbea0ecd0e536bd4574d67890af90fe7bf7",
       "design_fingerprint": "sha256:055d45a896ab7f72ab67ac84d8b8b2c2eae42984496ab790a25b6921fc686f9c",
       "tasks_fingerprint": "sha256:416915d8331fadda440d49d96f0c568714094cd6b5eb9207862d1c046f6e399c",
-      "code_identity": "sha256:9bc94b278f98673b02e2a62a49497a4e9e0cf8b07ccd6ab1ef74b3c38f535fbc",
+      "code_identity": "sha256:1dec32827102034182bd7022ed46207be6c053214f44dca43ae04a4d317b89a0",
       "profile": {
         "platform": "darwin/arm64",
         "sqlite": "3.45.3 2024-04-15 13:34:05 8653b758870e6ef0c98d46b3ace27849054af85da891eb121e9aaa537f1e8355 (64-bit)",
         "swift": "Apple Swift version 6.4 (swiftlang-6.4.0.34.1 clang-2100.3.34.1)\nTarget: arm64-apple-macosx27.0.0\nswift-driver version: 1.168.6",
-        "walden": "v0.10.4",
+        "walden": "v0.11.0",
         "xcode": "Xcode 27.0\nBuild version 27A266a"
       },
       "steps": [
@@ -94,7 +94,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:ef414602d384377761ca9041731fa6e97f86803388c43003e705c4a75f4c91ea"
+          "output_digest": "sha256:62b167391a62a30121c9c63dba49c028aae3f637e1a5f23b3c9b8a9b276e0d71"
         },
         {
           "command": [
@@ -105,7 +105,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:54f57803970311043894e220c29e60fc54b3eb8f7e9415ad519f2ffa0872310e"
+          "output_digest": "sha256:f35da9366821b7495c3a3118596a779a47ae7064c3fdf0eb447c108f8aa21620"
         },
         {
           "command": [
@@ -116,11 +116,11 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:6120806dd1f7544fa11863359b2704f2845c0dc64876bcdefe5fe5d7a395edaa"
+          "output_digest": "sha256:ed3b01a13711e981188c40d0657eff42db79bd21280bb015eab8ffc531e22164"
         }
       ],
       "result": "passed",
-      "verified_at": "2026-09-22T15:22:19Z"
+      "verified_at": "2026-09-27T08:06:24Z"
     },
     "11": {
       "task_fingerprint": "sha256:9310cf1d1b7f2a939149327cb8c886d039b20026e6d085136fc4ff7a3315e9b2",
@@ -130,18 +130,18 @@
         "policy": "verify-purity/v1",
         "assertion_result": "passed",
         "integrity": "pure",
-        "before_code_identity": "sha256:9bc94b278f98673b02e2a62a49497a4e9e0cf8b07ccd6ab1ef74b3c38f535fbc",
-        "after_code_identity": "sha256:9bc94b278f98673b02e2a62a49497a4e9e0cf8b07ccd6ab1ef74b3c38f535fbc"
+        "before_code_identity": "sha256:1dec32827102034182bd7022ed46207be6c053214f44dca43ae04a4d317b89a0",
+        "after_code_identity": "sha256:1dec32827102034182bd7022ed46207be6c053214f44dca43ae04a4d317b89a0"
       },
       "requirements_fingerprint": "sha256:801af3e91ff433fa491f1de8bd881dbea0ecd0e536bd4574d67890af90fe7bf7",
       "design_fingerprint": "sha256:055d45a896ab7f72ab67ac84d8b8b2c2eae42984496ab790a25b6921fc686f9c",
       "tasks_fingerprint": "sha256:416915d8331fadda440d49d96f0c568714094cd6b5eb9207862d1c046f6e399c",
-      "code_identity": "sha256:9bc94b278f98673b02e2a62a49497a4e9e0cf8b07ccd6ab1ef74b3c38f535fbc",
+      "code_identity": "sha256:1dec32827102034182bd7022ed46207be6c053214f44dca43ae04a4d317b89a0",
       "profile": {
         "platform": "darwin/arm64",
         "sqlite": "3.45.3 2024-04-15 13:34:05 8653b758870e6ef0c98d46b3ace27849054af85da891eb121e9aaa537f1e8355 (64-bit)",
         "swift": "Apple Swift version 6.4 (swiftlang-6.4.0.34.1 clang-2100.3.34.1)\nTarget: arm64-apple-macosx27.0.0\nswift-driver version: 1.168.6",
-        "walden": "v0.10.4",
+        "walden": "v0.11.0",
         "xcode": "Xcode 27.0\nBuild version 27A266a"
       },
       "steps": [
@@ -154,7 +154,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:f460e2420c273804bd14c744dac0ce7c13086e600d6635ac1f45818048996850"
+          "output_digest": "sha256:99f50ccd3d0a50cfdfc30713ffa07eb8d8a350756da09c4369f6ab03d2d455b4"
         },
         {
           "command": [
@@ -165,11 +165,11 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:fc05bd2add274b5bc9223751f8a8aef650e93b60272e09563ca88afb98979b36"
+          "output_digest": "sha256:81a0aa8392e1c4baf389af005d50c0779229ae3ecd0dca24f44c71f5322cc7da"
         }
       ],
       "result": "passed",
-      "verified_at": "2026-09-22T15:22:19Z"
+      "verified_at": "2026-09-27T08:06:24Z"
     },
     "12": {
       "task_fingerprint": "sha256:8576dd83657f83cbb9424e5e920a6ca37a6021edae9f1a19926a0aeb7a859875",
@@ -179,18 +179,18 @@
         "policy": "verify-purity/v1",
         "assertion_result": "passed",
         "integrity": "pure",
-        "before_code_identity": "sha256:9bc94b278f98673b02e2a62a49497a4e9e0cf8b07ccd6ab1ef74b3c38f535fbc",
-        "after_code_identity": "sha256:9bc94b278f98673b02e2a62a49497a4e9e0cf8b07ccd6ab1ef74b3c38f535fbc"
+        "before_code_identity": "sha256:1dec32827102034182bd7022ed46207be6c053214f44dca43ae04a4d317b89a0",
+        "after_code_identity": "sha256:1dec32827102034182bd7022ed46207be6c053214f44dca43ae04a4d317b89a0"
       },
       "requirements_fingerprint": "sha256:801af3e91ff433fa491f1de8bd881dbea0ecd0e536bd4574d67890af90fe7bf7",
       "design_fingerprint": "sha256:055d45a896ab7f72ab67ac84d8b8b2c2eae42984496ab790a25b6921fc686f9c",
       "tasks_fingerprint": "sha256:416915d8331fadda440d49d96f0c568714094cd6b5eb9207862d1c046f6e399c",
-      "code_identity": "sha256:9bc94b278f98673b02e2a62a49497a4e9e0cf8b07ccd6ab1ef74b3c38f535fbc",
+      "code_identity": "sha256:1dec32827102034182bd7022ed46207be6c053214f44dca43ae04a4d317b89a0",
       "profile": {
         "platform": "darwin/arm64",
         "sqlite": "3.45.3 2024-04-15 13:34:05 8653b758870e6ef0c98d46b3ace27849054af85da891eb121e9aaa537f1e8355 (64-bit)",
         "swift": "Apple Swift version 6.4 (swiftlang-6.4.0.34.1 clang-2100.3.34.1)\nTarget: arm64-apple-macosx27.0.0\nswift-driver version: 1.168.6",
-        "walden": "v0.10.4",
+        "walden": "v0.11.0",
         "xcode": "Xcode 27.0\nBuild version 27A266a"
       },
       "steps": [
@@ -203,7 +203,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:3f7c7299efc784184f6e101b831a3cfea371e0edeb2a2e3791c526f1bfd31eac"
+          "output_digest": "sha256:979d23a1e806e4cdd0ff248402c0aec4adc0c375b6d796fe761b707bf7fb0401"
         },
         {
           "command": [
@@ -214,7 +214,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:654f010a12a904e9140f92796b5ed6ce79f2ee522a81cc3492eccba4b31abfc1"
+          "output_digest": "sha256:b63e9cd31ed4c1e88e848ee6c29d641294de32453f983c144acf90855d536984"
         },
         {
           "command": [
@@ -225,7 +225,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:f77ead549f99234a1b3a4c4d726b1aae497d4e845269097f06fce3d97bce1c40"
+          "output_digest": "sha256:10ac00c9c58a2b5af646cceb739f876e554613c88597b0f656f6bc43d94725fd"
         },
         {
           "command": [
@@ -236,7 +236,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:7c34ceae5afcb33426185798b03792e820696985345db7f070edaa067d90d044"
+          "output_digest": "sha256:687971765300629f963e75f0afcd4803798beb194db05e9014687c822f48cf6b"
         },
         {
           "command": [
@@ -247,11 +247,11 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:35cf86d3cace360e2eb0c49158034707ab0b45b02b14a456cb4095c19740757d"
+          "output_digest": "sha256:b92d79ae15063b54666891bba7eaa537245fe4dbfaefcec2c326893fb934d4ce"
         }
       ],
       "result": "passed",
-      "verified_at": "2026-09-22T15:22:19Z"
+      "verified_at": "2026-09-27T08:06:24Z"
     },
     "13": {
       "task_fingerprint": "sha256:48a4e0ad2007d99c9059a1a8d4e709cdc8a25a2191706904cb6c1d077274a3cf",
@@ -261,18 +261,18 @@
         "policy": "verify-purity/v1",
         "assertion_result": "passed",
         "integrity": "pure",
-        "before_code_identity": "sha256:9bc94b278f98673b02e2a62a49497a4e9e0cf8b07ccd6ab1ef74b3c38f535fbc",
-        "after_code_identity": "sha256:9bc94b278f98673b02e2a62a49497a4e9e0cf8b07ccd6ab1ef74b3c38f535fbc"
+        "before_code_identity": "sha256:1dec32827102034182bd7022ed46207be6c053214f44dca43ae04a4d317b89a0",
+        "after_code_identity": "sha256:1dec32827102034182bd7022ed46207be6c053214f44dca43ae04a4d317b89a0"
       },
       "requirements_fingerprint": "sha256:801af3e91ff433fa491f1de8bd881dbea0ecd0e536bd4574d67890af90fe7bf7",
       "design_fingerprint": "sha256:055d45a896ab7f72ab67ac84d8b8b2c2eae42984496ab790a25b6921fc686f9c",
       "tasks_fingerprint": "sha256:416915d8331fadda440d49d96f0c568714094cd6b5eb9207862d1c046f6e399c",
-      "code_identity": "sha256:9bc94b278f98673b02e2a62a49497a4e9e0cf8b07ccd6ab1ef74b3c38f535fbc",
+      "code_identity": "sha256:1dec32827102034182bd7022ed46207be6c053214f44dca43ae04a4d317b89a0",
       "profile": {
         "platform": "darwin/arm64",
         "sqlite": "3.45.3 2024-04-15 13:34:05 8653b758870e6ef0c98d46b3ace27849054af85da891eb121e9aaa537f1e8355 (64-bit)",
         "swift": "Apple Swift version 6.4 (swiftlang-6.4.0.34.1 clang-2100.3.34.1)\nTarget: arm64-apple-macosx27.0.0\nswift-driver version: 1.168.6",
-        "walden": "v0.10.4",
+        "walden": "v0.11.0",
         "xcode": "Xcode 27.0\nBuild version 27A266a"
       },
       "steps": [
@@ -285,7 +285,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:9e2368976d02a3471c83b65c90ac8e7f57b9538366c1fe2df200406b83b718c3"
+          "output_digest": "sha256:3d60ee667e83087fa14d89ece5439c0ab464291b92a343062a3a1575293edc83"
         },
         {
           "command": [
@@ -296,11 +296,11 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:c3f79df1051d64594120f8a0ab4715173ef64179d6790744abd5dc27fb957259"
+          "output_digest": "sha256:3b003fd0db4eb519a4f423a8b1a0110327ec1769b6550177e58d43d0d8d42a97"
         }
       ],
       "result": "passed",
-      "verified_at": "2026-09-22T15:22:19Z"
+      "verified_at": "2026-09-27T08:06:24Z"
     },
     "14": {
       "task_fingerprint": "sha256:d555ec2b428a8eabbc9ca368d4e34fdc0cbfbe8175200deb1c6fecfd09f04bed",
@@ -310,18 +310,18 @@
         "policy": "verify-purity/v1",
         "assertion_result": "passed",
         "integrity": "pure",
-        "before_code_identity": "sha256:9bc94b278f98673b02e2a62a49497a4e9e0cf8b07ccd6ab1ef74b3c38f535fbc",
-        "after_code_identity": "sha256:9bc94b278f98673b02e2a62a49497a4e9e0cf8b07ccd6ab1ef74b3c38f535fbc"
+        "before_code_identity": "sha256:1dec32827102034182bd7022ed46207be6c053214f44dca43ae04a4d317b89a0",
+        "after_code_identity": "sha256:1dec32827102034182bd7022ed46207be6c053214f44dca43ae04a4d317b89a0"
       },
       "requirements_fingerprint": "sha256:801af3e91ff433fa491f1de8bd881dbea0ecd0e536bd4574d67890af90fe7bf7",
       "design_fingerprint": "sha256:055d45a896ab7f72ab67ac84d8b8b2c2eae42984496ab790a25b6921fc686f9c",
       "tasks_fingerprint": "sha256:416915d8331fadda440d49d96f0c568714094cd6b5eb9207862d1c046f6e399c",
-      "code_identity": "sha256:9bc94b278f98673b02e2a62a49497a4e9e0cf8b07ccd6ab1ef74b3c38f535fbc",
+      "code_identity": "sha256:1dec32827102034182bd7022ed46207be6c053214f44dca43ae04a4d317b89a0",
       "profile": {
         "platform": "darwin/arm64",
         "sqlite": "3.45.3 2024-04-15 13:34:05 8653b758870e6ef0c98d46b3ace27849054af85da891eb121e9aaa537f1e8355 (64-bit)",
         "swift": "Apple Swift version 6.4 (swiftlang-6.4.0.34.1 clang-2100.3.34.1)\nTarget: arm64-apple-macosx27.0.0\nswift-driver version: 1.168.6",
-        "walden": "v0.10.4",
+        "walden": "v0.11.0",
         "xcode": "Xcode 27.0\nBuild version 27A266a"
       },
       "steps": [
@@ -334,7 +334,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:1538ad7255fefa2717387d063a39f24d21c8a74f4303249c5174b91311130911"
+          "output_digest": "sha256:15a0f8423eb10e92731ddebf92bc7ec683abe8172d90b634e2aa66a6703c77e1"
         },
         {
           "command": [
@@ -345,7 +345,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:3dd0e370ac54ca5ecf876aefe02252da3aa79347e1e99962cc86f1b657e2f403"
+          "output_digest": "sha256:8df338ace840bf2bd21b955e69f4ba2aaff3ef80c68ae319895727a7e72746c0"
         },
         {
           "command": [
@@ -356,7 +356,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:58be2e5cd05ecd9b1c6b54029f1e2b3ad86ede3c6d56f3b0ea55ed1d6324a351"
+          "output_digest": "sha256:c4075f9a76c000466bb93e488d7b93b6b5f4d40bb69fe9bd75bb541f6698b4bb"
         },
         {
           "command": [
@@ -367,7 +367,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:adaead8375d71eedceba0db77e47f9bab075a355f51031c622fc8870d38ce0f9"
+          "output_digest": "sha256:3641bc2a0241e5c88a444b4d279355fa53727056d045c29274c82afd65436373"
         },
         {
           "command": [
@@ -378,7 +378,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:2da9c5431e205740f84199e97c0f72d4ce18dab490d73f507aecc188700f675a"
+          "output_digest": "sha256:87acc6c25bdb8aa6effd3bda181aa91d892223ec8792f0a6e76f44a9ed41c59d"
         },
         {
           "command": [
@@ -389,7 +389,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:2d6eff452e38f00f664fd5477d9bb5ec93851c3452c7ba044319c9e7c2a56848"
+          "output_digest": "sha256:d81ef889c6536b96bfa9aae73b4167b3a145e2c6724626a21d71230d12a18d99"
         },
         {
           "command": [
@@ -400,7 +400,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:d64f48b93f0b7126e6d578ac532ff7a89c56f9b8cbc58e5d93c9f044c436f286"
+          "output_digest": "sha256:0e4414ed013723911d5acea4c69f44f4aacef13d5c377529ddbbff2e1b8f1f61"
         },
         {
           "command": [
@@ -411,11 +411,11 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:6b6fdce9d4c5683798ef118afefe6fa71b62304a206e2d81174fab1dfbeaf34a"
+          "output_digest": "sha256:4129a81cdc17fc7a1f90eb9d16da473f4f9f5e857cbf18a78afa1e2b87d5668c"
         }
       ],
       "result": "passed",
-      "verified_at": "2026-09-22T15:22:19Z"
+      "verified_at": "2026-09-27T08:06:24Z"
     },
     "15": {
       "task_fingerprint": "sha256:af3af5e5f9faee4e79977f990a8008ae25641036dd2210723cfab80a8b5233f2",
@@ -425,18 +425,18 @@
         "policy": "verify-purity/v1",
         "assertion_result": "passed",
         "integrity": "pure",
-        "before_code_identity": "sha256:9bc94b278f98673b02e2a62a49497a4e9e0cf8b07ccd6ab1ef74b3c38f535fbc",
-        "after_code_identity": "sha256:9bc94b278f98673b02e2a62a49497a4e9e0cf8b07ccd6ab1ef74b3c38f535fbc"
+        "before_code_identity": "sha256:1dec32827102034182bd7022ed46207be6c053214f44dca43ae04a4d317b89a0",
+        "after_code_identity": "sha256:1dec32827102034182bd7022ed46207be6c053214f44dca43ae04a4d317b89a0"
       },
       "requirements_fingerprint": "sha256:801af3e91ff433fa491f1de8bd881dbea0ecd0e536bd4574d67890af90fe7bf7",
       "design_fingerprint": "sha256:055d45a896ab7f72ab67ac84d8b8b2c2eae42984496ab790a25b6921fc686f9c",
       "tasks_fingerprint": "sha256:416915d8331fadda440d49d96f0c568714094cd6b5eb9207862d1c046f6e399c",
-      "code_identity": "sha256:9bc94b278f98673b02e2a62a49497a4e9e0cf8b07ccd6ab1ef74b3c38f535fbc",
+      "code_identity": "sha256:1dec32827102034182bd7022ed46207be6c053214f44dca43ae04a4d317b89a0",
       "profile": {
         "platform": "darwin/arm64",
         "sqlite": "3.45.3 2024-04-15 13:34:05 8653b758870e6ef0c98d46b3ace27849054af85da891eb121e9aaa537f1e8355 (64-bit)",
         "swift": "Apple Swift version 6.4 (swiftlang-6.4.0.34.1 clang-2100.3.34.1)\nTarget: arm64-apple-macosx27.0.0\nswift-driver version: 1.168.6",
-        "walden": "v0.10.4",
+        "walden": "v0.11.0",
         "xcode": "Xcode 27.0\nBuild version 27A266a"
       },
       "steps": [
@@ -458,7 +458,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:84f63f75a497a4768acda71187fda8b16cde400997fa227ab89aa5b9875d3055"
+          "output_digest": "sha256:d1c62de5ca49f26712ce640b8719ea6518a459f84d9662b260d3a953d1221ebf"
         },
         {
           "command": [
@@ -469,7 +469,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:4e90c6d4e76d1bbd83b2ad4a37dc434545650f7e4531ad86f3bf9e9c61393e17"
+          "output_digest": "sha256:015621d3158d57d0de8d5544eef59590058e9d45fcc69050899753714633f4cd"
         },
         {
           "command": [
@@ -480,7 +480,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:cef9f39db1b8fee1515c7a45b26d4f1f01976495fa41c4c962df0f2ec520ec73"
+          "output_digest": "sha256:3ee016744fee921cac3d36965ff4c0e250aa64187e9d077e54a79aaf608de628"
         },
         {
           "command": [
@@ -491,7 +491,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:85fb3b379522e38866b8c9fd94ad934b487b70ffc205accc5daa911bf7b162e0"
+          "output_digest": "sha256:253d4f3905f4d1d0f980a640e5564a0fbbe7c53853af29fcce84de2c6ea91352"
         },
         {
           "command": [
@@ -502,7 +502,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:9b3fd0687abfa0582125644e31b9042a50e8a2c622de7fcb3b48d08e609bbf66"
+          "output_digest": "sha256:91aa43ad894d604511082161ef7a11a078b09313897b6e47d130e75225ddf1b6"
         },
         {
           "command": [
@@ -513,11 +513,11 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:005a6a515592b7acb991dea43331983b4117d84811c160a1dcd1b911df710ca4"
+          "output_digest": "sha256:7cd292133ba7ca190d5c2408d7943d0dff70004ff7cb08953afb3c57517eb5a0"
         }
       ],
       "result": "passed",
-      "verified_at": "2026-09-22T15:22:19Z"
+      "verified_at": "2026-09-27T08:06:24Z"
     },
     "2": {
       "task_fingerprint": "sha256:800505fff96f3afe233b287b0fc28f1cade7c25296f20c5f582c5bdfce7569a6",
@@ -527,18 +527,18 @@
         "policy": "verify-purity/v1",
         "assertion_result": "passed",
         "integrity": "pure",
-        "before_code_identity": "sha256:9bc94b278f98673b02e2a62a49497a4e9e0cf8b07ccd6ab1ef74b3c38f535fbc",
-        "after_code_identity": "sha256:9bc94b278f98673b02e2a62a49497a4e9e0cf8b07ccd6ab1ef74b3c38f535fbc"
+        "before_code_identity": "sha256:1dec32827102034182bd7022ed46207be6c053214f44dca43ae04a4d317b89a0",
+        "after_code_identity": "sha256:1dec32827102034182bd7022ed46207be6c053214f44dca43ae04a4d317b89a0"
       },
       "requirements_fingerprint": "sha256:801af3e91ff433fa491f1de8bd881dbea0ecd0e536bd4574d67890af90fe7bf7",
       "design_fingerprint": "sha256:055d45a896ab7f72ab67ac84d8b8b2c2eae42984496ab790a25b6921fc686f9c",
       "tasks_fingerprint": "sha256:416915d8331fadda440d49d96f0c568714094cd6b5eb9207862d1c046f6e399c",
-      "code_identity": "sha256:9bc94b278f98673b02e2a62a49497a4e9e0cf8b07ccd6ab1ef74b3c38f535fbc",
+      "code_identity": "sha256:1dec32827102034182bd7022ed46207be6c053214f44dca43ae04a4d317b89a0",
       "profile": {
         "platform": "darwin/arm64",
         "sqlite": "3.45.3 2024-04-15 13:34:05 8653b758870e6ef0c98d46b3ace27849054af85da891eb121e9aaa537f1e8355 (64-bit)",
         "swift": "Apple Swift version 6.4 (swiftlang-6.4.0.34.1 clang-2100.3.34.1)\nTarget: arm64-apple-macosx27.0.0\nswift-driver version: 1.168.6",
-        "walden": "v0.10.4",
+        "walden": "v0.11.0",
         "xcode": "Xcode 27.0\nBuild version 27A266a"
       },
       "steps": [
@@ -551,7 +551,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:5990f4affb89db7d4294af571db0e2097c791c22213e5af317761554ca832737"
+          "output_digest": "sha256:0879bcb8c52c698a5326faebeda2c1c3e565c94f820c880a9dbfb6f9de6e1e09"
         },
         {
           "command": [
@@ -562,11 +562,11 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:fdfb94d6aca4c45080700e4a70a6d1151ba6b7c850cd1cdf23424f7bb8515b6f"
+          "output_digest": "sha256:fcc9ca225714177408abbe88621c2d8068db13b52b31e4b9d9386808d358e1ac"
         }
       ],
       "result": "passed",
-      "verified_at": "2026-09-22T15:22:19Z"
+      "verified_at": "2026-09-27T08:06:24Z"
     },
     "3": {
       "task_fingerprint": "sha256:dde8a5b29189798ee919f7b95d4730fff8d6513921935c3734bf1fee768be721",
@@ -576,18 +576,18 @@
         "policy": "verify-purity/v1",
         "assertion_result": "passed",
         "integrity": "pure",
-        "before_code_identity": "sha256:9bc94b278f98673b02e2a62a49497a4e9e0cf8b07ccd6ab1ef74b3c38f535fbc",
-        "after_code_identity": "sha256:9bc94b278f98673b02e2a62a49497a4e9e0cf8b07ccd6ab1ef74b3c38f535fbc"
+        "before_code_identity": "sha256:1dec32827102034182bd7022ed46207be6c053214f44dca43ae04a4d317b89a0",
+        "after_code_identity": "sha256:1dec32827102034182bd7022ed46207be6c053214f44dca43ae04a4d317b89a0"
       },
       "requirements_fingerprint": "sha256:801af3e91ff433fa491f1de8bd881dbea0ecd0e536bd4574d67890af90fe7bf7",
       "design_fingerprint": "sha256:055d45a896ab7f72ab67ac84d8b8b2c2eae42984496ab790a25b6921fc686f9c",
       "tasks_fingerprint": "sha256:416915d8331fadda440d49d96f0c568714094cd6b5eb9207862d1c046f6e399c",
-      "code_identity": "sha256:9bc94b278f98673b02e2a62a49497a4e9e0cf8b07ccd6ab1ef74b3c38f535fbc",
+      "code_identity": "sha256:1dec32827102034182bd7022ed46207be6c053214f44dca43ae04a4d317b89a0",
       "profile": {
         "platform": "darwin/arm64",
         "sqlite": "3.45.3 2024-04-15 13:34:05 8653b758870e6ef0c98d46b3ace27849054af85da891eb121e9aaa537f1e8355 (64-bit)",
         "swift": "Apple Swift version 6.4 (swiftlang-6.4.0.34.1 clang-2100.3.34.1)\nTarget: arm64-apple-macosx27.0.0\nswift-driver version: 1.168.6",
-        "walden": "v0.10.4",
+        "walden": "v0.11.0",
         "xcode": "Xcode 27.0\nBuild version 27A266a"
       },
       "steps": [
@@ -600,7 +600,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:fa48d7949afbf7b56c155c94917a6197811e94dacb96dda05587a7611457c9d2"
+          "output_digest": "sha256:7e8a4c60f684c9c42ee26d97552953098aa4547db72510e76899cbb8959c7f5f"
         },
         {
           "command": [
@@ -611,7 +611,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:ed55dfc0b50080b641eefad4afb5b392993accb1b89a551aeb93e6ccf7195b86"
+          "output_digest": "sha256:078035eb21dd7dd6a635e8d5dfb32521e30095b0ea5d370f44f133836049aa09"
         },
         {
           "command": [
@@ -622,7 +622,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:ba377d8af587a122da381053776961cbd844c2620493dea96a9386fff436127b"
+          "output_digest": "sha256:b7e558bb9e1184f453809fb3713b3f23e50f709280c9a882a205af8b7bd6faa1"
         },
         {
           "command": [
@@ -633,7 +633,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:3eb1b6696293264ea3c021db891399f7f807760178ee40a1a05bfc1b2915c544"
+          "output_digest": "sha256:04e62f58d27246398ab48cb85fd4fc7e8b3b4aa342349731cc888108e799e058"
         },
         {
           "command": [
@@ -644,7 +644,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:8993f4afd557198029b190908a45cc6b8305093a59a304de6ea6b25a45851d56"
+          "output_digest": "sha256:ad5f654f813b317232668c5049e586ea4500dc0ce0e1b87cdb6c801695ca0571"
         },
         {
           "command": [
@@ -655,11 +655,11 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:b3ebe6f250f334d4653303cc5127f84281d6f531a68485a3eedade5dca530d79"
+          "output_digest": "sha256:b2f9152e818f46000e339c745cd358c22a6cd4db26de23f28b8d7d4d72f63be6"
         }
       ],
       "result": "passed",
-      "verified_at": "2026-09-22T15:22:19Z"
+      "verified_at": "2026-09-27T08:06:24Z"
     },
     "4": {
       "task_fingerprint": "sha256:f47578af3475be66b6d64dd3fc4496ad23d725ca3f9237b486b5cd0709d3dd7d",
@@ -669,18 +669,18 @@
         "policy": "verify-purity/v1",
         "assertion_result": "passed",
         "integrity": "pure",
-        "before_code_identity": "sha256:9bc94b278f98673b02e2a62a49497a4e9e0cf8b07ccd6ab1ef74b3c38f535fbc",
-        "after_code_identity": "sha256:9bc94b278f98673b02e2a62a49497a4e9e0cf8b07ccd6ab1ef74b3c38f535fbc"
+        "before_code_identity": "sha256:1dec32827102034182bd7022ed46207be6c053214f44dca43ae04a4d317b89a0",
+        "after_code_identity": "sha256:1dec32827102034182bd7022ed46207be6c053214f44dca43ae04a4d317b89a0"
       },
       "requirements_fingerprint": "sha256:801af3e91ff433fa491f1de8bd881dbea0ecd0e536bd4574d67890af90fe7bf7",
       "design_fingerprint": "sha256:055d45a896ab7f72ab67ac84d8b8b2c2eae42984496ab790a25b6921fc686f9c",
       "tasks_fingerprint": "sha256:416915d8331fadda440d49d96f0c568714094cd6b5eb9207862d1c046f6e399c",
-      "code_identity": "sha256:9bc94b278f98673b02e2a62a49497a4e9e0cf8b07ccd6ab1ef74b3c38f535fbc",
+      "code_identity": "sha256:1dec32827102034182bd7022ed46207be6c053214f44dca43ae04a4d317b89a0",
       "profile": {
         "platform": "darwin/arm64",
         "sqlite": "3.45.3 2024-04-15 13:34:05 8653b758870e6ef0c98d46b3ace27849054af85da891eb121e9aaa537f1e8355 (64-bit)",
         "swift": "Apple Swift version 6.4 (swiftlang-6.4.0.34.1 clang-2100.3.34.1)\nTarget: arm64-apple-macosx27.0.0\nswift-driver version: 1.168.6",
-        "walden": "v0.10.4",
+        "walden": "v0.11.0",
         "xcode": "Xcode 27.0\nBuild version 27A266a"
       },
       "steps": [
@@ -693,7 +693,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:6ef84b0b99e4429deeb945170984507335f78dea1addb62ac5d2ef0f46d8b628"
+          "output_digest": "sha256:d84829fff329028b3435443b303db05ac36535e6d91ad41c40083e0fef1f343b"
         },
         {
           "command": [
@@ -704,7 +704,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:61775c5ef15b2ba08874068ae9f03b92037c423008c709237079c272d9cdf8b5"
+          "output_digest": "sha256:bee26d16a01b47b789216cb4c6776dcd02fadf2fa7d9ae08e418045db7916cd6"
         },
         {
           "command": [
@@ -715,7 +715,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:72ba35add93d4282932d98525fd56e9f7d3ba8fcdc5bc24482e7785c7f3e547d"
+          "output_digest": "sha256:2401f9e29b56aa365e18be0781aab82d2aeb8aeca0e81c3049d936af032f3486"
         },
         {
           "command": [
@@ -726,7 +726,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:bbb4abc6f52df078ce8af6f70c9816917ec01b306287194cddcae6e8932c2d73"
+          "output_digest": "sha256:ec9d265c2e92ae2a2dd312c1199afde13a758a8012532e15cdd15dc75ff8e707"
         },
         {
           "command": [
@@ -737,11 +737,11 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:aaeda252d0fac7c1d43f5435d671fc196bd36d632b9632b4bbac1a3f157a52bf"
+          "output_digest": "sha256:abb1dfa2a6ee09ea798e5745dc9d3fe9764f1be1bfb7eca9930941cdf36dd1c9"
         }
       ],
       "result": "passed",
-      "verified_at": "2026-09-22T15:22:19Z"
+      "verified_at": "2026-09-27T08:06:24Z"
     },
     "5": {
       "task_fingerprint": "sha256:de1204a54952e8f25c5acda4991fe10d9fa8787a1d01ef96002591215b87a8df",
@@ -751,18 +751,18 @@
         "policy": "verify-purity/v1",
         "assertion_result": "passed",
         "integrity": "pure",
-        "before_code_identity": "sha256:9bc94b278f98673b02e2a62a49497a4e9e0cf8b07ccd6ab1ef74b3c38f535fbc",
-        "after_code_identity": "sha256:9bc94b278f98673b02e2a62a49497a4e9e0cf8b07ccd6ab1ef74b3c38f535fbc"
+        "before_code_identity": "sha256:1dec32827102034182bd7022ed46207be6c053214f44dca43ae04a4d317b89a0",
+        "after_code_identity": "sha256:1dec32827102034182bd7022ed46207be6c053214f44dca43ae04a4d317b89a0"
       },
       "requirements_fingerprint": "sha256:801af3e91ff433fa491f1de8bd881dbea0ecd0e536bd4574d67890af90fe7bf7",
       "design_fingerprint": "sha256:055d45a896ab7f72ab67ac84d8b8b2c2eae42984496ab790a25b6921fc686f9c",
       "tasks_fingerprint": "sha256:416915d8331fadda440d49d96f0c568714094cd6b5eb9207862d1c046f6e399c",
-      "code_identity": "sha256:9bc94b278f98673b02e2a62a49497a4e9e0cf8b07ccd6ab1ef74b3c38f535fbc",
+      "code_identity": "sha256:1dec32827102034182bd7022ed46207be6c053214f44dca43ae04a4d317b89a0",
       "profile": {
         "platform": "darwin/arm64",
         "sqlite": "3.45.3 2024-04-15 13:34:05 8653b758870e6ef0c98d46b3ace27849054af85da891eb121e9aaa537f1e8355 (64-bit)",
         "swift": "Apple Swift version 6.4 (swiftlang-6.4.0.34.1 clang-2100.3.34.1)\nTarget: arm64-apple-macosx27.0.0\nswift-driver version: 1.168.6",
-        "walden": "v0.10.4",
+        "walden": "v0.11.0",
         "xcode": "Xcode 27.0\nBuild version 27A266a"
       },
       "steps": [
@@ -775,11 +775,11 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:64a12f7dc00deb73ee90d11cae86981c1f2e92a24e50eeeabd069078009824f2"
+          "output_digest": "sha256:f23918d98afb126fe399e7f6688f7a0f2ccb37c0e1fa5015c144742e2000c7aa"
         }
       ],
       "result": "passed",
-      "verified_at": "2026-09-22T15:22:19Z"
+      "verified_at": "2026-09-27T08:06:24Z"
     },
     "6": {
       "task_fingerprint": "sha256:26e56cd03c551489db5ad04a8d055ed79ec3713f4c8e76b458887fa41612f67a",
@@ -789,18 +789,18 @@
         "policy": "verify-purity/v1",
         "assertion_result": "passed",
         "integrity": "pure",
-        "before_code_identity": "sha256:9bc94b278f98673b02e2a62a49497a4e9e0cf8b07ccd6ab1ef74b3c38f535fbc",
-        "after_code_identity": "sha256:9bc94b278f98673b02e2a62a49497a4e9e0cf8b07ccd6ab1ef74b3c38f535fbc"
+        "before_code_identity": "sha256:1dec32827102034182bd7022ed46207be6c053214f44dca43ae04a4d317b89a0",
+        "after_code_identity": "sha256:1dec32827102034182bd7022ed46207be6c053214f44dca43ae04a4d317b89a0"
       },
       "requirements_fingerprint": "sha256:801af3e91ff433fa491f1de8bd881dbea0ecd0e536bd4574d67890af90fe7bf7",
       "design_fingerprint": "sha256:055d45a896ab7f72ab67ac84d8b8b2c2eae42984496ab790a25b6921fc686f9c",
       "tasks_fingerprint": "sha256:416915d8331fadda440d49d96f0c568714094cd6b5eb9207862d1c046f6e399c",
-      "code_identity": "sha256:9bc94b278f98673b02e2a62a49497a4e9e0cf8b07ccd6ab1ef74b3c38f535fbc",
+      "code_identity": "sha256:1dec32827102034182bd7022ed46207be6c053214f44dca43ae04a4d317b89a0",
       "profile": {
         "platform": "darwin/arm64",
         "sqlite": "3.45.3 2024-04-15 13:34:05 8653b758870e6ef0c98d46b3ace27849054af85da891eb121e9aaa537f1e8355 (64-bit)",
         "swift": "Apple Swift version 6.4 (swiftlang-6.4.0.34.1 clang-2100.3.34.1)\nTarget: arm64-apple-macosx27.0.0\nswift-driver version: 1.168.6",
-        "walden": "v0.10.4",
+        "walden": "v0.11.0",
         "xcode": "Xcode 27.0\nBuild version 27A266a"
       },
       "steps": [
@@ -813,7 +813,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:cbe5782b2aa369ea0b1d559245e078a17f371d6283cbc1f5fa1c2b96a951cbb9"
+          "output_digest": "sha256:3e16a0d8118079d558a08d13abea02e899c8e48bb5ae095b6d6b4535ccc5ceec"
         },
         {
           "command": [
@@ -824,7 +824,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:53cb7666444ff9bb069de6fd7700d7156d3825bd5ff72180508aa0ae11ae0416"
+          "output_digest": "sha256:abd6f2ec35347b5ba6249b26a584c558f0f9246e05060dbfa56e4cc5e661ca3d"
         },
         {
           "command": [
@@ -835,7 +835,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:944a25b6bab25df5d9cf1ec3390a3e0ed84e0f0e4dfa4148e4d05405b6116545"
+          "output_digest": "sha256:dca5ca387df46bcccd07191b9dfd2b24de1b26fe9116665bbb34132bbac4cc53"
         },
         {
           "command": [
@@ -846,11 +846,11 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:9d3671d0855618fb464ed81843bfe04ce663709b80dc1861090813216c1b8930"
+          "output_digest": "sha256:8ecae0b06cc6e23bfb495d1883f0c63d655dc410be12763039409a720c06bb87"
         }
       ],
       "result": "passed",
-      "verified_at": "2026-09-22T15:22:19Z"
+      "verified_at": "2026-09-27T08:06:24Z"
     },
     "7": {
       "task_fingerprint": "sha256:1c9c7cd793e6fafbbabceafa7d0da62213750d4aacf4fac3bda41ae9f50be15b",
@@ -860,18 +860,18 @@
         "policy": "verify-purity/v1",
         "assertion_result": "passed",
         "integrity": "pure",
-        "before_code_identity": "sha256:9bc94b278f98673b02e2a62a49497a4e9e0cf8b07ccd6ab1ef74b3c38f535fbc",
-        "after_code_identity": "sha256:9bc94b278f98673b02e2a62a49497a4e9e0cf8b07ccd6ab1ef74b3c38f535fbc"
+        "before_code_identity": "sha256:1dec32827102034182bd7022ed46207be6c053214f44dca43ae04a4d317b89a0",
+        "after_code_identity": "sha256:1dec32827102034182bd7022ed46207be6c053214f44dca43ae04a4d317b89a0"
       },
       "requirements_fingerprint": "sha256:801af3e91ff433fa491f1de8bd881dbea0ecd0e536bd4574d67890af90fe7bf7",
       "design_fingerprint": "sha256:055d45a896ab7f72ab67ac84d8b8b2c2eae42984496ab790a25b6921fc686f9c",
       "tasks_fingerprint": "sha256:416915d8331fadda440d49d96f0c568714094cd6b5eb9207862d1c046f6e399c",
-      "code_identity": "sha256:9bc94b278f98673b02e2a62a49497a4e9e0cf8b07ccd6ab1ef74b3c38f535fbc",
+      "code_identity": "sha256:1dec32827102034182bd7022ed46207be6c053214f44dca43ae04a4d317b89a0",
       "profile": {
         "platform": "darwin/arm64",
         "sqlite": "3.45.3 2024-04-15 13:34:05 8653b758870e6ef0c98d46b3ace27849054af85da891eb121e9aaa537f1e8355 (64-bit)",
         "swift": "Apple Swift version 6.4 (swiftlang-6.4.0.34.1 clang-2100.3.34.1)\nTarget: arm64-apple-macosx27.0.0\nswift-driver version: 1.168.6",
-        "walden": "v0.10.4",
+        "walden": "v0.11.0",
         "xcode": "Xcode 27.0\nBuild version 27A266a"
       },
       "steps": [
@@ -884,11 +884,11 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:af1b944b1a9301a286d096178abfa000355dd31c2da9f153fa166874384d1ea0"
+          "output_digest": "sha256:aa518ed99664ea8426d55237a45fea69230da9782d7da5de82c5ca21aff227d8"
         }
       ],
       "result": "passed",
-      "verified_at": "2026-09-22T15:22:19Z"
+      "verified_at": "2026-09-27T08:06:24Z"
     },
     "8": {
       "task_fingerprint": "sha256:9c14048efe76723f54384b889f190e4d52d136fd0b1d2269c1adaee576a103ee",
@@ -898,18 +898,18 @@
         "policy": "verify-purity/v1",
         "assertion_result": "passed",
         "integrity": "pure",
-        "before_code_identity": "sha256:9bc94b278f98673b02e2a62a49497a4e9e0cf8b07ccd6ab1ef74b3c38f535fbc",
-        "after_code_identity": "sha256:9bc94b278f98673b02e2a62a49497a4e9e0cf8b07ccd6ab1ef74b3c38f535fbc"
+        "before_code_identity": "sha256:1dec32827102034182bd7022ed46207be6c053214f44dca43ae04a4d317b89a0",
+        "after_code_identity": "sha256:1dec32827102034182bd7022ed46207be6c053214f44dca43ae04a4d317b89a0"
       },
       "requirements_fingerprint": "sha256:801af3e91ff433fa491f1de8bd881dbea0ecd0e536bd4574d67890af90fe7bf7",
       "design_fingerprint": "sha256:055d45a896ab7f72ab67ac84d8b8b2c2eae42984496ab790a25b6921fc686f9c",
       "tasks_fingerprint": "sha256:416915d8331fadda440d49d96f0c568714094cd6b5eb9207862d1c046f6e399c",
-      "code_identity": "sha256:9bc94b278f98673b02e2a62a49497a4e9e0cf8b07ccd6ab1ef74b3c38f535fbc",
+      "code_identity": "sha256:1dec32827102034182bd7022ed46207be6c053214f44dca43ae04a4d317b89a0",
       "profile": {
         "platform": "darwin/arm64",
         "sqlite": "3.45.3 2024-04-15 13:34:05 8653b758870e6ef0c98d46b3ace27849054af85da891eb121e9aaa537f1e8355 (64-bit)",
         "swift": "Apple Swift version 6.4 (swiftlang-6.4.0.34.1 clang-2100.3.34.1)\nTarget: arm64-apple-macosx27.0.0\nswift-driver version: 1.168.6",
-        "walden": "v0.10.4",
+        "walden": "v0.11.0",
         "xcode": "Xcode 27.0\nBuild version 27A266a"
       },
       "steps": [
@@ -922,7 +922,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:85f6df21846f095d558a3aea4c2b68f7b1953cd6b4cde31f1250743aee0cbfb8"
+          "output_digest": "sha256:febd0a6e50f153f8b3ca2cb06f922fb63c2ed891960b09f4ed1ec2aae0fd553a"
         },
         {
           "command": [
@@ -933,7 +933,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:e39b4353f2bc50ac6a9182dd9e5498873445aeed052dd705805a9cfd865fb4a2"
+          "output_digest": "sha256:7e75b2fd124e2e029b4d865b50202da0f3a67a213eff0df40fa73ec1f118c70c"
         },
         {
           "command": [
@@ -944,7 +944,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:14143b8bba289a809894557263bf20339d7a55e8e27bceb35d1b8128a6bddab3"
+          "output_digest": "sha256:ae754389b98e2954e6e186d743f7381214dbd2bc730466c38e6835f5f451530b"
         },
         {
           "command": [
@@ -955,11 +955,11 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:45bc382a5a7c0f3433e358a0bffc01e148dbc75650bd63c158580edfad5ee6e6"
+          "output_digest": "sha256:c45cc7ed2a64b0798e4e9bab05b071f8006b59cdf05fa5b01fce9085b2b916fd"
         }
       ],
       "result": "passed",
-      "verified_at": "2026-09-22T15:22:19Z"
+      "verified_at": "2026-09-27T08:06:24Z"
     },
     "9": {
       "task_fingerprint": "sha256:84c083f708d0654bbd744613fd04176dfcea0cc2ec13363b884a6badf5098fb2",
@@ -969,18 +969,18 @@
         "policy": "verify-purity/v1",
         "assertion_result": "passed",
         "integrity": "pure",
-        "before_code_identity": "sha256:9bc94b278f98673b02e2a62a49497a4e9e0cf8b07ccd6ab1ef74b3c38f535fbc",
-        "after_code_identity": "sha256:9bc94b278f98673b02e2a62a49497a4e9e0cf8b07ccd6ab1ef74b3c38f535fbc"
+        "before_code_identity": "sha256:1dec32827102034182bd7022ed46207be6c053214f44dca43ae04a4d317b89a0",
+        "after_code_identity": "sha256:1dec32827102034182bd7022ed46207be6c053214f44dca43ae04a4d317b89a0"
       },
       "requirements_fingerprint": "sha256:801af3e91ff433fa491f1de8bd881dbea0ecd0e536bd4574d67890af90fe7bf7",
       "design_fingerprint": "sha256:055d45a896ab7f72ab67ac84d8b8b2c2eae42984496ab790a25b6921fc686f9c",
       "tasks_fingerprint": "sha256:416915d8331fadda440d49d96f0c568714094cd6b5eb9207862d1c046f6e399c",
-      "code_identity": "sha256:9bc94b278f98673b02e2a62a49497a4e9e0cf8b07ccd6ab1ef74b3c38f535fbc",
+      "code_identity": "sha256:1dec32827102034182bd7022ed46207be6c053214f44dca43ae04a4d317b89a0",
       "profile": {
         "platform": "darwin/arm64",
         "sqlite": "3.45.3 2024-04-15 13:34:05 8653b758870e6ef0c98d46b3ace27849054af85da891eb121e9aaa537f1e8355 (64-bit)",
         "swift": "Apple Swift version 6.4 (swiftlang-6.4.0.34.1 clang-2100.3.34.1)\nTarget: arm64-apple-macosx27.0.0\nswift-driver version: 1.168.6",
-        "walden": "v0.10.4",
+        "walden": "v0.11.0",
         "xcode": "Xcode 27.0\nBuild version 27A266a"
       },
       "steps": [
@@ -993,7 +993,7 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:7f176a32d03f2e194d79a064c9740046f77e67f0abc07a53fda584b0d374ea10"
+          "output_digest": "sha256:014484a17232ea27d34d33ff3ef09c8062c79fbef4d967639de25dc6cd2d6265"
         },
         {
           "command": [
@@ -1004,11 +1004,11 @@
           ],
           "expected_exit": 0,
           "actual_exit": 0,
-          "output_digest": "sha256:0fda3b0c0a7e0f181cdc8ecb6120709b655a5123b3219a8468bfc1a1164a70db"
+          "output_digest": "sha256:b907cab5f657f35ecf77ffea82ed7422cadb9443039b96a33f4ad6b0d2e20d17"
         }
       ],
       "result": "passed",
-      "verified_at": "2026-09-22T15:22:19Z"
+      "verified_at": "2026-09-27T08:06:24Z"
     }
   }
 }

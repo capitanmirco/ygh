@@ -17,8 +17,9 @@ public struct CatalogWriter: Sendable {
     /// Replaces the catalog's English-language contents with `cards`.
     ///
     /// Rows a card no longer has — a printing withdrawn, a restriction lifted —
-    /// are removed, but only for the cards present in this dataset and only for
-    /// upstream-sourced restrictions.
+    /// are removed, but only for the cards present in this dataset, only for
+    /// upstream-sourced restrictions, and never for an artwork a deck holds or
+    /// a printing a collection lot was recorded against.
     public func writeEnglishDataset(
         _ cards: [CatalogCardPayload],
         observedAt: Date,
@@ -53,16 +54,31 @@ public struct CatalogWriter: Sendable {
             card.misc?.mdRarity,
         ])
 
-        try writeArtworks(card, using: statements)
+        try writeArtworks(card, using: statements, in: db)
         try writeFormats(card, using: statements)
         try writeBanStatuses(card, using: statements)
         try writePrintings(card, using: statements)
         try writePrices(card, observedAtText: observedAtText, using: statements)
     }
 
-    private func writeArtworks(_ card: CatalogCardPayload, using statements: Statements) throws {
-        try statements.deleteArtworks.execute(arguments: [card.id])
+    /// A deck holds its cards by artwork, and the schema will not delete an
+    /// artwork a deck holds. Clearing every row and inserting it again failed
+    /// the whole update as soon as one deck existed, so only the artworks no
+    /// deck holds are cleared. A held one is updated where it stands, and kept
+    /// even when upstream stops listing it: an update must not take a card out
+    /// of a deck.
+    ///
+    /// Inserted rather than upserted otherwise, so an artwork two cards claim
+    /// still aborts the write instead of silently moving to the second card.
+    private func writeArtworks(
+        _ card: CatalogCardPayload,
+        using statements: Statements,
+        in db: Database
+    ) throws {
+        try statements.deleteUnheldArtworks.execute(arguments: [card.id])
         for (ordinal, image) in card.cardImages.enumerated() {
+            try statements.reorderHeldArtwork.execute(arguments: [ordinal, image.id, card.id])
+            guard db.changesCount == 0 else { continue }
             try statements.insertArtwork.execute(arguments: [image.id, card.id, ordinal])
         }
     }
@@ -104,14 +120,34 @@ public struct CatalogWriter: Sendable {
         }
     }
 
+    /// A collection lot names its printing by row identifier, so a printing a
+    /// lot holds keeps that identifier across an update and stays even when
+    /// upstream withdraws it. Deleting it failed the update on the lot's
+    /// foreign key; re-inserting it would have handed it a new identifier.
+    ///
+    /// A held row is matched to the upstream entry by set code and rarity, at
+    /// most once, so the printings nobody holds are written exactly as before.
     private func writePrintings(_ card: CatalogCardPayload, using statements: Statements) throws {
-        try statements.deletePrintings.execute(arguments: [card.id])
+        try statements.deleteUnheldPrintings.execute(arguments: [card.id])
+        var held = try Row.fetchAll(statements.heldPrintings, arguments: [card.id]).map {
+            (id: $0["id"] as Int64, setCode: $0["set_code"] as String, rarity: $0["rarity"] as String?)
+        }
+
         for set in card.cardSets ?? [] {
             // "0" means unpriced rather than free, so it is stored as absent.
             let price = set.setPrice.flatMap(Double.init).flatMap { $0 > 0 ? $0 : nil }
-            try statements.insertPrinting.execute(arguments: [
-                card.id, set.setCode, set.setName, set.setRarity, set.setRarityCode, price,
-            ])
+            if let match = held.firstIndex(where: {
+                $0.setCode == set.setCode && $0.rarity == set.setRarity
+            }) {
+                try statements.refreshPrinting.execute(arguments: [
+                    set.setName, set.setRarityCode, price, held[match].id,
+                ])
+                held.remove(at: match)
+            } else {
+                try statements.insertPrinting.execute(arguments: [
+                    card.id, set.setCode, set.setName, set.setRarity, set.setRarityCode, price,
+                ])
+            }
         }
     }
 
@@ -181,13 +217,16 @@ public struct CatalogWriter: Sendable {
 
     private struct Statements {
         let upsertCard: GRDB.Statement
-        let deleteArtworks: GRDB.Statement
+        let deleteUnheldArtworks: GRDB.Statement
+        let reorderHeldArtwork: GRDB.Statement
         let insertArtwork: GRDB.Statement
         let deleteFormats: GRDB.Statement
         let insertFormat: GRDB.Statement
         let deleteUpstreamBans: GRDB.Statement
         let insertBan: GRDB.Statement
-        let deletePrintings: GRDB.Statement
+        let deleteUnheldPrintings: GRDB.Statement
+        let heldPrintings: GRDB.Statement
+        let refreshPrinting: GRDB.Statement
         let insertPrinting: GRDB.Statement
         let deletePrices: GRDB.Statement
         let insertPrice: GRDB.Statement
@@ -216,7 +255,12 @@ public struct CatalogWriter: Sendable {
                     ocg_date = excluded.ocg_date, konami_id = excluded.konami_id,
                     md_rarity = excluded.md_rarity
                 """)
-            deleteArtworks = try db.makeStatement(sql: "DELETE FROM card_artwork WHERE card_id = ?")
+            deleteUnheldArtworks = try db.makeStatement(sql: """
+                DELETE FROM card_artwork
+                WHERE card_id = ? AND artwork_id NOT IN (SELECT artwork_id FROM deck_slot)
+                """)
+            reorderHeldArtwork = try db.makeStatement(sql:
+                "UPDATE card_artwork SET ordinal = ? WHERE artwork_id = ? AND card_id = ?")
             insertArtwork = try db.makeStatement(sql:
                 "INSERT INTO card_artwork (artwork_id, card_id, ordinal) VALUES (?, ?, ?)")
             deleteFormats = try db.makeStatement(sql: "DELETE FROM card_format WHERE card_id = ?")
@@ -226,7 +270,18 @@ public struct CatalogWriter: Sendable {
                 "DELETE FROM ban_status WHERE card_id = ? AND source = 'upstream'")
             insertBan = try db.makeStatement(sql:
                 "INSERT INTO ban_status (card_id, format_code, status, source) VALUES (?, ?, ?, ?)")
-            deletePrintings = try db.makeStatement(sql: "DELETE FROM card_print WHERE card_id = ?")
+            // `IS NOT NULL` matters: one null in a `NOT IN` list makes the
+            // test unknown for every row, and nothing would be deleted.
+            deleteUnheldPrintings = try db.makeStatement(sql: """
+                DELETE FROM card_print
+                WHERE card_id = ? AND id NOT IN (
+                    SELECT print_id FROM collection_entry WHERE print_id IS NOT NULL)
+                """)
+            heldPrintings = try db.makeStatement(sql:
+                "SELECT id, set_code, rarity FROM card_print WHERE card_id = ? ORDER BY id")
+            refreshPrinting = try db.makeStatement(sql: """
+                UPDATE card_print SET set_name = ?, rarity_code = ?, set_price = ? WHERE id = ?
+                """)
             insertPrinting = try db.makeStatement(sql: """
                 INSERT INTO card_print (card_id, set_code, set_name, rarity, rarity_code, set_price)
                 VALUES (?, ?, ?, ?, ?, ?)
