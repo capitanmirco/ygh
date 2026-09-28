@@ -18,11 +18,21 @@ public struct AnalyticsView: View {
                 .padding(.horizontal, Theme.Spacing.regular)
                 .padding(.vertical, Theme.Spacing.snug)
             Divider()
-            header
-            Divider()
-            HSplitView {
-                shape
-                odds
+            // Without a deck there are no figures, and empty panes beside a
+            // menu say nothing about why.
+            if let message = model.noDeckMessage {
+                ContentUnavailableView(
+                    "Nessun mazzo scelto",
+                    systemImage: "chart.bar",
+                    description: Text(message))
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+            } else {
+                header
+                Divider()
+                HSplitView {
+                    shape
+                    odds
+                }
             }
         }
         .background(Theme.Palette.surface)

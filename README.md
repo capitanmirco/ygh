@@ -83,7 +83,10 @@ not editing: nothing in that panel can change a deck.
 
 The statistics say what they are about. They took whichever deck the window
 had selected and offered no way to change it; now the screen chooses its own
-deck, and opens even with nothing selected. It also reads that deck in any
+deck. Opened with nothing selected — which is how every launch begins — it
+shows its chooser and asks for a deck, rather than reporting a deck that "was
+not read"; only a deck that was asked for and could not be read is a failure,
+and an empty library is said rather than offered as an empty menu. It also reads that deck in any
 format — a forty-card deck read as GOAT deals its first player six cards and
 five read as TCG, and every probability moves with the hand size — while
 leaving the deck's own format alone, and it carries one line of verdict

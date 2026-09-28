@@ -718,7 +718,9 @@ private struct AnalyticsLoader: View {
             await model.loadLists()
             await model.measureAgainstImpliedList()
 
-            guard model.deck != nil || model.libraryIsEmpty else {
+            // Only a deck that was asked for and could not be read is a
+            // failure. Nothing selected is the screen's own chooser's job.
+            guard model.unreadableStartingDeck == nil else {
                 failure = "Il mazzo non è stato letto."
                 return
             }

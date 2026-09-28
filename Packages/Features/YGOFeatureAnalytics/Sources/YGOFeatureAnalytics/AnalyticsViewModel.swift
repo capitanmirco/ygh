@@ -147,11 +147,30 @@ public final class AnalyticsViewModel {
         }
     }
 
+    /// The deck the screen was asked to open on and could not read.
+    ///
+    /// Nil when it was asked for none: opening with nothing selected is a
+    /// request to choose, not a failure. The composition root treated the two
+    /// alike, so opening the statistics before touching the deck list reported
+    /// a deck that "was not read" and hid the chooser that would have fixed it.
+    public private(set) var unreadableStartingDeck: Int64?
+
     /// Opens on a deck chosen elsewhere in the application.
     public func start(on deckID: Int64?) async {
         await loadDecks()
+        unreadableStartingDeck = nil
         guard let deckID else { return }
         await choose(deckID: deckID)
+        if deck?.id != deckID { unreadableStartingDeck = deckID }
+    }
+
+    /// What the screen says in place of figures when it has no deck, or nil
+    /// when it has one.
+    public var noDeckMessage: String? {
+        guard deck == nil else { return nil }
+        return libraryIsEmpty
+            ? "Nessun mazzo salvato: non c'è niente da analizzare."
+            : "Scegli un mazzo dal menu qui sopra per vederne le statistiche."
     }
 
     // MARK: - Loading
