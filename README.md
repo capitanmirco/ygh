@@ -5,11 +5,11 @@ portfolio. Single local user, offline-first, no accounts and no server.
 
 ## Status
 
-Nineteen specifications are complete and certified: `card-catalog`,
+Twenty specifications are complete and certified: `card-catalog`,
 `deck-builder`, `collection-tracker`, `deck-analytics`, `pricing`,
 `banlist-history`, `card-detail`, `deck-editing`, `visual-language`,
 `catalog-filters`, `italian-vocabulary`, `deck-card-preview`,
-`deck-authoring`, `banlist-browser`, `app-preferences`, `deck-history`, `deck-labels`, `deck-legality` and `analytics-controls`. The application acquires the full card pool, keeps it current,
+`deck-authoring`, `banlist-browser`, `app-preferences`, `deck-history`, `deck-labels`, `deck-legality`, `analytics-controls` and `collection-shortfall`. The application acquires the full card pool, keeps it current,
 stores artwork locally, and browses, builds, tracks, analyses and prices
 entirely offline.
 
@@ -90,6 +90,15 @@ leaving the deck's own format alone, and it carries one line of verdict
 against a chosen Forbidden & Limited List. Choosing a deck, a format or a
 list clears a hand dealt under the previous choice: a stale hand looks like
 evidence.
+
+The collection says what a deck still needs, about a deck the user chose. Its
+"Cosa manca" panel had never been given a deck, and drew its empty answer as
+"nothing to buy" for every deck in the library. It now opens on the deck
+selected in the window, offers every stored deck, names the deck it is
+answering about, and shrinks as copies are recorded. It says nothing is
+missing only for a deck it read and found complete: with no deck chosen it
+asks for one, with no deck stored it says so, and a read that fails is
+reported as an unavailable answer rather than as a collection owning nothing.
 
 ## Requirements
 

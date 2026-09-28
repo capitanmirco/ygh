@@ -9,9 +9,13 @@ import YGODesignSystem
 public struct CollectionView: View {
     @State private var model: CollectionViewModel
     @FocusState private var focus: CollectionFocusRegion?
+    /// The deck already chosen elsewhere in the window, where the "Cosa manca"
+    /// report starts. Nil starts it on a request to choose one.
+    private let startingDeck: Int64?
 
-    public init(model: CollectionViewModel) {
+    public init(model: CollectionViewModel, startingDeck: Int64? = nil) {
         _model = State(wrappedValue: model)
+        self.startingDeck = startingDeck
     }
 
     public var body: some View {
@@ -34,7 +38,10 @@ public struct CollectionView: View {
             }
         }
         .background(Theme.Palette.surface)
-        .task { await model.reload() }
+        .task {
+            await model.startShortfall(on: startingDeck)
+            await model.reload()
+        }
         // The card is captured while the dialog is built rather than read
         // inside the button's action. Tapping a dialog button dismisses it
         // first, and the dismissal runs this binding's setter — so the action
@@ -183,30 +190,70 @@ public struct CollectionView: View {
         .frame(minWidth: 300)
     }
 
+    /// Which deck, then what the model knows about it. The panel draws the
+    /// report and decides nothing: an empty list used to be drawn here as
+    /// "nothing to buy", with no deck chosen at all.
     @ViewBuilder
     private var shortfallReport: some View {
         VStack(alignment: .leading, spacing: Theme.Spacing.snug) {
             Text("Cosa manca").font(Theme.Typography.sectionTitle)
 
-            if model.shortfall.isEmpty {
-                Label("Niente da comprare per questo mazzo", systemImage: "checkmark.circle")
-                    .font(Theme.Typography.body)
-                    .foregroundStyle(Theme.Palette.secondaryText)
-            } else {
-                // Worst shortfall first, so the list reads as a shopping order.
-                ForEach(model.shortfallSentences, id: \.self) { sentence in
-                    Label(sentence, systemImage: "cart")
-                        .font(Theme.Typography.body)
-                        .fixedSize(horizontal: false, vertical: true)
+            if model.canChooseShortfallDeck { shortfallDeckMenu }
+
+            Label(model.shortfallReport.headline, systemImage: headlineSymbol)
+                .font(Theme.Typography.body)
+                .foregroundStyle(Theme.Palette.secondaryText)
+                .fixedSize(horizontal: false, vertical: true)
+
+            // Worst shortfall first, so the list reads as a shopping order. A
+            // real deck can miss fifty cards, so the list scrolls.
+            ScrollView {
+                VStack(alignment: .leading, spacing: Theme.Spacing.tight) {
+                    ForEach(model.shortfall) { entry in
+                        Label(entry.sentence, systemImage: "cart")
+                            .font(Theme.Typography.body)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
-            Spacer()
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(Theme.Spacing.regular)
         .focused($focus, equals: .shortfall)
         .accessibilityLabel("Cosa manca per il mazzo scelto")
         .frame(minWidth: 300)
+    }
+}
+
+extension CollectionView {
+    /// A menu rather than a picker or a sheet: it presents nothing, so it
+    /// cannot compete with the removal dialog for the one presentation SwiftUI
+    /// shows — and it is how the statistics screen chooses its deck too.
+    fileprivate var shortfallDeckMenu: some View {
+        Menu {
+            ForEach(model.decks) { deck in
+                Button("\(deck.name) · \(deck.format.rawValue)") {
+                    Task { await model.chooseShortfallDeck(deck.id) }
+                }
+            }
+        } label: {
+            Label(model.chosenShortfallDeck?.name ?? "Scegli un mazzo",
+                  systemImage: "rectangle.stack")
+        }
+        .disabled(model.decks.isEmpty)
+        .accessibilityLabel("Mazzo confrontato con la collezione")
+        .accessibilityValue(model.chosenShortfallDeck?.name ?? "nessuno")
+    }
+
+    fileprivate var headlineSymbol: String {
+        switch model.shortfallReport {
+        case .noDecks: "tray"
+        case .chooseADeck: "rectangle.stack"
+        case .unavailable: "exclamationmark.triangle"
+        case .satisfied: "checkmark.circle"
+        case .missing: "cart"
+        }
     }
 }
 

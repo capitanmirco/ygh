@@ -149,6 +149,16 @@ public protocol CollectionReading: Sendable {
     func ownedCopiesByCard() async throws -> [CardIdentifier: Int]
 }
 
+/// Card names for a set of cards, the way the collection shows them: Italian
+/// where the catalog has a translation, English otherwise.
+///
+/// Its own port rather than a fourth method on `CollectionReading`: every
+/// reader already written, the certified proofs' doubles among them, would
+/// otherwise have to learn it or answer with no names at all.
+public protocol CardNaming: Sendable {
+    func cardNames(for cards: Set<CardIdentifier>) async throws -> [CardIdentifier: String]
+}
+
 /// Changing what the collection holds.
 ///
 /// Declared here so the collection view can record copies without knowing that

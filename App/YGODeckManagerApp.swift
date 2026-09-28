@@ -510,10 +510,16 @@ private struct Detail: View {
         case .catalog:
             CatalogSection(environment: environment, language: language)
         case .collection:
-            CollectionView(model: CollectionViewModel(
-                reader: environment.collection,
-                writer: environment.collection,
-                catalogue: environment.repository))
+            // The shortfall panel starts from the deck the window has chosen,
+            // and names the cards the way the collection does.
+            CollectionView(
+                model: CollectionViewModel(
+                    reader: environment.collection,
+                    writer: environment.collection,
+                    catalogue: environment.repository,
+                    library: environment.deckRepository,
+                    naming: environment.collection),
+                startingDeck: selectedDeck)
         case .banlist:
             BanlistSection(environment: environment)
         case .analytics:

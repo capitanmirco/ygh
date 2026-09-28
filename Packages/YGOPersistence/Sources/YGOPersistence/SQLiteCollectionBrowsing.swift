@@ -235,6 +235,9 @@ extension SQLiteCollectionRepository {
 }
 
 /// The collection view reads through this rather than through SQLite directly.
+/// `cardNames(for:)` below already answers in the collection's language.
+extension SQLiteCollectionRepository: CardNaming {}
+
 extension SQLiteCollectionRepository: CollectionReading {
     public func ownedCardItems(matching query: String) async throws -> [OwnedCardItem] {
         try await ownedCards(named: query).map {
