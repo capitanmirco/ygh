@@ -114,7 +114,7 @@ reported as an unavailable answer rather than as a collection owning nothing.
 
 ```bash
 swift build          # builds every module and the app executable
-swift test           # 673 tests across 16 targets
+swift test           # 694 tests across 16 targets
 swift run YGODeckManager
 ```
 
@@ -161,6 +161,14 @@ Ban lists are published for TCG, OCG and GOAT only. Edison and Master Duel
 expose format membership but no restrictions, so those lists are maintained by
 hand and preserved across catalog updates.
 
+An update rewrites each card's artworks and printings, but never a row the
+user's own data names. An artwork a deck holds and a printing a collection lot
+was recorded against keep their rows and identifiers, and stay even when
+upstream withdraws them: an update must not take a card out of a deck. Until
+2026-09-27 the writer deleted and re-inserted those rows, the deck's foreign key
+refused the delete, and the first update after any deck existed rolled back
+whole — the catalog stayed on the version it had before the first deck.
+
 **Historical** lists come from a second, independent upstream:
 [`yaml-yugi-limit-regulation`](https://github.com/DawnbrandBots/yaml-yugi-limit-regulation),
 which publishes 177 lists across TCG, OCG, Master Duel and Rush Duel, from
@@ -178,15 +186,16 @@ stored here for personal local use.
 
 ## Measured figures
 
-Taken from the live API and from the test suite, not estimated:
+Taken from the live API and from the test suite, not estimated. Catalog
+figures are from upstream version 147.17, measured on 2026-09-28:
 
 | | |
 | --- | --- |
-| Cards | 14,566 English, 11,599 Italian |
-| Artwork identifiers | 14,730 |
-| Database, full catalog | 40 MB (budget 250 MB) |
-| Artwork on disk | 388.4 MB, all 14,730 downloaded (budget 500 MB) |
-| Printings / prices | 44,491 / 64,503 |
+| Cards | 14,589 English, 11,585 Italian |
+| Artwork identifiers | 14,761 |
+| Database, full catalog with decks and list history | 51 MB (budget 250 MB) |
+| Artwork on disk | 389.4 MB, all 14,761 downloaded (budget 500 MB) |
+| Printings / prices | 44,586 / 64,516 |
 | Banlist history | 177 lists, 28,648 entries, 0.43 MB |
 | Search latency, p95 | under 100 ms in a debug build |
 | Card history latency | under 20 ms, worst case, debug build |
@@ -197,7 +206,7 @@ Taken from the live API and from the test suite, not estimated:
 | Palette separation | ΔE ≥ 25 from any restriction colour, ≥ 18 within a deck section |
 | Contrast | markers ≥ 3:1, text ≥ 4.5:1, both appearances |
 | Vocabulary | 47 card kinds, 33 monster types, 7 attributes translated |
-| Tests | 538, all green |
+| Tests | 694, all green |
 
 ## Specification workflow
 
